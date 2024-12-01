@@ -1,0 +1,800 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_tq6stt6tcg';window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    ①QT实现电脑音频和视频的录制并封装成mp4 |
+    
+    Stardm 风也温柔
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="音视频录制的多线程实现  主要类  AudioRecorder：音频采集线程 VideoRecorder：视频采集线程 MainWindow：控制音频和视频的采集    AudioRecorder 类详解  头文件部分   构造函数： 1AudioRecorder(QObject *parent &#x3D; nullptr, AVFormatContext **ofmt_ctx &#x3D; nullptr);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="①QT实现电脑音频和视频的录制并封装成mp4">
+<meta property="og:url" content="https://stardm0.github.io/2024/12/01/%E2%91%A0QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/index.html">
+<meta property="og:site_name" content="Stardm 风也温柔">
+<meta property="og:description" content="音视频录制的多线程实现  主要类  AudioRecorder：音频采集线程 VideoRecorder：视频采集线程 MainWindow：控制音频和视频的采集    AudioRecorder 类详解  头文件部分   构造函数： 1AudioRecorder(QObject *parent &#x3D; nullptr, AVFormatContext **ofmt_ctx &#x3D; nullptr);">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-01T11:23:53.000Z">
+<meta property="article:modified_time" content="2024-12-01T12:32:45.042Z">
+<meta property="article:author" content="凌">
+<meta property="article:tag" content="FFmpeg">
+<meta property="article:tag" content="音频录制">
+<meta property="article:tag" content="视频录制">
+<meta property="article:tag" content="多线程">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Stardm 风也温柔" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon rotate">
+            &#xe62b;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon rotate">
+            &#xe62b;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon rotate">
+            &#xe62b;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon rotate">
+            &#xe62b;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <picture>
+        
+          <source media="(max-width: 479px)" srcset="/images/banner-600w.webp">
+        
+          <source media="(max-width: 799px)" srcset="/images/banner-800w.webp">
+        
+          <source media="(min-width: 800px)" srcset="/images/banner.webp">
+        
+        <img fetchpriority="high" src="/images/banner.webp" alt="①QT实现电脑音频和视频的录制并封装成mp4">
+      </picture>
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">①QT实现电脑音频和视频的录制并封装成mp4</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-①QT实现电脑音频和视频的录制并封装成mp4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/12/01/%E2%91%A0QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-12-01T11:23:53.000Z" itemprop="datePublished">2024-12-01</time>
+    <time style="display: none;" id="post-update-time">2024-12-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" data-aos="zoom-in">音视频</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h3 id="音视频录制的多线程实现"><a class="markdownIt-Anchor" href="#音视频录制的多线程实现"></a> <strong>音视频录制的多线程实现</strong></h3>
+<h4 id="主要类"><a class="markdownIt-Anchor" href="#主要类"></a> <strong>主要类</strong></h4>
+<ul>
+<li><strong>AudioRecorder</strong>：音频采集线程</li>
+<li><strong>VideoRecorder</strong>：视频采集线程</li>
+<li><strong>MainWindow</strong>：控制音频和视频的采集</li>
+</ul>
+<hr />
+<h3 id="audiorecorder-类详解"><a class="markdownIt-Anchor" href="#audiorecorder-类详解"></a> <strong>AudioRecorder 类详解</strong></h3>
+<h4 id="头文件部分"><a class="markdownIt-Anchor" href="#头文件部分"></a> <strong>头文件部分</strong></h4>
+<ul>
+<li>
+<p><strong>构造函数</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">AudioRecorder</span>(QObject *parent = <span class="literal">nullptr</span>, AVFormatContext **ofmt_ctx = <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>主要变量</strong>：</p>
+<ul>
+<li><code>bool flage = false;</code>  // 用于控制采集的开始与结束</li>
+<li><code>AVFormatContext *fmt_ctx = NULL;</code>  // 输入上下文</li>
+<li><code>AVFormatContext **ofmt_ctx = NULL;</code>  // 输出上下文</li>
+<li><code>QObject *parent = NULL;</code>  // 用于回调函数</li>
+</ul>
+</li>
+</ul>
+<h4 id="源文件部分"><a class="markdownIt-Anchor" href="#源文件部分"></a> 源文件部分</h4>
+<p>采集音频的具体步骤可以分为8个步骤，使用到的变量有：</p>
+<ul>
+<li><code>AVPacket pkt;</code>：音频包</li>
+<li><code>int nb_samples = 22050;</code>：每帧样本数</li>
+<li><code>SwrContext *swr_ctx = nullptr;</code>：重采样上下文</li>
+<li><code>uint8_t **src_data = nullptr; uint8_t **dst_data = nullptr;</code>：音频数据缓冲区</li>
+<li><code>AVCodecContext *codec_ctx = nullptr;</code>：编码上下文</li>
+<li><code>AVCodecContext *dec_ctx = nullptr;</code>：解码上下文</li>
+<li><code>AVFrame *frame = av_frame_alloc();</code>：音频帧</li>
+<li><code>AVAudioFifo* fifo = nullptr;</code>：音频FIFO缓冲区</li>
+<li><code>const char* outFilename = &quot;output.mp4&quot;;</code>：输出文件名</li>
+</ul>
+<h4 id="音频采集步骤"><a class="markdownIt-Anchor" href="#音频采集步骤"></a> <strong>音频采集步骤</strong></h4>
+<ol>
+<li>
+<p><strong>打开设备</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open_device</span>(&amp;fmt_ctx);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>查找并打开音频解码器</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open_Audio_decoder</span>(fmt_ctx, &amp;dec_ctx);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>打开AAC编码器</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open_encoder</span>(&amp;codec_ctx);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>建立FIFO缓冲区</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fifo = <span class="built_in">init_audio_fifo</span>(codec_ctx-&gt;sample_fmt, codec-&gt;ch_layout.nb_channels);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>配置重采样上下文（如果需要，根据编码器的输入要求）</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">init_resampler</span>(codec_ctx, &amp;swr_ctx, &amp;src_data, &amp;dst_data);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>创建输出流</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AVStream *outStream = <span class="built_in">avformat_new_stream</span>(*ofmt_ctx, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>写头文件（通过回调方式）</strong></p>
+</li>
+</ol>
+<p>为了确保音频流和视频流都创建好后再写入头文件，我采用了回调函数的方式。FFmpeg在写入头文件时要求所有流都已经创建好，因此我们通过回调机制确保音频流和视频流的创建顺序。</p>
+<h4 id="回调函数的实现"><a class="markdownIt-Anchor" href="#回调函数的实现"></a> <strong>回调函数的实现</strong></h4>
+<p>在代码中，我们定义了一个回调函数别名，并将其与<code>MainWindow</code>的<code>Main_avformat_write_header</code>方法绑定，确保在合适的时机调用该函数来写入头文件。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义回调函数别名，绑定到 MainWindow::Main_avformat_write_header 方法</span></span><br><span class="line">CallbackFun writehead = std::<span class="built_in">bind</span>(&amp;MainWindow::Main_avformat_write_header, </span><br><span class="line">                                   <span class="built_in">static_cast</span>&lt;MainWindow *&gt;(parent), </span><br><span class="line">                                   *ofmt_ctx, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用回调函数执行写入头文件操作</span></span><br><span class="line"><span class="built_in">writehead</span>();</span><br></pre></td></tr></table></figure>
+<h4 id="解释"><a class="markdownIt-Anchor" href="#解释"></a> <strong>解释</strong></h4>
+<ul>
+<li><code>std::bind</code>：该方法将<code>MainWindow::Main_avformat_write_header</code>函数与<code>parent</code>（<code>MainWindow</code>）对象绑定，并传入必要的参数。</li>
+<li>通过回调的方式，只有在音频和视频流都准备好后才会调用<code>Main_avformat_write_header</code>方法进行头文件写入，确保FFmpeg正确地写入头文件。</li>
+</ul>
+<h4 id="为什么要使用回调"><a class="markdownIt-Anchor" href="#为什么要使用回调"></a> <strong>为什么要使用回调</strong></h4>
+<p>FFmpeg的<code>avformat_write_header()</code>函数要求在写入文件头之前，所有流都必须被创建并初始化。因此，在创建音频和视频流后，我们通过回调函数来确保头文件的写入时机是正确的。</p>
+<ol start="8">
+<li><strong>用 <code>av_read_frame()</code> 读取音频数据并写入文件</strong></li>
+</ol>
+<hr />
+<h3 id="open_devicefmt_ctx-的具体实现"><a class="markdownIt-Anchor" href="#open_devicefmt_ctx-的具体实现"></a> <strong>open_device(&amp;fmt_ctx) 的具体实现</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::open_device</span><span class="params">(AVFormatContext **fmt_ctx)</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> AVInputFormat * iformat = <span class="literal">NULL</span>;  <span class="comment">// 音频捕获格式</span></span><br><span class="line">    AVDictionary *options = <span class="literal">NULL</span>;</span><br><span class="line">    QString devicename;  <span class="comment">// 音频设备名称</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">avdevice_register_all</span>();  <span class="comment">// 注册音频设备</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取音频格式</span></span><br><span class="line">    iformat = <span class="built_in">av_find_input_format</span>(<span class="string">&quot;dshow&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取当前音频设备的描述名称</span></span><br><span class="line">    devicename = <span class="string">&quot;audio=麦克风阵列 (Realtek(R) Audio)&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">avformat_open_input</span>(fmt_ctx, devicename.<span class="built_in">toUtf8</span>(), iformat, &amp;options) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// 打开设备失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 成功打开设备</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="open_audio_decoder-的具体实现"><a class="markdownIt-Anchor" href="#open_audio_decoder-的具体实现"></a> <strong>open_Audio_decoder() 的具体实现</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::open_Audio_decoder</span><span class="params">(AVFormatContext **fmt_ctx)</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> AVCodec *codec = <span class="built_in">avcodec_find_decoder</span>(AV_CODEC_ID_AAC);</span><br><span class="line">    <span class="keyword">if</span> (!codec) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;音频解码器未找到&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// 未找到解码器</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打开音频解码器</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">avcodec_open2</span>(dec_ctx, codec, <span class="literal">nullptr</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;无法打开解码器&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 成功打开解码器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="open_encoder-的具体实现"><a class="markdownIt-Anchor" href="#open_encoder-的具体实现"></a> <strong>open_encoder() 的具体实现</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::open_encoder</span><span class="params">(AVCodecContext **codec_ctx)</span> </span>&#123;</span><br><span class="line">    AVDictionary *options = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">const</span> AVCodec *codec = <span class="built_in">avcodec_find_encoder_by_name</span>(<span class="string">&quot;libfdk_aac&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!codec) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;编码器 libfdk_aac 未找到&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 分配编码器上下文</span></span><br><span class="line">    *codec_ctx = <span class="built_in">avcodec_alloc_context3</span>(codec);</span><br><span class="line">    <span class="keyword">if</span> (!*codec_ctx) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;编码器上下文分配失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置编码器参数</span></span><br><span class="line">    AVChannelLayout ch_layout;</span><br><span class="line">    <span class="built_in">av_channel_layout_default</span>(&amp;ch_layout, <span class="number">2</span>);  <span class="comment">// 立体声布局</span></span><br><span class="line">    (*codec_ctx)-&gt;sample_rate = <span class="number">48000</span>;  <span class="comment">// 采样率</span></span><br><span class="line">    (*codec_ctx)-&gt;sample_fmt = AV_SAMPLE_FMT_S16;  <span class="comment">// 样本格式</span></span><br><span class="line">    (*codec_ctx)-&gt;bit_rate = <span class="number">128000</span>;  <span class="comment">// 比特率</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">av_channel_layout_copy</span>(&amp;(*codec_ctx)-&gt;ch_layout, &amp;ch_layout) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;设置通道布局失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开编码器</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">avcodec_open2</span>(*codec_ctx, codec, &amp;options) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;编码器打开失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 成功打开编码器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="fifo缓冲区实现"><a class="markdownIt-Anchor" href="#fifo缓冲区实现"></a> <strong>FIFO缓冲区实现</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AVAudioFifo* <span class="title">AudioRecorder::init_audio_fifo</span><span class="params">(AVSampleFormat sample_fmt, <span class="type">int</span> channels)</span> </span>&#123;</span><br><span class="line">    AVAudioFifo* fifo = <span class="built_in">av_audio_fifo_alloc</span>(sample_fmt, channels, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (!fifo) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;无法分配FIFO缓冲区&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fifo;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::write_to_fifo</span><span class="params">(AVAudioFifo* fifo, <span class="type">const</span> <span class="type">uint8_t</span>** data, <span class="type">int</span> nb_samples)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="built_in">av_audio_fifo_write</span>(fifo, (<span class="type">void</span>**)data, nb_samples);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; nb_samples) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;写入FIFO失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// 成功写入</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::read_from_fifo</span><span class="params">(AVAudioFifo* fifo, <span class="type">uint8_t</span>** data, <span class="type">int</span> frame_size)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="built_in">av_audio_fifo_read</span>(fifo, (<span class="type">void</span>**)data, frame_size);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; frame_size) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;从FIFO读取失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// 成功读取</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="init_resampler-的具体实现"><a class="markdownIt-Anchor" href="#init_resampler-的具体实现"></a> <strong>init_resampler() 的具体实现</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::init_resampler</span><span class="params">(AVCodecContext *codec_ctx, SwrContext **swr_ctx, <span class="type">uint8_t</span> ***src_data, <span class="type">uint8_t</span> ***dst_data)</span> </span>&#123;</span><br><span class="line">    *swr_ctx = <span class="built_in">swr_alloc</span>();</span><br><span class="line">    AVChannelLayout in_ch_layout;</span><br><span class="line">    <span class="built_in">av_channel_layout_default</span>(&amp;in_ch_layout, <span class="number">2</span>);  <span class="comment">// 立体声布局</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置重采样上下文</span></span><br><span class="line">    <span class="built_in">swr_alloc_set_opts2</span>(swr_ctx,</span><br><span class="line">                        &amp;codec_ctx-&gt;ch_layout,          <span class="comment">// 输出通道布局</span></span><br><span class="line">                        codec_ctx-&gt;sample_fmt,          <span class="comment">// 输出采样格式</span></span><br><span class="line">                        codec_ctx-&gt;sample_rate,         <span class="comment">// 输出采样率</span></span><br><span class="line">                        &amp;in_ch_layout,                 <span class="comment">// 输入通道布局</span></span><br><span class="line">                        AV_SAMPLE_FMT_S16,              <span class="comment">// 输入采样格式</span></span><br><span class="line">                        <span class="number">48000</span>,                         <span class="comment">// 输入采样率</span></span><br><span class="line">                        <span class="number">0</span>, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!*swr_ctx || <span class="built_in">swr_init</span>(*swr_ctx) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;重采样初始化失败&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建输入输出缓冲区</span></span><br><span class="line">    <span class="built_in">av_samples_alloc_array_and_samples</span>(src_data, <span class="literal">nullptr</span>, in_ch_layout.nb_channels, <span class="number">22050</span>, AV_SAMPLE_FMT_S16, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">av_samples_alloc_array_and_samples</span>(dst_data, <span class="literal">nullptr</span>, <span class="number">2</span>, <span class="number">22050</span>, codec_ctx-&gt;sample_fmt, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 成功</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="音频数据读取与写入文件过程"><a class="markdownIt-Anchor" href="#音频数据读取与写入文件过程"></a> <strong>音频数据读取与写入文件过程</strong></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (flage &amp;&amp; <span class="built_in">av_read_frame</span>(fmt_ctx, &amp;pkt) == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="built_in">avcodec_send_packet</span>(dec_ctx, &amp;pkt);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;向解码器发送数据包失败!&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (ret &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ret = <span class="built_in">avcodec_receive_frame</span>(dec_ctx, frame);</span><br><span class="line">        <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ret == <span class="built_in">AVERROR</span>(EAGAIN) || ret == AVERROR_EOF) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;解码音频帧错误&quot;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">write_to_fifo</span>(fifo, (<span class="type">const</span> <span class="type">uint8_t</span>**)frame-&gt;data, nb_samples);</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">av_audio_fifo_size</span>(fifo) &gt;= frame_size) &#123;</span><br><span class="line">            <span class="built_in">read_from_fifo</span>(fifo, frame-&gt;data, frame_size);</span><br><span class="line">            frame-&gt;nb_samples = codec_ctx-&gt;frame_size;</span><br><span class="line">            frame-&gt;pts = pts;</span><br><span class="line">            ret = <span class="built_in">avcodec_send_frame</span>(codec_ctx, frame);</span><br><span class="line">            <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;发送帧数据到编码器失败!&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (ret &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                ret = <span class="built_in">avcodec_receive_packet</span>(codec_ctx, newpkt);</span><br><span class="line">                <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="built_in">writehead</span>();</span><br><span class="line">                <span class="built_in">av_packet_unref</span>(newpkt);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> <strong>总结</strong></h3>
+<p>通过多线程, 调用FFmpeg的API，音频采集部分利用FIFO缓冲区存储音频数据，并经过解码、编码后进行写入。音频处理被清晰地分成多个步骤，各个函数独立完成不同的任务，便于维护和扩展。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        <a data-aos="zoom-in" href="/2024/12/01/%E2%91%A0QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2024/12/01/%E2%91%A0QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" itemprop="commentCount"></span>
+          留言
+        </a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/FFmpeg/" rel="tag">FFmpeg</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6/" rel="tag">视频录制</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6/" rel="tag">音频录制</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://www.freeimg.cn/i/2024/11/30/674a9f8d8f3f9.webp" data-sizes="auto" alt="SQL基础" class="lazyload">
+        
+      
+      <a href="/2024/11/28/SQL%E5%9F%BA%E7%A1%80/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          SQL基础
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+  <section id="comments" class="vcomment" data-aos="fade-up"></section>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">4</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep rotate"></span>
+      凌
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        3.5k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        00:13
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">4</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon rotate">
+          &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+  
+<script src="https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js" integrity="sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn" crossorigin="anonymous" data-pjax></script>
+
+  <script data-pjax>
+    var GUEST_INFO = ['nick', 'mail', 'link'];
+    var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+      return GUEST_INFO.indexOf(item) > -1
+    });
+    var recordIP = JSON.parse('true');
+    var highlight = JSON.parse('true');
+    var visitor = JSON.parse('false');
+
+    new Valine({
+      el: '.vcomment',
+      appId: "Bd17umq4JlEEEj0CkSxnsPC9-gzGzoHsz",
+      appKey: "m0FoW4Y9WglsyoP3J0Y8Kmjh",
+      placeholder: "Just go go",
+      pageSize: '10',
+      avatar: 'mp',
+      lang: 'zh-CN',
+      recordIP: recordIP,
+      highlight: highlight,
+      visitor: visitor,
+      requiredFields: guest_info,
+      path: window.location.pathname
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+
