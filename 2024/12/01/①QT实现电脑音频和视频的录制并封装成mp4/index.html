@@ -205,6 +205,93 @@
 
         <div id="content">
           
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">4</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
           <section id="main"><article id="post-①QT实现电脑音频和视频的录制并封装成mp4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -361,7 +448,7 @@
       
         
         
-          <img data-src="https://www.freeimg.cn/i/2024/11/30/674a9f90bfea2.webp" data-sizes="auto" alt="SQL基础" class="lazyload">
+          <img data-src="https://www.freeimg.cn/i/2024/11/28/67485ef72e436.webp" data-sizes="auto" alt="SQL基础" class="lazyload">
         
       
       <a href="/2024/11/28/SQL%E5%9F%BA%E7%A1%80/"></a>
@@ -386,93 +473,6 @@
 
 
 </section>
-          
-            <aside id="sidebar">
-  <div class="sidebar-wrapper wrap-sticky">
-    <div class="sidebar-wrap" data-aos="fade-up">
-      
-        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
-  <h3 class="toc-title">文章目录</h3>
-  <div class="sidebar-toc-wrapper toc-div-class" >
-      
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
-      
-  </div>
-</div>
-</div>
-        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
-  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
-  <div class="sidebar-author-name">凌</div>
-  <div class="sidebar-description"></div>
-</div>
-<div class="sidebar-state">
-  <div class="sidebar-state-article">
-    <div>文章</div>
-    <div class="sidebar-state-number">4</div>
-  </div>
-  <div class="sidebar-state-category">
-    <div>分类</div>
-    <div class="sidebar-state-number">2</div>
-  </div>
-  <div class="sidebar-state-tag">
-    <div>标签</div>
-    <div class="sidebar-state-number">13</div>
-  </div>
-</div>
-<div class="sidebar-social">
-  
-</div>
-<div class="sidebar-menu">
-  
-    
-      <div class="sidebar-menu-link-wrap">
-        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
-        <div class="sidebar-menu-icon icon ">
-          &#xf015;
-        </div>
-        <div class="sidebar-menu-link">首页</div>
-      </div>
-    
-      <div class="sidebar-menu-link-wrap">
-        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
-        <div class="sidebar-menu-icon icon ">
-          &#xf187;
-        </div>
-        <div class="sidebar-menu-link">归档</div>
-      </div>
-    
-      <div class="sidebar-menu-link-wrap">
-        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
-        <div class="sidebar-menu-icon icon ">
-          &#xf06a;
-        </div>
-        <div class="sidebar-menu-link">关于</div>
-      </div>
-    
-      <div class="sidebar-menu-link-wrap">
-        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
-        <div class="sidebar-menu-icon icon ">
-          &#xf0c1;
-        </div>
-        <div class="sidebar-menu-link">友链</div>
-      </div>
-    
-  
-</div>
-</div>
-      
-      
-        <div class="sidebar-btn-wrapper" style="position:static">
-          <div class="sidebar-toc-btn current"></div>
-          <div class="sidebar-common-btn"></div>
-        </div>
-      
-    </div>
-  </div>
-
-  
-</aside>
-
           
         </div>
         <footer id="footer">
