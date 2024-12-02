@@ -43,7 +43,7 @@
 <meta property="og:description" content="音视频录制的多线程实现  主要类  AudioRecorder：音频采集线程 VideoRecorder：视频采集线程 MainWindow：控制音频和视频的采集    AudioRecorder 类详解  头文件部分   构造函数： 1AudioRecorder(QObject *parent &#x3D; nullptr, AVFormatContext **ofmt_ctx &#x3D; nullptr);">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-01T11:23:53.000Z">
-<meta property="article:modified_time" content="2024-12-01T12:32:45.042Z">
+<meta property="article:modified_time" content="2024-12-02T10:46:20.883Z">
 <meta property="article:author" content="凌">
 <meta property="article:tag" content="FFmpeg">
 <meta property="article:tag" content="音频录制">
@@ -213,7 +213,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
       
   </div>
 </div>
@@ -226,7 +226,7 @@
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">4</div>
+    <div class="sidebar-state-number">5</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
@@ -234,7 +234,7 @@
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
 </div>
 <div class="sidebar-social">
@@ -298,7 +298,7 @@
       <div class="article-date">
   <a href="/2024/12/01/%E2%91%A0QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" class="article-date-link" data-aos="zoom-in">
     <time datetime="2024-12-01T11:23:53.000Z" itemprop="datePublished">2024-12-01</time>
-    <time style="display: none;" id="post-update-time">2024-12-01</time>
+    <time style="display: none;" id="post-update-time">2024-12-02</time>
   </a>
 </div>
 
@@ -341,7 +341,7 @@
 </li>
 </ul>
 <h4 id="源文件部分"><a class="markdownIt-Anchor" href="#源文件部分"></a> 源文件部分</h4>
-<p>采集音频的具体步骤可以分为8个步骤，使用到的变量有：</p>
+<p>采集音频的具体步骤可以分为10个步骤，使用到的变量有：</p>
 <ul>
 <li><code>AVPacket pkt;</code>：音频包</li>
 <li><code>int nb_samples = 22050;</code>：每帧样本数</li>
@@ -395,8 +395,18 @@
 <h4 id="为什么要使用回调"><a class="markdownIt-Anchor" href="#为什么要使用回调"></a> <strong>为什么要使用回调</strong></h4>
 <p>FFmpeg的<code>avformat_write_header()</code>函数要求在写入文件头之前，所有流都必须被创建并初始化。因此，在创建音频和视频流后，我们通过回调函数来确保头文件的写入时机是正确的。</p>
 <ol start="8">
-<li><strong>用 <code>av_read_frame()</code> 读取音频数据并写入文件</strong></li>
+<li><strong>配置解码后数据的frame容器及音频帧</strong></li>
 </ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取frame_size</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> frame_size = codec_ctx-&gt;frame_size;</span><br><span class="line"><span class="comment">// 初始化帧编号</span></span><br><span class="line"><span class="type">int64_t</span> pts = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">frame-&gt;nb_samples = dec_ctx-&gt;frame_size;</span><br><span class="line">frame-&gt;sample_rate = dec_ctx-&gt;sample_rate;</span><br><span class="line">frame-&gt;ch_layout = dec_ctx-&gt;ch_layout;</span><br><span class="line">frame-&gt;format = dec_ctx-&gt;sample_fmt;</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>
+<p><strong>用 <code>av_read_frame()</code> 读取音频数据并写入文件</strong></p>
+</li>
+<li>
+<p><strong>释放分配的空间</strong></p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 释放缓冲区的数据和相关上下文</span></span><br><span class="line"><span class="keyword">if</span>(src_data)&#123;</span><br><span class="line">    <span class="built_in">av_freep</span>(&amp;src_data[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">av_freep</span>(&amp;src_data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(dst_data)&#123;</span><br><span class="line">    <span class="built_in">av_freep</span>(&amp;dst_data[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">av_freep</span>(&amp;dst_data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(swr_ctx)<span class="built_in">swr_free</span>(&amp;swr_ctx);</span><br><span class="line"><span class="keyword">if</span>(frame)<span class="built_in">av_frame_free</span>(&amp;frame);</span><br><span class="line"><span class="keyword">if</span>(newpkt)<span class="built_in">av_packet_free</span>(&amp;newpkt);</span><br><span class="line"><span class="keyword">if</span>(fifo)<span class="built_in">av_audio_fifo_free</span>(fifo);</span><br><span class="line"></span><br><span class="line"><span class="comment">// close device and Release fmt_ctx resources 关闭设备并释放上下文</span></span><br><span class="line"><span class="built_in">avformat_close_input</span>(&amp;fmt_ctx);</span><br></pre></td></tr></table></figure>
 <hr />
 <h3 id="open_devicefmt_ctx-的具体实现"><a class="markdownIt-Anchor" href="#open_devicefmt_ctx-的具体实现"></a> <strong>open_device(&amp;fmt_ctx) 的具体实现</strong></h3>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">AudioRecorder::open_device</span><span class="params">(AVFormatContext **fmt_ctx)</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> AVInputFormat * iformat = <span class="literal">NULL</span>;  <span class="comment">// 音频捕获格式</span></span><br><span class="line">    AVDictionary *options = <span class="literal">NULL</span>;</span><br><span class="line">    QString devicename;  <span class="comment">// 音频设备名称</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">avdevice_register_all</span>();  <span class="comment">// 注册音频设备</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取音频格式</span></span><br><span class="line">    iformat = <span class="built_in">av_find_input_format</span>(<span class="string">&quot;dshow&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取当前音频设备的描述名称</span></span><br><span class="line">    devicename = <span class="string">&quot;audio=麦克风阵列 (Realtek(R) Audio)&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">avformat_open_input</span>(fmt_ctx, devicename.<span class="built_in">toUtf8</span>(), iformat, &amp;options) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// 打开设备失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 成功打开设备</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -415,10 +425,6 @@
 <hr />
 <h3 id="音频数据读取与写入文件过程"><a class="markdownIt-Anchor" href="#音频数据读取与写入文件过程"></a> <strong>音频数据读取与写入文件过程</strong></h3>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (flage &amp;&amp; <span class="built_in">av_read_frame</span>(fmt_ctx, &amp;pkt) == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="built_in">avcodec_send_packet</span>(dec_ctx, &amp;pkt);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;向解码器发送数据包失败!&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (ret &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ret = <span class="built_in">avcodec_receive_frame</span>(dec_ctx, frame);</span><br><span class="line">        <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ret == <span class="built_in">AVERROR</span>(EAGAIN) || ret == AVERROR_EOF) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;解码音频帧错误&quot;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">write_to_fifo</span>(fifo, (<span class="type">const</span> <span class="type">uint8_t</span>**)frame-&gt;data, nb_samples);</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">av_audio_fifo_size</span>(fifo) &gt;= frame_size) &#123;</span><br><span class="line">            <span class="built_in">read_from_fifo</span>(fifo, frame-&gt;data, frame_size);</span><br><span class="line">            frame-&gt;nb_samples = codec_ctx-&gt;frame_size;</span><br><span class="line">            frame-&gt;pts = pts;</span><br><span class="line">            ret = <span class="built_in">avcodec_send_frame</span>(codec_ctx, frame);</span><br><span class="line">            <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;发送帧数据到编码器失败!&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (ret &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                ret = <span class="built_in">avcodec_receive_packet</span>(codec_ctx, newpkt);</span><br><span class="line">                <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="built_in">writehead</span>();</span><br><span class="line">                <span class="built_in">av_packet_unref</span>(newpkt);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr />
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> <strong>总结</strong></h3>
-<p>通过多线程, 调用FFmpeg的API，音频采集部分利用FIFO缓冲区存储音频数据，并经过解码、编码后进行写入。音频处理被清晰地分成多个步骤，各个函数独立完成不同的任务，便于维护和扩展。</p>
-
       
     </div>
     <footer class="article-footer">
@@ -443,12 +449,28 @@
   
   <nav id="article-nav" data-aos="fade-up">
     
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://www.freeimg.cn/i/2024/11/28/67485ef09082c.webp" data-sizes="auto" alt="②QT实现电脑音频和视频的录制并封装成mp4" class="lazyload">
+          
+        
+        <a href="/2024/12/02/%E2%91%A1QT%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            ②QT实现电脑音频和视频的录制并封装成mp4
+          
+        </h3>
+      </div>
+    
     
     <div class="article-nav-link-wrap article-nav-link-right">
       
         
         
-          <img data-src="https://www.freeimg.cn/i/2024/11/28/67485ef09082c.webp" data-sizes="auto" alt="SQL基础" class="lazyload">
+          <img data-src="https://www.freeimg.cn/i/2024/11/30/674a9f8de8c74.webp" data-sizes="auto" alt="SQL基础" class="lazyload">
         
       
       <a href="/2024/11/28/SQL%E5%9F%BA%E7%A1%80/"></a>
@@ -496,10 +518,10 @@
     
       <div>
         <span class="icon-brush"></span>
-        3.5k
+        5k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        00:13
+        00:20
       </div>
     
     
@@ -531,7 +553,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text"> 总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text"> 音视频录制的多线程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text"> 主要类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#audiorecorder-%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> AudioRecorder 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 头文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E6%96%87%E4%BB%B6%E9%83%A8%E5%88%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 源文件部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.3.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text"> 回调函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.5.</span> <span class="toc-text"> 解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83"><span class="toc-number">2.6.</span> <span class="toc-text"> 为什么要使用回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_devicefmt_ctx-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> open_device(&amp;fmt_ctx) 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_audio_decoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> open_Audio_decoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fifo%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.</span> <span class="toc-text"> FIFO缓冲区实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text"> init_resampler() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
       
   </div>
 </div>
@@ -544,7 +566,7 @@
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">4</div>
+    <div class="sidebar-state-number">5</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
@@ -552,7 +574,7 @@
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
 </div>
 <div class="sidebar-social">
