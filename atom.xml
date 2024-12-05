@@ -6,7 +6,7 @@
   <link href="https://stardm0.github.io/atom.xml" rel="self"/>
   
   <link href="https://stardm0.github.io/"/>
-  <updated>2024-12-04T02:57:02.677Z</updated>
+  <updated>2024-12-05T11:35:29.846Z</updated>
   <id>https://stardm0.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>对ffmpeg中时间基与时间戳的理解</title>
+    <link href="https://stardm0.github.io/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+    <id>https://stardm0.github.io/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/</id>
+    <published>2024-12-05T06:05:16.000Z</published>
+    <updated>2024-12-05T11:35:29.846Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;时间基与时间戳的基本概念&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#时间基与时间戳的基本概念&quot;&gt;&lt;/a&gt; 时间基与时间戳的基本概念&lt;/h3&gt;
+&lt;p&gt;在 FFmpeg</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm0.github.io/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="ffmpeg" scheme="https://stardm0.github.io/tags/ffmpeg/"/>
+    
+  </entry>
   
   <entry>
     <title>解决git操作push失败的问题</title>
@@ -246,7 +272,7 @@
     <link href="https://stardm0.github.io/2024/11/28/FFmpeg%20%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/"/>
     <id>https://stardm0.github.io/2024/11/28/FFmpeg%20%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/</id>
     <published>2024-11-28T10:19:50.000Z</published>
-    <updated>2024-12-01T12:35:43.124Z</updated>
+    <updated>2024-12-05T11:33:41.875Z</updated>
     
     
       
