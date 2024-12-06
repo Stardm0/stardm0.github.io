@@ -1,0 +1,712 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    实现FFmpeg的解复用 |
+    
+    Stardm 风也温柔
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="程序步骤  1. 处理参数 123456789101112131415161718char* src;  &#x2F;&#x2F;输入数据char* dst;  &#x2F;&#x2F;输出数据int *stream_map &#x3D; NULL;AVFormatContext *pFmtCtx &#x3D; NULL;AVFormatContext *oFmtCtx &#x3D; NULL;AVPacket pkt;av_log_set_level(AV_LO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现FFmpeg的解复用">
+<meta property="og:url" content="https://stardm0.github.io/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/index.html">
+<meta property="og:site_name" content="Stardm 风也温柔">
+<meta property="og:description" content="程序步骤  1. 处理参数 123456789101112131415161718char* src;  &#x2F;&#x2F;输入数据char* dst;  &#x2F;&#x2F;输出数据int *stream_map &#x3D; NULL;AVFormatContext *pFmtCtx &#x3D; NULL;AVFormatContext *oFmtCtx &#x3D; NULL;AVPacket pkt;av_log_set_level(AV_LO">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-06T13:43:40.000Z">
+<meta property="article:modified_time" content="2024-12-06T14:03:48.499Z">
+<meta property="article:author" content="凌">
+<meta property="article:tag" content="FFmpeg">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Stardm 风也温柔" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <img src="/images/taichi.png" alt="loading" />
+        
+      </div>
+      <div class="loading-word">加载中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf015;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf187;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf06a;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf0c1;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/11/30/674a9f8d8f3f9.webp" alt="实现FFmpeg的解复用">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">实现FFmpeg的解复用</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 程序步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A4%84%E7%90%86%E5%8F%82%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 处理参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E8%BE%93%E5%85%A5%E4%B8%8A%E4%B8%8B%E6%96%87%E6%89%93%E5%BC%80%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. 配置输入上下文，打开多媒体文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E8%BE%93%E5%87%BA%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 配置输出上下文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%89%93%E5%BC%80%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text"> 4. 打开输出文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%9C%A8%E8%BE%93%E5%87%BA%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%9B%E5%BB%BA%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text"> 5. 在输出上下文创建流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%86%99%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E5%A4%B4%E5%88%B0%E7%9B%AE%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text"> 6. 写多媒体文件头到目的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BB%8E%E6%BA%90%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E5%88%B0%E7%9B%AE%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.7.</span> <span class="toc-text"> 7. 从源多媒体文件中读取数据到目的文件中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%86%99%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E5%B0%BE%E5%88%B0%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.8.</span> <span class="toc-text"> 8. 写多媒体文件尾到文件中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E5%B0%86%E7%94%B3%E8%AF%B7%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8A%E6%94%BE%E6%8E%89"><span class="toc-number">1.9.</span> <span class="toc-text"> 9. 将申请的资源释放掉</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+          <section id="main"><article id="post-实现FFmpeg的解复用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-12-06T13:43:40.000Z" itemprop="datePublished">2024-12-06</time>
+    <time style="display: none;" id="post-update-time">2024-12-06</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" data-aos="zoom-in">音视频</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h2 id="程序步骤"><a class="markdownIt-Anchor" href="#程序步骤"></a> 程序步骤</h2>
+<h3 id="1-处理参数"><a class="markdownIt-Anchor" href="#1-处理参数"></a> 1. 处理参数</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* src;  <span class="comment">//输入数据</span></span><br><span class="line"><span class="type">char</span>* dst;  <span class="comment">//输出数据</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> *stream_map = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">AVFormatContext *pFmtCtx = <span class="literal">NULL</span>;</span><br><span class="line">AVFormatContext *oFmtCtx = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">AVPacket pkt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">av_log_set_level</span>(AV_LOG_DEBUG);</span><br><span class="line"><span class="keyword">if</span>(argc &lt; <span class="number">3</span>)&#123; <span class="comment">//argv[0] 就是这个extra_audio名字</span></span><br><span class="line">    <span class="built_in">av_log</span>(<span class="literal">NULL</span>, AV_LOG_INFO, <span class="string">&quot;arguments must be more than 3!&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">src = argv[<span class="number">1</span>];</span><br><span class="line">dst = argv[<span class="number">2</span>];</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="2-配置输入上下文打开多媒体文件"><a class="markdownIt-Anchor" href="#2-配置输入上下文打开多媒体文件"></a> 2. 配置输入上下文，打开多媒体文件</h3>
+<p>通过 avformat_open_input 打开输入的多媒体文件，并初始化输入上下文：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((ret = <span class="built_in">avformat_open_input</span>(&amp;pFmtCtx, src, <span class="literal">NULL</span>, <span class="literal">NULL</span>)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="built_in">av_log</span>(<span class="literal">NULL</span>, AV_LOG_ERROR, <span class="string">&quot;%s\n&quot;</span>, <span class="built_in">av_err2str</span>(ret));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="3-配置输出上下文"><a class="markdownIt-Anchor" href="#3-配置输出上下文"></a> 3. 配置输出上下文</h3>
+<p>通过 avformat_alloc_output_context2 为目标文件创建输出上下文：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">avformat_alloc_output_context2</span>(&amp;oFmtCtx, <span class="literal">NULL</span>, <span class="literal">NULL</span>, dst);</span><br><span class="line"><span class="keyword">if</span>(!oFmtCtx)&#123;</span><br><span class="line">    <span class="built_in">av_log</span>(<span class="literal">NULL</span> ,AV_LOG_ERROR, <span class="string">&quot;NO MEMORY&quot;</span>);</span><br><span class="line">    <span class="keyword">goto</span> __ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="4-打开输出文件"><a class="markdownIt-Anchor" href="#4-打开输出文件"></a> 4. 打开输出文件</h3>
+<p>通过 avio_open2 打开目标文件，用于写入处理后的多媒体数据：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ret = <span class="built_in">avio_open2</span>(&amp;oFmtCtx-&gt;pb, dst, AVIO_FLAG_WRITE, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="built_in">av_log</span>(oFmtCtx, AV_LOG_ERROR, <span class="string">&quot;%s&quot;</span>, <span class="built_in">av_err2str</span>(ret));</span><br><span class="line">    <span class="keyword">goto</span> __ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="5-在输出上下文创建流"><a class="markdownIt-Anchor" href="#5-在输出上下文创建流"></a> 5. 在输出上下文创建流</h3>
+<p>遍历输入文件的所有流，根据需要创建对应的输出流，同时初始化 stream_map：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">stream_map = <span class="built_in">av_calloc</span>(pFmtCtx-&gt;nb_streams, <span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="keyword">if</span>(!stream_map)&#123;</span><br><span class="line">    <span class="built_in">av_log</span>(<span class="literal">NULL</span> ,AV_LOG_ERROR, <span class="string">&quot;NO MEMORY&quot;</span>);</span><br><span class="line">    <span class="keyword">goto</span> __ERROR;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; pFmtCtx-&gt;nb_streams; i++)&#123;</span><br><span class="line">    AVStream *outStream = <span class="literal">NULL</span>;</span><br><span class="line">    AVStream *inStream = pFmtCtx-&gt;streams[i];</span><br><span class="line">    AVCodecParameters *inCodecPar = inStream-&gt;codecpar;</span><br><span class="line">    <span class="keyword">if</span>(inCodecPar-&gt;codec_type != AVMEDIA_TYPE_AUDIO &amp;&amp; inCodecPar-&gt;codec_type != AVMEDIA_TYPE_VIDEO &amp;&amp; inCodecPar-&gt;codec_type != AVMEDIA_TYPE_SUBTITLE)&#123;</span><br><span class="line">        stream_map[i] = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    stream_map[i] = stream_idx++;</span><br><span class="line">    outStream = <span class="built_in">avformat_new_stream</span>(oFmtCtx, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span>(!outStream)&#123;</span><br><span class="line">        <span class="built_in">av_log</span>(<span class="literal">NULL</span> ,AV_LOG_ERROR, <span class="string">&quot;NO MEMORY&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> __ERROR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置输出视频参数</span></span><br><span class="line">    <span class="built_in">avcodec_parameters_copy</span>(outStream-&gt;codecpar, inStream-&gt;codecpar);</span><br><span class="line">    outStream-&gt;codecpar-&gt;codec_tag = <span class="number">0</span>; <span class="comment">//自动设置编解码器，对于输出流在这里是自动设置编码器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="6-写多媒体文件头到目的文件"><a class="markdownIt-Anchor" href="#6-写多媒体文件头到目的文件"></a> 6. 写多媒体文件头到目的文件</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ret = avformat_write_header(oFmtCtx, <span class="literal">NULL</span>);</span><br><span class="line"><span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">    av_log(oFmtCtx, AV_LOG_ERROR, <span class="string">&quot;%s&quot;</span>, av_err2str(ret));</span><br><span class="line">    <span class="keyword">goto</span> __ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="7-从源多媒体文件中读取数据到目的文件中"><a class="markdownIt-Anchor" href="#7-从源多媒体文件中读取数据到目的文件中"></a> 7. 从源多媒体文件中读取数据到目的文件中</h3>
+<p>通过 av_read_frame 读取输入文件的帧数据，并通过 av_interleaved_write_frame 将处理后的数据写入目标文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(av_read_frame(pFmtCtx, &amp;pkt) &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">    AVStream *inStream, *outStream;</span><br><span class="line">    <span class="keyword">if</span>(stream_map[pkt.stream_index] &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        av_packet_unref(&amp;pkt);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inStream = pFmtCtx-&gt;streams[pkt.stream_index];</span><br><span class="line">    pkt.stream_index = stream_map[pkt.stream_index];</span><br><span class="line">    outStream = oFmtCtx-&gt;streams[pkt.stream_index];</span><br><span class="line">    av_packet_rescale_ts(&amp;pkt, inStream-&gt;time_base, outStream-&gt;time_base);</span><br><span class="line">    <span class="comment">//查看ffmpeg源码可以知道在写入包之前会有一个guess_pkt_duration(s, st, pkt),这个函数会自动设置duration</span></span><br><span class="line">    <span class="comment">//pkt.pos = -1; //用于索引标识，在特殊的场景下可以使用，比如合并多个文件。</span></span><br><span class="line">    av_interleaved_write_frame(oFmtCtx, &amp;pkt);</span><br><span class="line">    av_packet_unref(&amp;pkt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="8-写多媒体文件尾到文件中"><a class="markdownIt-Anchor" href="#8-写多媒体文件尾到文件中"></a> 8. 写多媒体文件尾到文件中</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">av_write_trailer(oFmtCtx);</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="9-将申请的资源释放掉"><a class="markdownIt-Anchor" href="#9-将申请的资源释放掉"></a> 9. 将申请的资源释放掉</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">__ERROR:</span><br><span class="line"><span class="keyword">if</span>(pFmtCtx)&#123;</span><br><span class="line">    avformat_close_input(&amp;pFmtCtx);</span><br><span class="line">    pFmtCtx = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(oFmtCtx-&gt;pb)&#123;</span><br><span class="line">    avio_close(oFmtCtx-&gt;pb);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(oFmtCtx)&#123;</span><br><span class="line">    avformat_free_context(oFmtCtx);</span><br><span class="line">    oFmtCtx = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(stream_map)&#123;</span><br><span class="line">    av_free(stream_map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        <a data-aos="zoom-in" href="/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/" itemprop="commentCount"></span>
+          留言
+        </a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/FFmpeg/" rel="tag">FFmpeg</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="https://www.freeimg.cn/i/2024/11/28/67485ef424ac1.webp" data-sizes="auto" alt="对ffmpeg中时间基与时间戳的理解" class="lazyload">
+      
+      <a href="/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          对ffmpeg中时间基与时间戳的理解
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+  <section id="comments" class="vcomment" data-aos="fade-up"></section>
+
+
+
+
+
+
+</section>
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep rotate"></span>
+      凌
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        8k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        00:33
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 程序步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A4%84%E7%90%86%E5%8F%82%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 处理参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E8%BE%93%E5%85%A5%E4%B8%8A%E4%B8%8B%E6%96%87%E6%89%93%E5%BC%80%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. 配置输入上下文，打开多媒体文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E8%BE%93%E5%87%BA%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 配置输出上下文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%89%93%E5%BC%80%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text"> 4. 打开输出文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%9C%A8%E8%BE%93%E5%87%BA%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%9B%E5%BB%BA%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text"> 5. 在输出上下文创建流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%86%99%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E5%A4%B4%E5%88%B0%E7%9B%AE%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text"> 6. 写多媒体文件头到目的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BB%8E%E6%BA%90%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E5%88%B0%E7%9B%AE%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.7.</span> <span class="toc-text"> 7. 从源多媒体文件中读取数据到目的文件中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%86%99%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E5%B0%BE%E5%88%B0%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.8.</span> <span class="toc-text"> 8. 写多媒体文件尾到文件中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E5%B0%86%E7%94%B3%E8%AF%B7%E7%9A%84%E8%B5%84%E6%BA%90%E9%87%8A%E6%94%BE%E6%8E%89"><span class="toc-number">1.9.</span> <span class="toc-text"> 9. 将申请的资源释放掉</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+  
+<script src="https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js" integrity="sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn" crossorigin="anonymous" data-pjax></script>
+
+  <script data-pjax>
+    var GUEST_INFO = ['nick', 'mail', 'link'];
+    var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+      return GUEST_INFO.indexOf(item) > -1
+    });
+    var recordIP = JSON.parse('true');
+    var highlight = JSON.parse('true');
+    var visitor = JSON.parse('false');
+
+    new Valine({
+      el: '.vcomment',
+      appId: "Bd17umq4JlEEEj0CkSxnsPC9-gzGzoHsz",
+      appKey: "m0FoW4Y9WglsyoP3J0Y8Kmjh",
+      placeholder: "Just go go",
+      pageSize: '10',
+      avatar: 'mp',
+      lang: 'zh-CN',
+      recordIP: recordIP,
+      highlight: highlight,
+      visitor: visitor,
+      requiredFields: guest_info,
+      path: window.location.pathname
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+
