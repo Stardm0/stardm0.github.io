@@ -35,15 +35,15 @@
 
   
   
-    <meta name="description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。">
+    <meta name="description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对ffmpeg中时间基与时间戳的理解">
 <meta property="og:url" content="https://stardm0.github.io/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Stardm 风也温柔">
-<meta property="og:description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。">
+<meta property="og:description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-05T06:05:16.000Z">
-<meta property="article:modified_time" content="2024-12-06T09:55:29.500Z">
+<meta property="article:modified_time" content="2024-12-06T10:05:26.384Z">
 <meta property="article:author" content="凌">
 <meta property="article:tag" content="FFmpeg">
 <meta name="twitter:card" content="summary">
@@ -304,16 +304,20 @@
 <p>在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。</p>
 <h3 id="pts和dts"><a class="markdownIt-Anchor" href="#pts和dts"></a> pts和dts</h3>
 <p>这里我将pts和dts简单的理解为<code>pts是播放时间</code>，<code>dts是解码时间</code><br />
-视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。<br />
+视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。<br />
+对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。<br />
 音频帧的解码时间和播放时间绝大多数的情况下是相同的，因为音频帧按顺序解码并播放。</p>
 <h3 id="视频流和音频流pts和dts的设置"><a class="markdownIt-Anchor" href="#视频流和音频流pts和dts的设置"></a> 视频流和音频流pts和dts的设置</h3>
 <h4 id="视频流"><a class="markdownIt-Anchor" href="#视频流"></a> 视频流</h4>
 <p>视频按帧播放，所以解码后的原始视频帧时间基为 1/帧率。<br />
-例如，对于高清视频，时间基的 <code>num</code> 和 <code>den</code> 为 1 和 90000，时间基就是 1/90000。这样计算视频的时间戳就是 <code>1 / 25 * 90000</code>。<br />
-即pts就是<code>1 / 25 * 90000</code>，<br />
+例如，对于高清视频，时间基的 <code>num</code> 和 <code>den</code> 为 1 和 90000，时间基就是 1/90000。<br />
+这样计算视频的时间戳就是 <code>index / 25 * 90000</code>，<code>index</code>是帧标识，表示第几帧。<br />
+即pts就是<code>index / 25 * 90000</code><br />
 而dts我发现不设置也可以(但具体原因我也不知道，有知道的还请一定指点一二，拜托了<code>(ಥ _ ಥ)</code>)<br />
 其中，<code>25</code> 是视频的帧率（frames per second，fps），即每秒钟的帧数。<br />
-通过将时间戳乘以时间基，可以得到实际的播放时间。换算成时间基的目的，主要是为了统一不视频流的时间单位，就像统一国际单位一样，不同帧率的视频时间戳都有统一的单位，这样的换算也能进一步提高精度。</p>
+通过将时间戳乘以时间基，可以得到实际的播放时间。<br />
+换算成时间基的目的，主要是为了统一不视频流的时间单位，就像统一国际单位一样，不同帧率的视频时间戳都有统一的单位。<br />
+这样的换算也能进一步提高精度。</p>
 <h4 id="音频流"><a class="markdownIt-Anchor" href="#音频流"></a> 音频流</h4>
 <p>音频按采样点播放，所以解码后的原始音频帧时间基为 1/采样率。<br />
 这样音频的时间戳设置就是采样数，时间基就是采样率的倒数。即，采样率越高，每个采样点的时间基就越小。</p>
