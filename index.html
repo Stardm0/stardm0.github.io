@@ -313,7 +313,7 @@
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-12-05</span>
-        <span><span class="icon-pencil"></span>517 字</span>
+        <span><span class="icon-pencil"></span>521 字</span>
         <span><span class="icon-clock"></span>1 分钟</span>
       </div>
       <h2 class="post-title">对ffmpeg中时间基与时间戳的理解</h2>
@@ -326,10 +326,9 @@
 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。
 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。
 音频帧的解码时间和播放时间绝大多数的情况下是相同的，因为音频帧按顺序解码并播放。
- 视频流和音频流pts和dts的设置
+ 视频流和音频流pts和dts的设置(基于裸流)
  视频流
-视频按帧播放，所以解码后的原始视频帧时间基为 1/帧率。
-例如，对
+视频按帧播放，所以解码后的原始视频帧时间基为 1/帧率
         
       </article>
     </div>
