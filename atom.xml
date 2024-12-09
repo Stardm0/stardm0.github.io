@@ -6,7 +6,7 @@
   <link href="https://stardm0.github.io/atom.xml" rel="self"/>
   
   <link href="https://stardm0.github.io/"/>
-  <updated>2024-12-08T10:36:25.399Z</updated>
+  <updated>2024-12-09T11:51:52.607Z</updated>
   <id>https://stardm0.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>用FFmpeg实现一个简单小咖秀</title>
+    <link href="https://stardm0.github.io/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/"/>
+    <id>https://stardm0.github.io/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/</id>
+    <published>2024-12-09T11:43:57.000Z</published>
+    <updated>2024-12-09T11:51:52.607Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;核心代码&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#核心代码&quot;&gt;&lt;/a&gt; 核心代码&lt;/h3&gt;
+&lt;h4 id=&quot;找其中一个源文件的音频流&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm0.github.io/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="FFmpeg" scheme="https://stardm0.github.io/tags/FFmpeg/"/>
+    
+  </entry>
   
   <entry>
     <title>实现FFmpeg的裁剪</title>
