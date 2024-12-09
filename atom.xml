@@ -203,11 +203,11 @@
     
     <category term="FFmpeg" scheme="https://stardm0.github.io/tags/FFmpeg/"/>
     
+    <category term="QT" scheme="https://stardm0.github.io/tags/QT/"/>
+    
     <category term="多线程" scheme="https://stardm0.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     <category term="C++" scheme="https://stardm0.github.io/tags/C/"/>
-    
-    <category term="QT" scheme="https://stardm0.github.io/tags/QT/"/>
     
   </entry>
   
@@ -265,9 +265,9 @@
     
     <category term="FFmpeg" scheme="https://stardm0.github.io/tags/FFmpeg/"/>
     
-    <category term="QT" scheme="https://stardm0.github.io/tags/QT/"/>
-    
     <category term="AAC" scheme="https://stardm0.github.io/tags/AAC/"/>
+    
+    <category term="QT" scheme="https://stardm0.github.io/tags/QT/"/>
     
   </entry>
   
