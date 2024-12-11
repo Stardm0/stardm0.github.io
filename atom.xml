@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-11T12:50:17.995Z</updated>
+  <updated>2024-12-11T12:56:02.874Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/"/>
     <id>https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/</id>
     <published>2024-12-11T12:06:32.000Z</published>
-    <updated>2024-12-11T12:50:17.995Z</updated>
+    <updated>2024-12-11T12:56:02.874Z</updated>
     
     
       
@@ -38,6 +38,8 @@
     
     
     <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    
+    <category term="AAC" scheme="https://stardm.ddns-ip.net/tags/AAC/"/>
     
   </entry>
   
