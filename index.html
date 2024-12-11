@@ -300,26 +300,27 @@
     <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/" aria-label="Cloudflare证书切换为 Google Trust(GTS)"></a>
+      <a class="post-link" href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/" aria-label="Cloudflare证书的颁发切换为 Google Trust(GTS)"></a>
     
     
     <div class="post-cover-left">
       
-        <img data-src="https://www.freeimg.cn/i/2024/11/30/674aa67cbff2e.webp" data-sizes="auto" alt="Cloudflare证书切换为 Google Trust(GTS)" class="lazyload">
+        <img data-src="https://www.freeimg.cn/i/2024/11/30/674aa67cbff2e.webp" data-sizes="auto" alt="Cloudflare证书的颁发切换为 Google Trust(GTS)" class="lazyload">
       
     </div>
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-12-10</span>
-        <span><span class="icon-pencil"></span>203 字</span>
+        <span><span class="icon-pencil"></span>352 字</span>
         <span><span class="icon-clock"></span>1 分钟</span>
       </div>
-      <h2 class="post-title">Cloudflare证书切换为 Google Trust(GTS)</h2>
+      <h2 class="post-title">Cloudflare证书的颁发切换为 Google Trust(GTS)</h2>
       <article class="post-article">
         
-           通过 API 改变证书(可能需要代理)
+          在使用cloudflare时发现了SSL的证书安全问题，经过一段时间的折腾，证书安全问题倒是解决了，但是我发现cloudflare里SSL显示的有效证书与我网站的真实证书不一致，所以就找到了这个调用官方API的方法，但调用成功后，我发现网站的实际证书还是不一样(很可能是我一开始瞎搞弄成这样的/(ㄒoㄒ)/~~)，总之静观其变吧，看看它续签的时候会不会换回来…(ノへ￣、)
+ 通过 API 改变证书(可能需要代理)
  输入（适用于 Mac/Linux）：
-1curl -sX PATCH &amp;quot;https://api.cloudflare.com/client/v4/zones/[DOMAIN_ZONE_ID_HERE]/ssl/universal/settings&amp;quot; -H &amp;quot;X-Auth-Email: [CLOUDFLARE_EMAIL_HERE]&amp;quot; -H &amp;quot;X-Auth-Key: [GLOBAL_API_KEY_HERE]&amp;quot; -H &amp;quot;Content-Type: application/json&amp;q
+1curl -sX PATCH &amp;quot;https://api.cloudflare.com/client/v4/zones/[DOMAIN
         
       </article>
     </div>
@@ -663,7 +664,7 @@ AVFormatCon
     
       <div>
         <span class="icon-brush"></span>
-        8.8k
+        8.9k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
         00:36
