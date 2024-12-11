@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-11T05:55:03.001Z</updated>
+  <updated>2024-12-11T05:57:33.216Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="https://stardm.ddns-ip.net/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/"/>
     <id>https://stardm.ddns-ip.net/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/</id>
     <published>2024-12-10T15:33:09.000Z</published>
-    <updated>2024-12-11T05:55:03.001Z</updated>
+    <updated>2024-12-11T05:57:33.216Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;在使用cloudflare时发现了SSL的证书安全问题，经过一段时间的折腾，证书安全问题倒是解决了，但是我发现cloudflare里SSL显示的有效证书与我网站的真实证书不一致，所以就找到了这个调用官方API的方法，但调用成功后，我发现网站的实际证书还是不一样(很可能是我一</summary>
+    <summary type="html">&lt;p&gt;在使用cloudflare时发现了SSL的证书安全问题，经过一段时间的折腾，证书安全问题倒是解决了。但是我发现cloudflare里SSL显示的有效证书与我网站的真实证书不一致，所以就找到了这个调用官方API的方法。但调用成功后，我发现网站的实际证书还是不一样(很可能是我一</summary>
         
       
     
