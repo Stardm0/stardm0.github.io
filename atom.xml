@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-11T05:57:33.216Z</updated>
+  <updated>2024-12-11T12:50:17.995Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>用FFmpeg自带的AAC编码器进行编码</title>
+    <link href="https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/"/>
+    <id>https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/</id>
+    <published>2024-12-11T12:06:32.000Z</published>
+    <updated>2024-12-11T12:50:17.995Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;大体内容和&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    
+  </entry>
   
   <entry>
     <title>Cloudflare证书的颁发切换为 Google Trust(GTS)</title>
@@ -168,9 +193,9 @@
     <category term="杂项" scheme="https://stardm.ddns-ip.net/categories/%E6%9D%82%E9%A1%B9/"/>
     
     
-    <category term="git" scheme="https://stardm.ddns-ip.net/tags/git/"/>
-    
     <category term="解决" scheme="https://stardm.ddns-ip.net/tags/%E8%A7%A3%E5%86%B3/"/>
+    
+    <category term="git" scheme="https://stardm.ddns-ip.net/tags/git/"/>
     
   </entry>
   
