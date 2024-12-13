@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-11T12:56:02.874Z</updated>
+  <updated>2024-12-13T13:25:57.666Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>实现FFmpeg的视频转图片(BMP)</title>
+    <link href="https://stardm.ddns-ip.net/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/"/>
+    <id>https://stardm.ddns-ip.net/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/</id>
+    <published>2024-12-13T13:10:01.000Z</published>
+    <updated>2024-12-13T13:25:57.666Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;结构体信息可以看这里&lt;br /&gt;
+&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    
+    <category term="BMP" scheme="https://stardm.ddns-ip.net/tags/BMP/"/>
+    
+  </entry>
   
   <entry>
     <title>用FFmpeg自带的AAC编码器进行编码</title>
