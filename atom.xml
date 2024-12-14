@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-13T13:29:19.252Z</updated>
+  <updated>2024-12-14T14:48:41.611Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SDL初探</title>
+    <link href="https://stardm.ddns-ip.net/2024/12/14/SDL%E5%88%9D%E6%8E%A2/"/>
+    <id>https://stardm.ddns-ip.net/2024/12/14/SDL%E5%88%9D%E6%8E%A2/</id>
+    <published>2024-12-14T14:40:00.000Z</published>
+    <updated>2024-12-14T14:48:41.611Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;学习了一下SDL，跟着教学用SDL实现了一个简单的随机加载红色方块的程序&lt;/p&gt;
+&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    
+  </entry>
   
   <entry>
     <title>实现FFmpeg的视频转图片(BMP)</title>
