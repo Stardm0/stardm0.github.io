@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-16T12:58:23.386Z</updated>
+  <updated>2024-12-17T04:37:21.022Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SDL与FFmpeg结合实现简单的视频播放器</title>
+    <link href="https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
+    <id>https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
+    <published>2024-12-17T04:26:08.000Z</published>
+    <updated>2024-12-17T04:37:21.022Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;用FFmpeg与SDL写了一个简单的音视频播放器，但还有很大的问题。首先并没有使用多线程，音视频的解码渲染操作都在主线程中，导致在同时播放视频的时候，音频的播放会出现断断续续的情况，把视频的播放关闭就不会出现问题。还有就是队列的实现，目前只有音频使用了队列，而视频则是直接播</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    
+    <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    
+  </entry>
   
   <entry>
     <title>SDL初探</title>
