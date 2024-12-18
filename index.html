@@ -300,49 +300,30 @@
     <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="/2024/12/18/%E2%91%A0FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/" aria-label="①FFmpeg与SDL实现音视频播放器"></a>
+      <a class="post-link" href="/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/" aria-label="FFmpeg与SDL实现真正的音视频播放器"></a>
     
     
     <div class="post-cover-left">
       
-        <img data-src="https://www.freeimg.cn/i/2024/12/03/674ea3ee3e285.webp" data-sizes="auto" alt="①FFmpeg与SDL实现音视频播放器" class="lazyload">
+        <img data-src="https://www.freeimg.cn/i/2024/12/03/674ea3ee3e285.webp" data-sizes="auto" alt="FFmpeg与SDL实现真正的音视频播放器" class="lazyload">
       
     </div>
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-12-18</span>
-        <span><span class="icon-pencil"></span>894 字</span>
-        <span><span class="icon-clock"></span>4 分钟</span>
+        <span><span class="icon-pencil"></span>2k 字</span>
+        <span><span class="icon-clock"></span>10 分钟</span>
       </div>
-      <h2 class="post-title">①FFmpeg与SDL实现音视频播放器</h2>
+      <h2 class="post-title">FFmpeg与SDL实现真正的音视频播放器</h2>
       <article class="post-article">
         
-          通过学习跟着写了一个音视频播放器。内容有点多，但是思路很清晰。这里就简单讲解一下
+          通过学习跟着写了一个音视频播放器。内容有点多，所以我就不打算在博客都展示出来了，这里就展示一下每个类的核心逻辑。思路很清晰，这里就简单讲解一下吧((～o￣3￣)～)
  音视频队列
 
-
 packet队列
-avpacketqueue 存储解复用线程中读取到的packet数据
+avpacketqueue 存储解复用线程中读取到的packet数据，因为队列的实现比较简单，我就展示一下该类的结构吧
 
-
-frame视频队列
-avframequeue 存储解码线程中解码后的frame数据
-
-
- 线程分工
-
-主线程
-主要完成线程的创建，让子线程完成具体的工作。
-解复用线程
-demuxthread 完成音频的解复用，并将pkt数据写入packet队列，同时音视频的相关参数也由该线程提供。
-解码线程
-decodethread 完成音视频的解码，并将解码后的数据写入frame队列。
-
- 输出渲染
-
-
-音频输出
-au
+12345678910111213class AVPacketQueue&amp;#123;public:    AVPacketQueue();    ~AVPacketQueue();    void Abort();    int Size();    int Push(AVPa
         
       </article>
     </div>
@@ -672,10 +653,10 @@ https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileh
     
       <div>
         <span class="icon-brush"></span>
-        15.7k
+        16.9k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        01:08
+        01:14
       </div>
     
     

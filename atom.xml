@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-18T09:01:09.730Z</updated>
+  <updated>2024-12-18T09:35:33.050Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -17,19 +17,19 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>①FFmpeg与SDL实现音视频播放器</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/18/%E2%91%A0FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/18/%E2%91%A0FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
+    <title>FFmpeg与SDL实现真正的音视频播放器</title>
+    <link href="https://stardm.ddns-ip.net/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
+    <id>https://stardm.ddns-ip.net/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
     <published>2024-12-18T08:27:12.000Z</published>
-    <updated>2024-12-18T09:01:09.730Z</updated>
+    <updated>2024-12-18T09:35:33.050Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;通过学习跟着写了一个音视频播放器。内容有点多，但是思路很清晰。这里就简单讲解一下&lt;/p&gt;
-&lt;h4 id=&quot;音视频队列&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#音视频队列&quot;&gt;&lt;/a&gt;</summary>
+    <summary type="html">&lt;p&gt;通过学习跟着写了一个音视频播放器。内容有点多，所以我就不打算在博客都展示出来了，这里就展示一下每个类的核心逻辑。思路很清晰，这里就简单讲解一下吧((～o￣3￣)～)&lt;/p&gt;
+&lt;h4 id=&quot;音视频队列&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
         
       
     
