@@ -40,9 +40,9 @@
     
     <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
     
-    <category term="多线程" scheme="https://stardm.ddns-ip.net/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
     <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    
+    <category term="多线程" scheme="https://stardm.ddns-ip.net/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     <category term="音视频同步" scheme="https://stardm.ddns-ip.net/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%90%8C%E6%AD%A5/"/>
     
@@ -371,9 +371,9 @@
     
     <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
     
-    <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
-    
     <category term="多线程" scheme="https://stardm.ddns-ip.net/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+    <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
     
     <category term="C++" scheme="https://stardm.ddns-ip.net/tags/C/"/>
     
