@@ -1,0 +1,784 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.code_block = {"expand":true};</script>
+  
+  <title>
+    WebRtc初步认识(webrtc实现1v1视频通话从0到1) |
+    
+    Stardm 风也温柔
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="在网上找到了一个非常适合入门的教程，再这里做个分享(o(￣︶￣)o)  WebRtc处理过程 实现1v1的通话有4个部分，WebRtc终端（这里理解为浏览器端）、Signal（信令）服务器、STUN&#x2F;TURN服务器 WebRtc终端，负责音视频的采集、编解码、NAT穿越、音视频数据传输 （这里终端暂时看做浏览器，webRtc不止应用在浏览器） Signal服务器，负责信令处理，如有人加入房间、离开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebRtc初步认识(webrtc实现1v1视频通话从0到1)">
+<meta property="og:url" content="https://stardm.ddns-ip.net/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/index.html">
+<meta property="og:site_name" content="Stardm 风也温柔">
+<meta property="og:description" content="在网上找到了一个非常适合入门的教程，再这里做个分享(o(￣︶￣)o)  WebRtc处理过程 实现1v1的通话有4个部分，WebRtc终端（这里理解为浏览器端）、Signal（信令）服务器、STUN&#x2F;TURN服务器 WebRtc终端，负责音视频的采集、编解码、NAT穿越、音视频数据传输 （这里终端暂时看做浏览器，webRtc不止应用在浏览器） Signal服务器，负责信令处理，如有人加入房间、离开">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-25T12:37:24.000Z">
+<meta property="article:modified_time" content="2024-12-25T13:14:08.838Z">
+<meta property="article:author" content="凌">
+<meta property="article:tag" content="WebRtc">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Stardm 风也温柔" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <img src="/images/taichi.png" alt="loading" />
+        
+      </div>
+      <div class="loading-word">加载中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf015;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf187;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf06a;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf0c1;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/12/03/674ea3ee51ddb.webp" alt="WebRtc初步认识(webrtc实现1v1视频通话从0到1)">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">WebRtc初步认识(webrtc实现1v1视频通话从0到1)</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text"> WebRtc处理过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AA%92%E4%BD%93%E5%8D%8F%E5%95%86"><span class="toc-number">1.1.</span> <span class="toc-text"> 媒体协商</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B"><span class="toc-number">1.2.</span> <span class="toc-text"> 连接建立</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 连接的基本原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stun%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text"> STUN协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#turn%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text"> TURN协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.</span> <span class="toc-text"> 完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 前端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E4%BB%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 信令服务器完整代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">1.4.</span> <span class="toc-text"> 最后</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">19</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">18</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+          <section id="main"><article id="post-WebRtc初步认识(webrtc实现1v1视频通话从0到1)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-12-25T12:37:24.000Z" itemprop="datePublished">2024-12-25</time>
+    <time style="display: none;" id="post-update-time">2024-12-25</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" data-aos="zoom-in">音视频</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <p>在网上找到了一个非常适合入门的教程，再这里做个分享(o(<em>￣︶￣</em>)o)</p>
+<h2 id="webrtc处理过程"><a class="markdownIt-Anchor" href="#webrtc处理过程"></a> WebRtc处理过程</h2>
+<p>实现1v1的通话有4个部分，WebRtc终端（这里理解为浏览器端）、Signal（信令）服务器、STUN/TURN服务器</p>
+<p>WebRtc终端，负责音视频的采集、编解码、NAT穿越、音视频数据传输 （这里终端暂时看做浏览器，webRtc不止应用在浏览器）<br />
+Signal服务器，负责信令处理，如有人加入房间、离开房间、媒体协商消息传递等。（类似聊天室的xx加入房间），一般采用WebSocket连接<br />
+STUN/TURN服务，负责获取WebRtc终端在公网的ip地址，以及NAT穿越失败后的数据中转。（）</p>
+<p>用户A和用户B要语音通过大致过程：<br />
+1.用户A和用户B作为WebRtc终端（浏览器）检测你的设备是否支持音视频数据采集，<br />
+2.获取音视频数据后加入到信令信令服务器，这样2个用户都加入到一个房间<br />
+3.用户A会创建RTCPeerConnection对象，该对象将采集到的音视频数据进行编码和通过P2P传送给对方，P2P穿越失败，就使用TURN进行数据中转，有的公司架构是直接用后者进行传输<br />
+音视频采集<br />
+浏览器的getUserMedia方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">navigator.<span class="property">mediaDevices</span>.<span class="title function_">getUserMedia</span>(constraints);</span><br></pre></td></tr></table></figure>
+<p>constraints参数视频设置采集分辨率、帧率参数，音频可以设置开启降噪等参数；如设备具备音视频采集能力，它返回的成功的promise里，可以获取到MediaStream对象<br />
+1.本地操作视频流：MediaStream对象存放着采集到的音视频轨，直接赋值给video标签的srcObject属性，就可以本地实现看到摄像头和听到声音。<br />
+2.拍照：通过canvas的drawImage，将video标签传入<br />
+3.保存照片：通过canvas.toDataURL生成本地地址，通过a标签下载图片</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> constraints = &#123; <span class="attr">audio</span>: <span class="literal">true</span>, <span class="attr">video</span>: <span class="literal">true</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> media</span><br><span class="line">navigator.<span class="property">mediaDevices</span></span><br><span class="line">    .<span class="title function_">getUserMedia</span>(constraints)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">MediaStream</span>) =&gt;</span> &#123;</span><br><span class="line">      media = <span class="title class_">MediaStream</span>;</span><br><span class="line">      <span class="keyword">const</span> video = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;video&quot;</span>);</span><br><span class="line">      video.<span class="property">srcObject</span> = <span class="title class_">MediaStream</span>;</span><br><span class="line">      video.<span class="property">onloadedmetadata</span> = <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">        video.<span class="title function_">play</span>();</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(e, <span class="string">&quot;e&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拍照：调用canvas的api，将video标签传入</span></span><br><span class="line"><span class="keyword">const</span> video = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;video&quot;</span>);</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;canvas&quot;</span>).<span class="title function_">getContext</span>(<span class="string">&#x27;2d&#x27;</span>).<span class="title function_">drawImage</span>(video, <span class="number">0</span>, <span class="number">0</span>,<span class="number">400</span>,<span class="number">300</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 保存照片</span></span><br><span class="line"><span class="keyword">const</span> url = canvas.<span class="title function_">toDataURL</span>(<span class="string">&quot;image/jpeg&quot;</span>);</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;a&#x27;</span>).<span class="property">href</span> = url;</span><br></pre></td></tr></table></figure>
+<h3 id="媒体协商"><a class="markdownIt-Anchor" href="#媒体协商"></a> 媒体协商</h3>
+<p>作用：让双方找到共同支持的媒体能力,过程有点像TCP的三次握手</p>
+<p>1.创建连接，创建RTCPeerConnection，它负责端与端之间建立P2P连接<br />
+2.信令，客户端通过信令服务器交换SDP（包含编解码方式、传输协议、ip地址和端口等信息）<br />
+媒体协商过程</p>
+<p>Offer， 在双发通讯时，呼叫方发送的SDP消息称Offer<br />
+Answer，在双发通讯时，被呼叫方发送的SDP消息称Answer</p>
+<p>呼叫方创建Offer类型的SDP消息后，调setLocalDescription方法保存到本地Local域，再通过信令将Offer发给被呼叫方<br />
+被呼叫方收到Offer类型的SDP消息后，调setRemoteDescription保存到它的Remote域。它再创建Answer类型SDP消息，调setLocalDescription保存到本地域，再将消息发给呼叫方。<br />
+呼叫方收到Answer类型的SDP消息后，调setRemoteDescription保存到它的Remote域。</p>
+<p>总结：媒体协商完成后，WebRtc底层会收集Candidate（WebRtc与远端通信时使用的协议、ip地址和端口），进行连通性测试，最终建立一条链路。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 呼叫方A</span></span><br><span class="line"><span class="comment">// 创建Offer,本地设置，发给对方</span></span><br><span class="line"><span class="keyword">const</span> pcA = <span class="keyword">new</span> <span class="title class_">RTCPeerConnection</span>();</span><br><span class="line">pcA.<span class="title function_">createOffer</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">offerSDP</span>)=&gt;</span>&#123;</span><br><span class="line">    pcA.<span class="title function_">setLocalDescription</span>(offerSDP);</span><br><span class="line">    <span class="title function_">sendMessage</span>(offerSDP);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接受到answer，保存起来</span></span><br><span class="line">socket.<span class="title function_">on</span>(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(message.<span class="property">type</span> === <span class="string">&#x27;answer&#x27;</span>) &#123;</span><br><span class="line">        pcA.<span class="title function_">setRemoteDescription</span>(<span class="keyword">new</span> <span class="title class_">RTCSessionDescription</span>(message))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 被呼叫方B</span></span><br><span class="line"><span class="keyword">const</span> pcB = <span class="keyword">new</span> <span class="title class_">RTCPeerConnection</span>();</span><br><span class="line">socket.<span class="title function_">on</span>(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(message.<span class="property">type</span> === <span class="string">&#x27;offer&#x27;</span>)</span><br><span class="line">    pcB.<span class="title function_">setRemoteDescription</span>(<span class="keyword">new</span> <span class="title class_">RTCSessionDescription</span>(message))</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建Answer,本地设置，发给对方</span></span><br><span class="line">    pcB.<span class="title function_">createAnswer</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">answerSDP</span>)=&gt;</span>&#123;</span><br><span class="line">        pcB.<span class="title function_">setLocalDescription</span>(answerSDP);</span><br><span class="line">        <span class="title function_">sendMessage</span>(answerSDP)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="连接建立"><a class="markdownIt-Anchor" href="#连接建立"></a> 连接建立</h3>
+<h4 id="连接的基本原则"><a class="markdownIt-Anchor" href="#连接的基本原则"></a> 连接的基本原则</h4>
+<p>如果A和B连接，C作为服务器</p>
+<p>场景一：双方处于同一个网段内（内网）<br />
+场景二：双方处于不同点</p>
+<p><code>ICE Candidate（ICE候选者）</code>，它表示WebRtc与远端通信使用的协议、ip地址和端口，一般3种方式<br />
+<code>host</code>表示本机候选者，内网之间的联通性测试，优先级最高<br />
+<code>srflx</code>表示内网主机映射的外网地址和端口，让双发通过P2P进行连接，次优化级<br />
+<code>relay</code>表示中继候选者，低优先级</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">address</span>: <span class="string">&#x27;xxx.xxx.xxx.xxx&#x27;</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="string">&#x27;xxxx&#x27;</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;host/srflx/relay&#x27;</span>,</span><br><span class="line">    <span class="attr">protocol</span>: <span class="string">&#x27;UDP/TCP&#x27;</span>,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="stun协议"><a class="markdownIt-Anchor" href="#stun协议"></a> STUN协议</h4>
+<p><code>NAT</code>是指网络地址转换，作用就是进行内外网的地址转换。<br />
+<code>STUN(session traversal utilities for NAT)</code>,一种处理NAT传输的协议，它允许位于NAT后的客户端找出自己的公网地址。<br />
+srflx类型的Candidate实际上就是用的经NAT映射后的外网地址，进行P2P连接通信。</p>
+<h4 id="turn协议"><a class="markdownIt-Anchor" href="#turn协议"></a> TURN协议</h4>
+<p>relay服务通过TURN协议实现。TURN协议描述了如何获取relay服务器（即TUNR协议）的Candidate过程。通过TURN服务器发送Allocation指令，relay服务就会在服务端分配一个新的relay端口，用于中转UDP数据报。<br />
+因为P2P场景有限，其实大部分还是采用relay方式来传输数据。<br />
+实现1v1音视频实时直播系统<br />
+用户A和用户B之间视频通话过程：</p>
+<p>后端nodejs做信令服务器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ws = <span class="built_in">require</span>(<span class="string">&#x27;nodejs-websocket&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> roomTableMap = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 根据roomId，记录每个房间的成员信息</span></span><br><span class="line">ws.<span class="title function_">createServer</span>(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;text&#x27;</span>, <span class="function">(<span class="params">str</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 接收来自客户端的消息</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;).<span class="title function_">listen</span>(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+<p>用户A和用户B，通过WebSocket，连接ws服务，监听回到函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createWebScoket</span>(<span class="params">url</span>) &#123;</span><br><span class="line">  ws = <span class="keyword">new</span> <span class="title class_">WebSocket</span>(url);</span><br><span class="line">  ws.<span class="property">onopen</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;&#125;;</span><br><span class="line">  ws.<span class="property">onmessage</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 接收来自信令服务器的消息</span></span><br><span class="line">  &#125;;</span><br><span class="line">  ws.<span class="property">onclose</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;&#125;;</span><br><span class="line">  ws.<span class="property">onerror</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用户A和用户B先后点击加入房间，根据navigator.mediaDevices.getUserMedia获取本地的音视频流，再通过ws.send将roomId、userId等信息传递给信令服务器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">roomId = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;roomBox&#x27;</span>).<span class="property">value</span> <span class="comment">// 输入框取房间号</span></span><br><span class="line"><span class="comment">// 拿到媒体设备流，显示在本地</span></span><br><span class="line">navigator.<span class="property">mediaDevices</span>.<span class="title function_">getUserMedia</span>(&#123; <span class="attr">video</span>: <span class="literal">true</span>, <span class="attr">audio</span>: <span class="literal">true</span> &#125;).<span class="title function_">then</span>(<span class="function">(<span class="params">stream</span>) =&gt;</span> &#123;</span><br><span class="line">    ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;join&#x27;</span>,</span><br><span class="line">      roomId,</span><br><span class="line">      <span class="attr">uid</span>: localUserId</span><br><span class="line">    &#125;))</span><br><span class="line">    localStream = stream;</span><br><span class="line">    localVideo.<span class="property">srcObject</span> = stream;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>信令服务器先后收到用户A和用户B消息，将该用户加入房间，当用户B加入的时候，就通知到房间里用户A</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">socket.<span class="title function_">on</span>(<span class="string">&#x27;text&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; type = <span class="string">&#x27;&#x27;</span>, roomId, uid, remoteUid&#125; = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data);</span><br><span class="line">    <span class="keyword">if</span> (type === <span class="string">&#x27;join&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> roomMap = roomTableMap.<span class="title function_">get</span>(roomId);</span><br><span class="line">        <span class="keyword">if</span> (!roomMap) &#123;</span><br><span class="line">            roomMap = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line">            roomTableMap.<span class="title function_">set</span>(roomId, roomMap)</span><br><span class="line">        &#125;</span><br><span class="line">        roomMap.<span class="title function_">set</span>(uid, &#123;roomId,uid,socket&#125;)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> roomMap) &#123;</span><br><span class="line">            <span class="keyword">if</span>(key !== uid) &#123;</span><br><span class="line">                value.<span class="property">socket</span>.<span class="title function_">sendText</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">type</span>: <span class="string">&#x27;peer-join&#x27;</span>, <span class="attr">remoteUid</span>: uid &#125;));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>用户A发现此时房间有其他人，会收到消息，type=“peer-join”，会先创建RTCPeerConnection对象，再监听onicecandidate（收到网络协商相关消息）和ontrack（收到远端音视频流）,将本地音视频流添加到对象中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">ws.<span class="property">onmessage</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (type === <span class="string">&#x27;peer-join&#x27;</span>) &#123;</span><br><span class="line">        pc = <span class="keyword">new</span> <span class="title class_">RTCPeerConnection</span>(<span class="literal">null</span>);</span><br><span class="line">        pc.<span class="property">onicecandidate</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.<span class="property">candidate</span>) &#123;</span><br><span class="line">              ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">                <span class="attr">type</span>: <span class="string">&#x27;candidate&#x27;</span>,</span><br><span class="line">                roomId,</span><br><span class="line">                <span class="attr">uid</span>: localUserId,</span><br><span class="line">                <span class="attr">remoteUid</span>: remoteUserId,</span><br><span class="line">                <span class="attr">candidate</span>: e.<span class="property">candidate</span></span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        pc.<span class="property">ontrack</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">            remoteStream = e.<span class="property">streams</span>[<span class="number">0</span>];</span><br><span class="line">            remoteVideo.<span class="property">srcObject</span> = remoteStream;</span><br><span class="line">        &#125;</span><br><span class="line">        localStream.<span class="title function_">getTracks</span>().<span class="title function_">forEach</span>(<span class="function"><span class="params">track</span> =&gt;</span> &#123;</span><br><span class="line">        pc.<span class="title function_">addTrack</span>(track, localStream)</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用户A再通过RTCPeerConnection的实例，创建offer（sdp信息用于协商音视频编码协议），setLocalDescription设置在本地，再发送到信令服务器,转给用户B</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ws.<span class="property">onmessage</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (type === <span class="string">&#x27;peer-join&#x27;</span>) &#123;</span><br><span class="line">      pc.<span class="title function_">createOffer</span>().<span class="title function_">then</span>(<span class="function"><span class="params">sdp</span> =&gt;</span> &#123;</span><br><span class="line">          pc.<span class="title function_">setLocalDescription</span>(sdp).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">              ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">                <span class="attr">type</span>: <span class="string">&#x27;offer&#x27;</span>,</span><br><span class="line">                roomId,</span><br><span class="line">                <span class="attr">uid</span>: localUserId,</span><br><span class="line">                remoteUid,</span><br><span class="line">                sdp</span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>信令服务器收到消息，type=‘offer’时，转发给用户B</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">socket.<span class="title function_">on</span>(<span class="string">&#x27;text&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; type = <span class="string">&#x27;&#x27;</span>, roomId, uid, sdp = <span class="string">&#x27;&#x27;</span> &#125; = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(str);</span><br><span class="line">    <span class="keyword">if</span>(type === <span class="string">&#x27;offer&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> roomMap = roomTableMap.<span class="title function_">get</span>(roomId);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> roomMap) &#123;</span><br><span class="line">            <span class="keyword">if</span> (key !== uid) &#123;</span><br><span class="line">                value.<span class="property">socket</span>.<span class="title function_">sendText</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">                  type,</span><br><span class="line">                  roomId,</span><br><span class="line">                  <span class="attr">remoteUid</span>: uid,</span><br><span class="line">                  sdp</span><br><span class="line">                &#125;))</span><br><span class="line">              &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>用户B，收到信令服务器发到type=‘offer’消息，同样先创建RTCPeerConnection实例和监听，再监听onicecandidate和ontrack，将本地音视频流添加到实例中，代码同上面一致<br />
+同时用户B，会将用户A的sdp消息，setRemoteDescription到远程，自己创建answer的sdp信息，发送给服务端，转给用户A</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ws.<span class="property">onmessage</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (type === <span class="string">&#x27;offer&#x27;</span>) &#123;</span><br><span class="line">        pc.<span class="title function_">setRemoteDescription</span>(<span class="keyword">new</span> <span class="title class_">RTCSessionDescription</span>(sdp));</span><br><span class="line">        pc.<span class="title function_">createAnswer</span>().<span class="title function_">then</span>(<span class="function"><span class="params">sdp</span> =&gt;</span> &#123;</span><br><span class="line">            pc.<span class="title function_">setLocalDescription</span>(sdp).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">              ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">                <span class="attr">type</span>: <span class="string">&#x27;answer&#x27;</span>,</span><br><span class="line">                roomId,</span><br><span class="line">                <span class="attr">uid</span>: localUserId,</span><br><span class="line">                remoteUid,</span><br><span class="line">                sdp</span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后用户A收到，type=‘answer’的消息，setRemoteDescription到远程<br />
+双方收到ontrack回调事件，获取到对方码流的对象句柄<br />
+双方都开始请求打洞，通过onicecandidate获取到打洞信息（candidate）并通过信令服务器发送给对方<br />
+如果p2p能成功则进行通话，不成功则进行中继转发通话</p>
+<h3 id="完整代码"><a class="markdownIt-Anchor" href="#完整代码"></a> 完整代码</h3>
+<h4 id="前端代码"><a class="markdownIt-Anchor" href="#前端代码"></a> 前端代码</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;</span><br><span class="line">  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">  &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;input id=&quot;roomBox&quot; type=&quot;text&quot;&gt;</span><br><span class="line">    &lt;button id=&quot;joinBtn&quot;&gt;加入&lt;/button&gt;</span><br><span class="line">    &lt;button id=&quot;leaveBtn&quot;&gt;离开&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;video id=&quot;localVideo&quot; autoplay muted playsinline&gt;&lt;/video&gt;</span><br><span class="line">    &lt;video id=&quot;remoteVideo&quot; autoplay playsinline&gt;&lt;/video&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;script&gt;</span><br><span class="line">    const localVideo = document.getElementById(&#x27;localVideo&#x27;);</span><br><span class="line">    const remoteVideo = document.getElementById(&#x27;remoteVideo&#x27;);</span><br><span class="line">    const joinBtn = document.getElementById(&#x27;joinBtn&#x27;);</span><br><span class="line">    const leaveBtn = document.getElementById(&#x27;leaveBtn&#x27;);</span><br><span class="line">    const localUserId = Math.random().toString(36).slice(2);</span><br><span class="line">    let roomId = -1;</span><br><span class="line">    let remoteUserId = -1;</span><br><span class="line">    let localStream = null;</span><br><span class="line">    let remoteStream = null;</span><br><span class="line">    let ws = null;</span><br><span class="line">    let pc = null;</span><br><span class="line">    function createWebScoket(url) &#123;</span><br><span class="line">      ws = new WebSocket(url);</span><br><span class="line">      ws.onopen = (e) =&gt; &#123;</span><br><span class="line">        console.log(&quot;onopen&quot;, e)</span><br><span class="line">      &#125;</span><br><span class="line">      ws.onmessage = (e) =&gt; &#123;</span><br><span class="line">        const &#123; type, remoteUid = &#x27;&#x27;, sdp, candidate &#125; = JSON.parse(e.data);</span><br><span class="line">        if (type === &#x27;peer-join&#x27;) &#123;</span><br><span class="line">          remoteUserId = remoteUid;</span><br><span class="line">          if (!pc) createConnect();</span><br><span class="line">          pc.createOffer().then(sdp =&gt; &#123;</span><br><span class="line">            pc.setLocalDescription(sdp).then(() =&gt; &#123;</span><br><span class="line">              ws.send(JSON.stringify(&#123;</span><br><span class="line">                type: &#x27;offer&#x27;,</span><br><span class="line">                roomId,</span><br><span class="line">                uid: localUserId,</span><br><span class="line">                remoteUid,</span><br><span class="line">                sdp</span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; else if (type === &#x27;peer-leave&#x27;) &#123;</span><br><span class="line">          remoteVideo.srcObject = null;</span><br><span class="line">        &#125; else if (type === &#x27;offer&#x27;) &#123;</span><br><span class="line">          if (!pc) createConnect();</span><br><span class="line">          pc.setRemoteDescription(new RTCSessionDescription(sdp))</span><br><span class="line">          pc.createAnswer().then(sdp =&gt; &#123;</span><br><span class="line">            pc.setLocalDescription(sdp).then(() =&gt; &#123;</span><br><span class="line">              ws.send(JSON.stringify(&#123;</span><br><span class="line">                type: &#x27;answer&#x27;,</span><br><span class="line">                roomId,</span><br><span class="line">                uid: localUserId,</span><br><span class="line">                remoteUid,</span><br><span class="line">                sdp</span><br><span class="line">              &#125;))</span><br><span class="line">            &#125;)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; else if (type === &#x27;answer&#x27;) &#123;</span><br><span class="line">          if (!pc) createConnect();</span><br><span class="line">          pc.setRemoteDescription(new RTCSessionDescription(sdp))</span><br><span class="line">        &#125; else if (type === &#x27;candidate&#x27;) &#123;</span><br><span class="line">          pc.addIceCandidate(new RTCIceCandidate(candidate))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      ws.onclose = (e) =&gt; &#123;</span><br><span class="line">        console.log(&quot;onclose&quot;, e)</span><br><span class="line">      &#125;</span><br><span class="line">      ws.onerror = (e) =&gt; &#123;</span><br><span class="line">        console.log(&quot;onerror&quot;, e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    createWebScoket(&#x27;ws://127.0.0.1:3000&#x27;);</span><br><span class="line">    // 加入房间</span><br><span class="line">    joinBtn.onclick = () =&gt; &#123;</span><br><span class="line">      roomId = document.getElementById(&#x27;roomBox&#x27;).value // 输入框取房间号</span><br><span class="line">      // 拿到媒体设备流，显示在本地</span><br><span class="line">      navigator.mediaDevices.getUserMedia(&#123; video: true, audio: true &#125;).then((stream) =&gt; &#123;</span><br><span class="line">        ws.send(JSON.stringify(&#123;</span><br><span class="line">          type: &#x27;join&#x27;,</span><br><span class="line">          roomId,</span><br><span class="line">          uid: localUserId</span><br><span class="line">        &#125;))</span><br><span class="line">        localStream = stream;</span><br><span class="line">        localVideo.srcObject = stream;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    function createConnect() &#123;</span><br><span class="line">      pc = new RTCPeerConnection(null);</span><br><span class="line">      pc.onicecandidate = (e) =&gt; &#123;</span><br><span class="line">        if (e.candidate) &#123;</span><br><span class="line">          ws.send(JSON.stringify(&#123;</span><br><span class="line">            type: &#x27;candidate&#x27;,</span><br><span class="line">            roomId,</span><br><span class="line">            uid: localUserId,</span><br><span class="line">            remoteUid: remoteUserId,</span><br><span class="line">            candidate: e.candidate</span><br><span class="line">          &#125;))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      pc.ontrack = (e) =&gt; &#123;</span><br><span class="line">        remoteStream = e.streams[0];</span><br><span class="line">        remoteVideo.srcObject = remoteStream;</span><br><span class="line">      &#125;</span><br><span class="line">      localStream.getTracks().forEach(track =&gt; &#123;</span><br><span class="line">        pc.addTrack(track, localStream)</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    // 离开</span><br><span class="line">    leaveBtn.onclick = () =&gt; &#123;</span><br><span class="line">      ws.send(JSON.stringify(&#123;</span><br><span class="line">        type: &#x27;leave&#x27;,</span><br><span class="line">        roomId,</span><br><span class="line">        uid: localUserId</span><br><span class="line">      &#125;))</span><br><span class="line">      remoteVideo.srcObject = null;</span><br><span class="line">      localStream &amp;&amp; localStream.getTracks().forEach(track =&gt; track.stop())</span><br><span class="line">      localVideo.srcObject = null;</span><br><span class="line">      if(pc) &#123;</span><br><span class="line">        pc.close();</span><br><span class="line">        pc = null;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="信令服务器完整代码"><a class="markdownIt-Anchor" href="#信令服务器完整代码"></a> 信令服务器完整代码</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ws = <span class="built_in">require</span>(<span class="string">&#x27;nodejs-websocket&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> roomTableMap = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line">ws.<span class="title function_">createServer</span>(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;text&#x27;</span>, <span class="function">(<span class="params">str</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; type = <span class="string">&#x27;&#x27;</span>, roomId, uid, remoteUid, candidate = <span class="string">&#x27;&#x27;</span>, sdp = <span class="string">&#x27;&#x27;</span> &#125; = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(str);</span><br><span class="line">        <span class="keyword">if</span> (type === <span class="string">&#x27;join&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> roomMap = roomTableMap.<span class="title function_">get</span>(roomId);</span><br><span class="line">            <span class="keyword">if</span> (!roomMap) &#123;</span><br><span class="line">                roomMap = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line">                roomTableMap.<span class="title function_">set</span>(roomId, roomMap)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">const</span> client = &#123;</span><br><span class="line">                roomId,</span><br><span class="line">                uid,</span><br><span class="line">                socket</span><br><span class="line">            &#125;</span><br><span class="line">            roomMap.<span class="title function_">set</span>(uid, client)</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> roomMap) &#123;</span><br><span class="line">                <span class="keyword">if</span> (key !== uid) &#123;</span><br><span class="line">                    <span class="comment">// 通知其他人，有人进入房间了</span></span><br><span class="line">                    value.<span class="property">socket</span>.<span class="title function_">sendText</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">type</span>: <span class="string">&#x27;peer-join&#x27;</span>, <span class="attr">remoteUid</span>: uid &#125;));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string">&#x27;leave&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> roomMap = roomTableMap.<span class="title function_">get</span>(roomId);</span><br><span class="line">            roomMap.<span class="title function_">delete</span>(uid);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> roomMap) &#123;</span><br><span class="line">                value.<span class="property">socket</span>.<span class="title function_">sendText</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">type</span>: <span class="string">&#x27;peer-leave&#x27;</span>, <span class="attr">remoteUid</span>: uid &#125;));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([<span class="string">&#x27;offer&#x27;</span>, <span class="string">&#x27;answer&#x27;</span>, <span class="string">&#x27;candidate&#x27;</span>].<span class="title function_">includes</span>(type)) &#123;</span><br><span class="line">            <span class="keyword">let</span> roomMap = roomTableMap.<span class="title function_">get</span>(roomId);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> roomMap) &#123;</span><br><span class="line">              <span class="keyword">if</span> (key !== uid) &#123;</span><br><span class="line">                value.<span class="property">socket</span>.<span class="title function_">sendText</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">                  type,</span><br><span class="line">                  roomId,</span><br><span class="line">                  <span class="attr">remoteUid</span>: uid,</span><br><span class="line">                  sdp,</span><br><span class="line">                  candidate</span><br><span class="line">                &#125;))</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">    &#125;)</span><br><span class="line">    socket.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;).<span class="title function_">listen</span>(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h3>
+<p>本文只是webrtc进行一个初步的了解，参考了&lt;&lt;WebRtc音视频实时互动技术原理&gt;&gt;书籍和b站视频，对于大家如果有所帮助，欢迎点赞~</p>
+<p>作者：竹业<br />
+链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7218532789195702333">https://juejin.cn/post/7218532789195702333</a><br />
+来源：稀土掘金<br />
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+        <div class="sponsor-wrapper">
+  <div class="sponsor-button-wrapper">
+    <div class="sponsor-icon rotate"></div>
+    <div class="sponsor-title">赞助</div>
+    <div class="sponsor-icon rotate"></div>
+  </div>
+  <div class="sponsor-tip">请作者喝杯咖啡吧！</div>
+  
+    <div class="sponsor-qr">
+      
+        <div class="sponsor-qr-image-wrapper">
+          <img src="/sponsor/alipay.jpg" alt=支付宝 width="200" />
+          <p class="sponsor-qr-name">支付宝</p>
+        </div>
+      
+        <div class="sponsor-qr-image-wrapper">
+          <img src="/sponsor/wechat.jpg" alt=微信 width="200" />
+          <p class="sponsor-qr-name">微信</p>
+        </div>
+      
+    </div>
+  
+</div>
+      
+      
+        <a data-aos="zoom-in" href="/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/" itemprop="commentCount"></span>
+          留言
+        </a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/WebRtc/" rel="tag">WebRtc</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="https://www.freeimg.cn/i/2024/12/03/674ea3ee3e285.webp" data-sizes="auto" alt="FFmpeg与SDL实现真正的音视频播放器" class="lazyload">
+      
+      <a href="/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          FFmpeg与SDL实现真正的音视频播放器
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+  <section id="comments" class="vcomment" data-aos="fade-up"></section>
+
+
+
+
+
+
+</section>
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep rotate"></span>
+      凌
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        20.1k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        01:29
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text"> WebRtc处理过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AA%92%E4%BD%93%E5%8D%8F%E5%95%86"><span class="toc-number">1.1.</span> <span class="toc-text"> 媒体协商</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B"><span class="toc-number">1.2.</span> <span class="toc-text"> 连接建立</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 连接的基本原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stun%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text"> STUN协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#turn%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text"> TURN协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.</span> <span class="toc-text"> 完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 前端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E4%BB%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 信令服务器完整代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">1.4.</span> <span class="toc-text"> 最后</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">19</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">18</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+  
+<script src="https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js" integrity="sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn" crossorigin="anonymous" data-pjax></script>
+
+  <script data-pjax>
+    var GUEST_INFO = ['nick', 'mail', 'link'];
+    var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+      return GUEST_INFO.indexOf(item) > -1
+    });
+    var recordIP = JSON.parse('true');
+    var highlight = JSON.parse('true');
+    var visitor = JSON.parse('false');
+
+    new Valine({
+      el: '.vcomment',
+      appId: "Bd17umq4JlEEEj0CkSxnsPC9-gzGzoHsz",
+      appKey: "m0FoW4Y9WglsyoP3J0Y8Kmjh",
+      placeholder: "Just go go",
+      pageSize: '10',
+      avatar: 'mp',
+      lang: 'zh-CN',
+      recordIP: recordIP,
+      highlight: highlight,
+      visitor: visitor,
+      requiredFields: guest_info,
+      path: window.location.pathname
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+
