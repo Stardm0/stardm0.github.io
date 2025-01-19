@@ -108,25 +108,30 @@ const algoliaHandler = () => {
 
   search.start();
 
-  _$(".popup-trigger")
+  document
+    .querySelector(".popup-trigger")
     .off("click")
     .on("click", (event) => {
       event.stopPropagation();
-      const scrollWidth =
-        window.innerWidth - document.documentElement.offsetWidth;
+      document.body.insertAdjacentHTML("beforeend", '<div class="popoverlay hide"></div>');
+      const scrollWidth = window.innerWidth - document.documentElement.offsetWidth;
       _$("#container").style.marginRight = scrollWidth + "px";
       _$("#header-nav").style.marginRight = scrollWidth + "px";
       _$(".popup").classList.add("show");
-      _$("#mask").classList.remove("hide");
+      _$(".popoverlay").classList.remove("hide");
       document.body.style.overflow = "hidden";
       _$("#reimu-search-input input").focus();
     });
 
-  _$(".popup-btn-close")
+  document
+    .querySelector(".popup-btn-close")
     .off("click")
     .on("click", () => {
       _$(".popup").classList.remove("show");
-      _$("#mask").classList.add("hide");
+      _$(".popoverlay").classList.add("hide");
+      setTimeout(() => {
+        _$(".popoverlay").remove();
+      }, 300);
       _$("#container").style.marginRight = "";
       _$("#header-nav").style.marginRight = "";
       document.body.style.overflow = "";

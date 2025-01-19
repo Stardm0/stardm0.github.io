@@ -70,6 +70,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -165,8 +166,8 @@
 </div>
 <header id="header">
   
-    
-      <picture>
+    <picture>
+      
         
           <source media="(max-width: 479px)" srcset="/images/banner-600w.webp">
         
@@ -175,7 +176,10 @@
           <source media="(min-width: 800px)" srcset="/images/banner.webp">
         
         <img fetchpriority="high" src="/images/banner.webp" alt="友情链接">
-      </picture>
+      
+    </picture>
+    
+      <img src="" alt="友情链接" style="visibility: hidden;">
     
   
   <div id="header-outer">
@@ -198,9 +202,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper ">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -269,6 +274,7 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
     
       
@@ -296,9 +302,9 @@
 
     
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="page-" class="h-entry article article-type-page" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -375,6 +381,7 @@
 </div>
       
       
+      
         <a data-aos="zoom-in" href="/friend/index.html#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/friend/" itemprop="commentCount"></span>
           留言
@@ -400,8 +407,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -596,14 +604,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "友情链接",
+          url: "https://stardm.ddns-ip.net/friend/index.html",
+          excerpt: "",
+          description: "",
+          stripContent: " 本站信息  网址: https://stardm.ddns-ip.net/   申请方法  添加本站后，在本页留言，格式如下  123456```yml- name: #您的名字  url: #您的网址  desc: #简短描述  image: #一张图片```  小伙伴们  ",
+          date: "Tue Dec 10 2024 17:38:47 GMT+0800",
+          updated: "Tue Dec 10 2024 17:38:47 GMT+0800",
+          cover: "/images/banner.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -685,7 +713,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -706,6 +734,9 @@
     });
   }
 </script>
+
+
+
 
 
 

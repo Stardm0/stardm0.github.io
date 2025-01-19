@@ -71,6 +71,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -166,6 +167,7 @@
 </div>
 <header id="header">
   
+    <picture></picture>
     <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/11/28/67485ef09082c.webp" alt="③实现电脑音频和视频的录制并封装成mp4">
   
   <div id="header-outer">
@@ -188,9 +190,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper wrap-sticky">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -273,10 +276,11 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="post-③实现电脑音频和视频的录制并封装成mp4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -440,6 +444,7 @@
 </div>
       
       
+      
         <a data-aos="zoom-in" href="/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" itemprop="commentCount"></span>
           留言
@@ -498,8 +503,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -708,14 +714,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "③实现电脑音频和视频的录制并封装成mp4",
+          url: "https://stardm.ddns-ip.net/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/",
+          excerpt: "",
+          description: "",
+          stripContent: " 音视频录制的多线程实现  主要类  AudioRecorder：音频采集线程 VideoRecorder：视频采集线程 MainWindow：控制音频和视频的采集    AudioRecorder 类详解  头文件部分   构造函数： 1AudioRecorder(QObject *parent = nullptr, AVFormatContext **ofmt_ctx = nullptr);   主要变量：  bool flage = false;  // 用于控制采集的开始与结束 AVFo",
+          date: "Sun Dec 01 2024 19:23:53 GMT+0800",
+          updated: "Mon Dec 09 2024 20:43:26 GMT+0800",
+          cover: "https://www.freeimg.cn/i/2024/11/28/67485ef09082c.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -797,7 +823,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -818,6 +844,9 @@
     });
   }
 </script>
+
+
+
 
 
 

@@ -70,6 +70,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -165,6 +166,7 @@
 </div>
 <header id="header">
   
+    <picture></picture>
     <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/11/28/674860b73dacc.webp" alt="SQL基础">
   
   <div id="header-outer">
@@ -187,9 +189,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper wrap-sticky">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -272,10 +275,11 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="post-SQL基础" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -497,6 +501,7 @@
 </div>
       
       
+      
         <a data-aos="zoom-in" href="/2024/11/28/SQL%E5%9F%BA%E7%A1%80/#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/2024/11/28/SQL%E5%9F%BA%E7%A1%80/" itemprop="commentCount"></span>
           留言
@@ -555,8 +560,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -765,14 +771,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "SQL基础",
+          url: "https://stardm.ddns-ip.net/2024/11/28/SQL%E5%9F%BA%E7%A1%80/",
+          excerpt: "",
+          description: "",
+          stripContent: " 数据库约束与高级操作总结  约束  概念 约束是作用于表中字段上的规则，用于限制存储在表中的数据。 目的: 保证数据库中数据的正确性、有效性和完整性。 分类:   非空约束: 限制字段数据不能为 NULL 1NOT NULL   唯一约束: 保证字段数据唯一、不重复 1UNIQUE   主键约束: 主键是行数据的唯一标识，要求非空且唯一 1PRIMARY KEY   默认约束: 保存数据时未指定字段值，则采用默认值 1DEFAULT   检查约束 (8.0.16版本之后): 保证字段值满足条件",
+          date: "Thu Nov 28 2024 18:44:50 GMT+0800",
+          updated: "Fri Dec 06 2024 21:42:23 GMT+0800",
+          cover: "https://www.freeimg.cn/i/2024/11/28/674860b73dacc.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -854,7 +880,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -875,6 +901,9 @@
     });
   }
 </script>
+
+
+
 
 
 

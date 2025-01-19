@@ -70,6 +70,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -165,8 +166,8 @@
 </div>
 <header id="header">
   
-    
-      <picture>
+    <picture>
+      
         
           <source media="(max-width: 479px)" srcset="/images/banner-600w.webp">
         
@@ -175,7 +176,10 @@
           <source media="(min-width: 800px)" srcset="/images/banner.webp">
         
         <img fetchpriority="high" src="/images/banner.webp" alt="关于">
-      </picture>
+      
+    </picture>
+    
+      <img src="" alt="关于" style="visibility: hidden;">
     
   
   <div id="header-outer">
@@ -198,9 +202,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper ">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -269,6 +274,7 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
     
       
@@ -296,9 +302,9 @@
 
     
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="page-" class="h-entry article article-type-page" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -355,6 +361,7 @@
 </div>
       
       
+      
         <a data-aos="zoom-in" href="/about/index.html#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/about/" itemprop="commentCount"></span>
           留言
@@ -380,8 +387,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -576,14 +584,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "关于",
+          url: "https://stardm.ddns-ip.net/about/index.html",
+          excerpt: "",
+          description: "",
+          stripContent: " 扬帆起航 从初中开始，我便想拥有一个属于自己的博客。时光飞逝，转眼间，大学生活已悄然展开，我也具备了搭建自己博客的能力。然而，当博客建成时，却并没有预期中的那种成就感。或许，真正的满足感并不来自于初步的实现，而是来自于自己用心去经营、去打磨这片属于自己的空间。 看到自己的博客内容逐渐丰富，知识体系越来越完善，每一篇新文章的发布，都让我感到一种来自内心的满足。更重要的是，在这个过程中，我不仅获得了知识和经验的积累，更收获了对未来的期待和对自己的认知。这种不断成长的过程，或许正是我坚持下去的动力所",
+          date: "Wed Sep 22 2021 21:01:47 GMT+0800",
+          updated: "Wed Dec 25 2024 22:46:39 GMT+0800",
+          cover: "/images/banner.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -665,7 +693,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -686,6 +714,9 @@
     });
   }
 </script>
+
+
+
 
 
 

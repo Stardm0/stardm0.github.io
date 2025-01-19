@@ -70,6 +70,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -165,6 +166,7 @@
 </div>
 <header id="header">
   
+    <picture></picture>
     <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/11/30/674aa67f294f3.webp" alt="用FFmpeg自带的AAC编码器进行编码">
   
   <div id="header-outer">
@@ -187,9 +189,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper wrap-sticky">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -272,10 +275,11 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="post-用FFmpeg自带的AAC编码器进行编码" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -361,6 +365,7 @@
 </div>
       
       
+      
         <a data-aos="zoom-in" href="/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/" itemprop="commentCount"></span>
           留言
@@ -419,8 +424,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -629,14 +635,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "用FFmpeg自带的AAC编码器进行编码",
+          url: "https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/",
+          excerpt: "",
+          description: "",
+          stripContent: "大体内容和https://stardm.ddns-ip.net/2024/12/01/③实现电脑音频和视频的录制并封装成mp4/ 这一篇的相同，这里主要展示改变有变动的部分  音频采集步骤 这里的序号与③实现电脑音频和视频的录制并封装成mp4这篇里的对应   打开AAC编码器 1open_encoder(&amp;amp;codec_ctx);   配置重采样上下文（主要就是多了这一步） 1init_resampler(codec_ctx, &amp;amp;swr_ctx, &amp;amp;src_data, &amp;a",
+          date: "Wed Dec 11 2024 20:06:32 GMT+0800",
+          updated: "Wed Dec 11 2024 20:56:02 GMT+0800",
+          cover: "https://www.freeimg.cn/i/2024/11/30/674aa67f294f3.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -718,7 +744,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -739,6 +765,9 @@
     });
   }
 </script>
+
+
+
 
 
 

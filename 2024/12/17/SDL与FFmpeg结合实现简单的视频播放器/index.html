@@ -70,6 +70,7 @@
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
 
   
+  
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
@@ -165,6 +166,7 @@
 </div>
 <header id="header">
   
+    <picture></picture>
     <img fetchpriority="high" src="https://www.freeimg.cn/i/2024/12/03/674ea3ece1d3f.webp" alt="SDL与FFmpeg结合实现简单的视频播放器">
   
   <div id="header-outer">
@@ -187,9 +189,10 @@
   </div>
 </header>
 
-        <div id="content">
-          
-            <aside id="sidebar">
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
   <div class="sidebar-wrapper wrap-sticky">
     <div class="sidebar-wrap" data-aos="fade-up">
       
@@ -272,10 +275,11 @@
     </div>
   </div>
 
+  <div class="sidebar-widget">
   
+  </div>
 </aside>
 
-          
           <section id="main"><article id="post-SDL与FFmpeg结合实现简单的视频播放器" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
@@ -330,6 +334,7 @@
     </div>
   
 </div>
+      
       
       
         <a data-aos="zoom-in" href="/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/#comments" class="article-comment-link">
@@ -390,8 +395,9 @@
 
 
 </section>
-          
         </div>
+        
+        
         <footer id="footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
@@ -600,14 +606,34 @@
 
 
 
+
+
 <div id="lazy-script">
   <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "SDL与FFmpeg结合实现简单的视频播放器",
+          url: "https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/",
+          excerpt: "",
+          description: "",
+          stripContent: "用FFmpeg与SDL写了一个简单的音视频播放器，但还有很大的问题。首先并没有使用多线程，音视频的解码渲染操作都在主线程中，导致在同时播放视频的时候，音频的播放会出现断断续续的情况，把视频的播放关闭就不会出现问题。还有就是队列的实现，目前只有音频使用了队列，而视频则是直接播放渲染, 要使用队列的话就不得不实现多线程了。之后还有音视频的同步等等，这些都是需要改进的点。不过我相信在后面的学习中都会解决的&amp;lt;(￣︶￣)↗[GO!] 这里就直接放源码了(○｀ 3′○) 123456789101112",
+          date: "Tue Dec 17 2024 12:26:08 GMT+0800",
+          updated: "Tue Dec 17 2024 12:43:40 GMT+0800",
+          cover: "https://www.freeimg.cn/i/2024/12/03/674ea3ece1d3f.webp",
+        };
+      </script>
+       
     
     
       
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
+        
       
     
     
@@ -689,7 +715,7 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
@@ -710,6 +736,9 @@
     });
   }
 </script>
+
+
+
 
 
 
