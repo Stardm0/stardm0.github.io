@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2024-12-25T14:26:50.283Z</updated>
+  <updated>2025-01-19T11:47:01.930Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>1v1视频聊天网页</title>
+    <link href="https://stardm.ddns-ip.net/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/"/>
+    <id>https://stardm.ddns-ip.net/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/</id>
+    <published>2025-01-19T10:22:49.000Z</published>
+    <updated>2025-01-19T11:47:01.930Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;花了点时间跟着B站的教程手敲了一个关于WebRtc的项目，它是B/S框架的，用js做的前后端。工具用的是node，可以说是非常的方便。js语法本身也简单易学，和C有很多相似之处。总的来说nodejs YYDS(q(≧▽≦q))&lt;/p&gt;
+&lt;h3</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    
+  </entry>
   
   <entry>
     <title>WebRtc初步认识(webrtc实现1v1视频通话从0到1)</title>
