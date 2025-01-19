@@ -81,15 +81,15 @@
   font-family: var(--font-icon);
   content: "\f00d";
 }
-.post-meta .icon-calendar:before {
+.icon-calendar:before {
   font-family: var(--font-icon);
   content: "\f073";
 }
-.post-meta .icon-pencil:before {
+.icon-pencil:before {
   font-family: var(--font-icon);
   content: "\f5ad";
 }
-.post-meta .icon-clock:before {
+.icon-clock:before {
   font-family: var(--font-icon);
   content: "\f252";
 }
@@ -112,81 +112,6 @@
 .ais-pagination--item__next a:before {
   font-family: var(--font-icon);
   content: "\f105";
-}
-.icon-github:before {
-  content: "\f09b";
-}
-.icon-google:before {
-  content: "\f0d5";
-}
-.icon-facebook:before {
-  content: "\f09a";
-}
-.icon-twitter:before {
-  content: "\e61b";
-}
-.icon-instagram:before {
-  content: "\f16d";
-}
-.icon-linkedin:before {
-  content: "\f08c";
-}
-.icon-pinterest:before {
-  content: "\f0d2";
-}
-.icon-youtube:before {
-  content: "\f167";
-}
-.icon-vimeo:before {
-  content: "\f194";
-}
-.icon-flickr:before {
-  content: "\f16e";
-}
-.icon-dribbble:before {
-  content: "\f17d";
-}
-.icon-behance:before {
-  content: "\f1b4";
-}
-.icon-bilibili:before {
-  content: "\e3d9";
-}
-.icon-weibo:before {
-  content: "\f18a";
-}
-.icon-zhihu:before {
-  content: "\f63f";
-}
-.icon-reddit:before {
-  content: "\f1a1";
-}
-.icon-tumblr:before {
-  content: "\f173";
-}
-.icon-medium:before {
-  content: "\f23a";
-}
-.icon-deviantart:before {
-  content: "\f1bd";
-}
-.icon-stackoverflow:before {
-  content: "\f16c";
-}
-.icon-keybase:before {
-  content: "\f4f5";
-}
-.icon-telegram:before {
-  content: "\f2c6";
-}
-.icon-discord:before {
-  content: "\f392";
-}
-.icon-steam:before {
-  content: "\f1b6";
-}
-.icon-email:before {
-  content: "\f0e0";
 }
 .sidebar-btn-wrapper .sidebar-toc-btn:before {
   font-family: var(--font-icon);
@@ -215,4 +140,11 @@
 .icon-taichi:before {
   font-family: var(--font-icon);
   content: "\f6ad";
+}
+.icon-image:before {
+  font-family: var(--font-icon);
+  content: "\f03e";
+}
+.icon {
+  font-family: var(--font-icon);
 }
