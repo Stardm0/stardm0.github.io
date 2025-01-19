@@ -17,7 +17,8 @@
       return response.json();
     })
     .then((data) => {
-      _$("#search-form")
+      document
+        .getElementById("search-form")
         .off("submit")
         .on("submit", (event) => {
           event.preventDefault();
@@ -94,25 +95,26 @@
     });
   }
 
-  _$(".popup-trigger")
+  document
+    .querySelector(".popup-trigger")
     .off("click")
     .on("click", (event) => {
       event.stopPropagation();
-      const scrollWidth =
-        window.innerWidth - document.documentElement.offsetWidth;
+      document.body.insertAdjacentHTML("beforeend", '<div class="popoverlay"></div>');
+      const scrollWidth = window.innerWidth - document.documentElement.offsetWidth;
       _$("#container").style.marginRight = scrollWidth + "px";
       _$("#header-nav").style.marginRight = scrollWidth + "px";
       _$(".popup").classList.add("show");
-      _$("#mask").classList.remove("hide");
       document.body.style.overflow = "hidden";
       _$("#search-text").focus();
     });
 
-  _$(".popup-btn-close")
+  document
+    .querySelector(".popup-btn-close")
     .off("click")
     .on("click", () => {
       _$(".popup").classList.remove("show");
-      _$("#mask").classList.add("hide");
+      _$(".popoverlay").remove();
       _$("#container").style.marginRight = "";
       _$("#header-nav").style.marginRight = "";
       document.body.style.overflow = "";
