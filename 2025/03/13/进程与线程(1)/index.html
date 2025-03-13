@@ -1,0 +1,893 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.code_block = {"expand":true};</script>
+  
+  <title>
+    进程与线程 |
+    
+    Stardm 风也温柔
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="这里我将学习的进程与线程分为三个大部分 1.进程创建：使用fork创建子进程，execve执行新程序。 2.​进程通信：匿名管道、有名管道、共享内存、消息队列、信号 ​3.线程管理：线程创建、终止、同步（互斥锁、读写锁、条件变量等）  要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章 https:&#x2F;&#x2F;zybtr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程与线程">
+<meta property="og:url" content="https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/index.html">
+<meta property="og:site_name" content="Stardm 风也温柔">
+<meta property="og:description" content="这里我将学习的进程与线程分为三个大部分 1.进程创建：使用fork创建子进程，execve执行新程序。 2.​进程通信：匿名管道、有名管道、共享内存、消息队列、信号 ​3.线程管理：线程创建、终止、同步（互斥锁、读写锁、条件变量等）  要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章 https:&#x2F;&#x2F;zybtr">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-13T13:11:23.000Z">
+<meta property="article:modified_time" content="2025-03-13T14:48:10.029Z">
+<meta property="article:author" content="凌">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Stardm 风也温柔" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <img src="/images/taichi.png" alt="loading" />
+        
+      </div>
+      <div class="loading-word">加载中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf015;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf187;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf06a;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf0c1;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <picture></picture>
+    <img fetchpriority="high" src="https://pic1.imgdb.cn/item/67b84be2d0e0a243d40160b6.jpg" alt="进程与线程">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">进程与线程</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="sidebar-left"  >
+          <aside id="sidebar">
+  
+  
+    <meting-js
+      theme="var(--color-link)"
+      id="9838843200"
+      server="netease"
+      type="playlist"
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    ></meting-js>
+  
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E6%83%B3%E8%BF%9B%E4%B8%80%E6%AD%A5%E4%BA%86%E8%A7%A3%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%8F%AF%E4%BB%A5%E5%8E%BB%E7%9C%8B%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E7%9F%A5%E8%AF%86%E4%BA%86%E8%A7%A3%E4%BA%86%E8%A7%A3%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%89%A9%E7%90%86%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%80%E7%AF%87%E4%B8%8D%E9%94%99%E7%9A%84%E6%96%87%E7%AB%A0httpszybtreegithubio20200810%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text"> 要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章
+https:&#x2F;&#x2F;zybtree.github.io&#x2F;2020&#x2F;08&#x2F;10&#x2F;进程-线程模型&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text"> 进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text"> 1. 进程创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BD%BF%E7%94%A8-fork-%E5%88%9B%E5%BB%BA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 使用 fork 创建子进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E4%BD%BF%E7%94%A8-execve-%E6%89%A7%E8%A1%8C%E6%96%B0%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 使用 execve 执行新程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="toc-number">2.</span> <span class="toc-text"> 2. 进程通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 匿名管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 有名管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3 共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">2.4.</span> <span class="toc-text"> 2.4 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.5.</span> <span class="toc-text"> 2.5 信号</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">21</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">4</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">19</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  <div class="sidebar-widget">
+  
+  </div>
+</aside>
+
+          <section id="main"><article id="post-进程与线程(1)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2025-03-13T13:11:23.000Z" itemprop="datePublished">2025-03-13</time>
+    <time style="display: none;" id="post-update-time">2025-03-13</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/" data-aos="zoom-in">Linux应用层</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <p>这里我将学习的进程与线程分为三个大部分</p>
+<p>1.进程创建：使用fork创建子进程，execve执行新程序。<br />
+2.​进程通信：匿名管道、有名管道、共享内存、消息队列、信号<br />
+​3.线程管理：线程创建、终止、同步（互斥锁、读写锁、条件变量等）</p>
+<h2 id="要想进一步了解系统的底层原理可以去看操作系统相关的知识了解了解进程线程的物理模型以及进程线程在系统上的工作原理-这里有一篇不错的文章httpszybtreegithubio20200810进程-线程模型"><a class="markdownIt-Anchor" href="#要想进一步了解系统的底层原理可以去看操作系统相关的知识了解了解进程线程的物理模型以及进程线程在系统上的工作原理-这里有一篇不错的文章httpszybtreegithubio20200810进程-线程模型"></a> 要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章<br />
+<a target="_blank" rel="noopener" href="https://zybtree.github.io/2020/08/10/%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">https://zybtree.github.io/2020/08/10/进程-线程模型/</a></h2>
+<h1 id="进程与线程"><a class="markdownIt-Anchor" href="#进程与线程"></a> 进程与线程</h1>
+<h2 id="1-进程创建"><a class="markdownIt-Anchor" href="#1-进程创建"></a> 1. 进程创建</h2>
+<h3 id="11-使用-fork-创建子进程"><a class="markdownIt-Anchor" href="#11-使用-fork-创建子进程"></a> 1.1 使用 <code>fork</code> 创建子进程</h3>
+<p>• <strong><code>fork</code> 的作用</strong>：<code>fork</code> 是 Linux 系统中用于创建子进程的系统调用。调用 <code>fork</code> 后，父进程会复制一份自己的地址空间给子进程，子进程从 <code>fork</code> 返回处开始执行。这里涉及到<code>写时复制</code><br />
+• <strong>返回值</strong>：<br />
+• <code>-1</code>：创建失败。<br />
+• <code>0</code>：在子进程中返回。<br />
+• <code>&gt; 0</code>：在父进程中返回子进程的 PID。<br />
+• <strong>代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="comment">//调用fork之前 代码都在父进程中运行</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;当前%d\n&quot;</span>, getpid());</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**不需要传参</span></span><br><span class="line"><span class="comment">     * return: int 进程号</span></span><br><span class="line"><span class="comment">     *        (1):-1 出错</span></span><br><span class="line"><span class="comment">     *        (2): 父进程中表示子进程的PID</span></span><br><span class="line"><span class="comment">     *        (3): 子进程中显示为0</span></span><br><span class="line"><span class="comment">     * __pid_t fork (void)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="comment">//使用fork创建子进程 fork之后所有的代码都是在父子进程中各自执行一遍</span></span><br><span class="line">    <span class="type">pid_t</span> pid = fork();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, pid);</span></span><br><span class="line">    <span class="keyword">if</span>(pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;子进程创建失败!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">//当前为子进程</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;子进程 %d 创建成功! 父进程是 %d\n&quot;</span>, getpid(), getppid());</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//当前为父进程</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;当前为父进程 %d 子进程是 %d\n&quot;</span>, getpid(), pid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="12-使用-execve-执行新程序"><a class="markdownIt-Anchor" href="#12-使用-execve-执行新程序"></a> 1.2 使用 <code>execve</code> 执行新程序</h3>
+<p>• <strong><code>execve</code> 的作用</strong>：<code>execve</code> 用于替换当前进程的地址空间为新的程序，并执行该程序。调用成功后，原程序的代码和数据被新程序替换。这也意味着该进程的pid保持不变<br />
+• <strong>代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="comment">//跳转之前</span></span><br><span class="line">    <span class="type">char</span> *name = <span class="string">&quot;banzhang&quot;</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;我是%s 编号%d\n&quot;</span>, name, getpid());</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行跳转</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * const char *__path: 执行程序的路径</span></span><br><span class="line"><span class="comment">     * char *const __argv[]：传入参数 -&gt; 对应执行程序main方法的第二个参数</span></span><br><span class="line"><span class="comment">     *      (1): 第一个参数固定是程序的名称 -&gt; 执行的程序路径</span></span><br><span class="line"><span class="comment">     *      (2): 执行程序要传入的参数</span></span><br><span class="line"><span class="comment">     *      (3): 结尾的最后一个参数一定是NULL</span></span><br><span class="line"><span class="comment">     * char *const __envp[]: 传递的环境变量</span></span><br><span class="line"><span class="comment">     *      (1): 环境变量参数: key=value</span></span><br><span class="line"><span class="comment">     *      (2): 最后一个参数为NULL</span></span><br><span class="line"><span class="comment">     * return: 成功根本没法返回 下面的代码也没有意义 失败返回-1;</span></span><br><span class="line"><span class="comment">     * int execve (const char *__path, char *const __argv[], char *const __envp[])</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">char</span> *args[] = &#123;<span class="string">&quot;/home/stream/process_test/erlou&quot;</span>, name, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="type">char</span> *envs[] = &#123;<span class="string">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin&quot;</span>,<span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="type">int</span> re = execve(args[<span class="number">0</span>], args, envs);</span><br><span class="line">    <span class="keyword">if</span>(re == <span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;调用程序失败!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="2-进程通信"><a class="markdownIt-Anchor" href="#2-进程通信"></a> 2. 进程通信</h2>
+<h3 id="21-匿名管道"><a class="markdownIt-Anchor" href="#21-匿名管道"></a> 2.1 匿名管道</h3>
+<p>• <strong>匿名管道的特点</strong>：半双工通信，只能用于有亲缘关系的进程间通信。同时保持一个读一个写的原则<br />
+• <strong>代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">pid_t</span> cpid;</span><br><span class="line">    <span class="type">int</span> pipefd[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将程序传近来的第一个命令行参数 通过管道传输给子进程</span></span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s:请填写需要传递的信息!\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建管道</span></span><br><span class="line">    <span class="keyword">if</span>(pipe(pipefd) == <span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;创建管道失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//复制父子进程</span></span><br><span class="line">    cpid = fork();</span><br><span class="line">    <span class="keyword">if</span>(cpid == <span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;邀请新学员失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(cpid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">//子进程 读取管道的数据 打印到控制台</span></span><br><span class="line">        <span class="comment">//write(pipefd[1], argv[1], strlen(argv[1]));</span></span><br><span class="line">        close(pipefd[<span class="number">1</span>]);</span><br><span class="line">        <span class="type">char</span> str[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="built_in">sprintf</span>(str, <span class="string">&quot;新学员 %d接受信息\n&quot;</span>, getpid());</span><br><span class="line">        write(STDOUT_FILENO, &amp;str, <span class="keyword">sizeof</span>(str));</span><br><span class="line">        <span class="type">char</span> buf;</span><br><span class="line">        <span class="keyword">while</span>(read(pipefd[<span class="number">0</span>], &amp;buf, <span class="number">1</span>) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            write(STDOUT_FILENO, &amp;buf, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        write(STDOUT_FILENO, <span class="string">&quot;\n&quot;</span>, <span class="number">1</span>);</span><br><span class="line">        close(pipefd[<span class="number">0</span>]);</span><br><span class="line">        _exit(EXIT_SUCCESS);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//父进程 写入管道数据 打印到控制台</span></span><br><span class="line">        <span class="comment">//close(pipefd[0]);</span></span><br><span class="line">        <span class="comment">// 将数据写入</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;老学员%d对新学员传递信息\n&quot;</span>, getpid());</span><br><span class="line">        write(pipefd[<span class="number">1</span>], argv[<span class="number">1</span>], <span class="built_in">strlen</span>(argv[<span class="number">1</span>]));</span><br><span class="line">        close(pipefd[<span class="number">1</span>]);</span><br><span class="line">        waitpid(cpid, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// char buf;</span></span><br><span class="line">        <span class="comment">// while(read(pipefd[0], &amp;buf, 1) &gt; 0)&#123;</span></span><br><span class="line">        <span class="comment">//     write(STDOUT_FILENO, &amp;buf, 1);</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        <span class="comment">// write(STDOUT_FILENO, &quot;\n&quot;, 1);</span></span><br><span class="line">        close(pipefd[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="22-有名管道"><a class="markdownIt-Anchor" href="#22-有名管道"></a> 2.2 有名管道</h3>
+<p>• <strong>有名管道的特点</strong>：允许无亲缘关系的进程间通信，通过文件系统中的特殊文件实现。<br />
+• <strong>写进程代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="type">char</span> *pipe_path = <span class="string">&quot;/tmp/myfifo&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(mkfifo(pipe_path, <span class="number">0664</span>) != <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;mkfifo&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对有名管道的特殊文件 创建fd</span></span><br><span class="line">    fd = open(pipe_path, O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="type">size_t</span> read_num;</span><br><span class="line">    <span class="keyword">while</span>((read_num = read(STDIN_FILENO, buf, <span class="number">100</span>)) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        write(fd, buf, read_num);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(read_num &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;read&quot;</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;发送数据到管道完成 进程终止&quot;</span>);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">if</span>(unlink(pipe_path) == <span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;unlink&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>• <strong>读进程代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="type">char</span> *pipe_path = <span class="string">&quot;/tmp/myfifo&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对有名管道的特殊文件 创建fd</span></span><br><span class="line">    fd = open(pipe_path, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="type">size_t</span> read_num;</span><br><span class="line">    <span class="keyword">while</span>((read_num = read(fd, buf, <span class="number">100</span>)) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        write(STDOUT_FILENO, buf, read_num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(read_num &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;read&quot;</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;接受管道数据完成 进程终止&quot;</span>);</span><br><span class="line">    close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="23-共享内存"><a class="markdownIt-Anchor" href="#23-共享内存"></a> 2.3 共享内存</h3>
+<p>• <strong>共享内存的特点</strong>：多个进程共享同一块内存区域，是最快的进程间通信方式。<br />
+• <strong>代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *share;</span><br><span class="line">    <span class="comment">// 创建一个共享内存对象</span></span><br><span class="line">    <span class="type">char</span> shm_name[<span class="number">100</span>]  =&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sprintf</span>(shm_name, <span class="string">&quot;/letter%d&quot;</span>, getpid());</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    fd = shm_open(shm_name, O_RDWR | O_CREAT, <span class="number">0664</span>);</span><br><span class="line">    <span class="keyword">if</span>(fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;shm_open&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置共享内存大小</span></span><br><span class="line">    ftruncate(fd, <span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 内存映射</span></span><br><span class="line">    share = mmap(<span class="literal">NULL</span>, <span class="number">1024</span>, PROT_READ | PROT_WRITE, MAP_SHARED, fd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(share == MAP_FAILED)&#123;</span><br><span class="line">        perror(<span class="string">&quot;mmap&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 映射完成之后关闭fd连接 不是释放</span></span><br><span class="line">    close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用内存映射实现进程间的通讯</span></span><br><span class="line">    <span class="type">pid_t</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span>(pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;fork&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">strcpy</span>(share, <span class="string">&quot;你是个好人\n&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;新学员%d完成回信\n&quot;</span>, getpid());</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        waitpid(pid, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;老学员%d收到了新学员%d的回信:%s&quot;</span>, getpid(), pid, share);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 释放映射区</span></span><br><span class="line">        <span class="type">int</span> re = munmap(share, <span class="number">1024</span>);</span><br><span class="line">        <span class="keyword">if</span>(re == <span class="number">-1</span>)&#123;</span><br><span class="line">            perror(<span class="string">&quot;munmap&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 释放共享内存对象</span></span><br><span class="line">        shm_unlink(shm_name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="24-消息队列"><a class="markdownIt-Anchor" href="#24-消息队列"></a> 2.4 消息队列</h3>
+<p>• <strong>消息队列的特点</strong>：允许进程通过消息队列发送和接收消息，支持无亲缘关系的进程间通信。<br />
+• <strong>消费者代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;mqueue.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//创建消息队列</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> <span class="title">attr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//有用的参数 表示消息队列的容量</span></span><br><span class="line">    attr.mq_maxmsg = <span class="number">10</span>;</span><br><span class="line">    attr.mq_msgsize = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用mq_open时被忽略的参数</span></span><br><span class="line">    attr.mq_flags = <span class="number">0</span>;</span><br><span class="line">    attr.mq_curmsgs = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">char</span> *mq_name = <span class="string">&quot;/p_c_mq&quot;</span>;</span><br><span class="line">    <span class="type">mqd_t</span> mqdes = mq_open(mq_name, O_RDWR | O_CREAT, <span class="number">0664</span>, &amp;attr);</span><br><span class="line">    <span class="keyword">if</span>(mqdes == (<span class="type">mqd_t</span>)<span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;mq_open&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//不断接收控制台中的数据 发送到消息队列</span></span><br><span class="line">    <span class="type">char</span> read_buf[<span class="number">100</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">time_info</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(read_buf, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">        clock_gettime(<span class="number">0</span>, &amp;time_info);</span><br><span class="line">        time_info.tv_sec += <span class="number">15</span>;</span><br><span class="line">        <span class="comment">// 读取消息队列的数据</span></span><br><span class="line">        <span class="keyword">if</span> (mq_timedreceive(mqdes, read_buf, <span class="number">100</span>, <span class="literal">NULL</span>, &amp;time_info) == <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;mq_tiemreceive&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断当前数据是否为结束信息</span></span><br><span class="line">        <span class="keyword">if</span>(read_buf[<span class="number">0</span>] == EOF)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;接收到生产者发送的结束信息 准备退出...\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//正常的读取的消息队列信息打印到控制台</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;接收到来自生产者发送的的消息：%s\n&quot;</span>, read_buf);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//关闭消息队列描述符</span></span><br><span class="line">    close(mqdes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//清除消息队列</span></span><br><span class="line">    mq_unlink(mq_name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>• <strong>生产者代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;mqueue.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//创建消息队列</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> <span class="title">attr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//有用的参数 表示消息队列的容量</span></span><br><span class="line">    attr.mq_maxmsg = <span class="number">10</span>;</span><br><span class="line">    attr.mq_msgsize = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用mq_open时被忽略的参数</span></span><br><span class="line">    attr.mq_flags = <span class="number">0</span>;</span><br><span class="line">    attr.mq_curmsgs = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">char</span> *mq_name = <span class="string">&quot;/p_c_mq&quot;</span>;</span><br><span class="line">    <span class="type">mqd_t</span> mqdes = mq_open(mq_name, O_RDWR | O_CREAT, <span class="number">0664</span>, &amp;attr);</span><br><span class="line">    <span class="keyword">if</span>(mqdes == (<span class="type">mqd_t</span>)<span class="number">-1</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;mq_open&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//不断接收控制台中的数据 发送到消息队列</span></span><br><span class="line">    <span class="type">char</span> write_buf[<span class="number">100</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">time_info</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(write_buf, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">        <span class="type">ssize_t</span> read_count = read(<span class="number">0</span>, write_buf, <span class="number">100</span>);</span><br><span class="line">        clock_gettime(<span class="number">0</span>, &amp;time_info);</span><br><span class="line">        time_info.tv_sec += <span class="number">5</span>;</span><br><span class="line">        <span class="keyword">if</span>(read_count == <span class="number">-1</span>)&#123;</span><br><span class="line">            perror(<span class="string">&quot;read&quot;</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(read_count == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">// 就是在控制台中输入 ctrl + d的时候</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;EOF, exit..\n&quot;</span>);</span><br><span class="line">            <span class="type">char</span> eof = EOF;</span><br><span class="line">            <span class="keyword">if</span> (mq_timedsend(mqdes, &amp;eof, <span class="number">1</span>, <span class="number">0</span>, &amp;time_info) == <span class="number">-1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                perror(<span class="string">&quot;mq-timesend&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//正常接收控制台数据并发送</span></span><br><span class="line">        <span class="keyword">if</span> (mq_timedsend(mqdes, write_buf, <span class="built_in">strlen</span>(write_buf), <span class="number">0</span>, &amp;time_info) == <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;mq-timesend&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;从命令行接收的数据已经发送给消息队列\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//关闭消息队列描述符</span></span><br><span class="line">    close(mqdes);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="25-信号"><a class="markdownIt-Anchor" href="#25-信号"></a> 2.5 信号</h3>
+<p>• <strong>信号的特点</strong>：用于通知进程发生了某种事件，是一种异步通信方式。<br />
+• <strong>代码示例</strong>：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">sigint_handle</span><span class="params">(<span class="type">int</span> signum)</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n受到%d信号 停止程序\n&quot;</span>, signum);</span><br><span class="line">    <span class="built_in">exit</span>(signum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (signal(SIGINT, sigint_handle) == SIG_ERR)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;signal&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;你好, 在吗\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+        <div class="sponsor-wrapper">
+  <div class="sponsor-button-wrapper">
+    <div class="sponsor-icon rotate"></div>
+    <div class="sponsor-title">赞助</div>
+    <div class="sponsor-icon rotate"></div>
+  </div>
+  <div class="sponsor-tip">请作者喝杯咖啡吧！</div>
+  
+    <div class="sponsor-qr">
+      
+        <div class="sponsor-qr-image-wrapper">
+          <img src="/sponsor/alipay.jpg" alt=支付宝 width="200" />
+          <p class="sponsor-qr-name">支付宝</p>
+        </div>
+      
+        <div class="sponsor-qr-image-wrapper">
+          <img src="/sponsor/wechat.jpg" alt=微信 width="200" />
+          <p class="sponsor-qr-name">微信</p>
+        </div>
+      
+    </div>
+  
+</div>
+      
+      
+      
+        <a data-aos="zoom-in" href="/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/" itemprop="commentCount"></span>
+          留言
+        </a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="https://pic1.imgdb.cn/item/67b84e9ad0e0a243d4016159.png" data-sizes="auto" alt="1v1视频聊天网页" class="lazyload">
+      
+      <a href="/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          1v1视频聊天网页
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+  <section id="comments" class="vcomment" data-aos="fade-up"></section>
+
+
+
+
+
+
+</section>
+        </div>
+        
+        
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2025
+      <span class="footer-info-sep rotate"></span>
+      凌
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        24.4k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        01:50
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E6%83%B3%E8%BF%9B%E4%B8%80%E6%AD%A5%E4%BA%86%E8%A7%A3%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%8F%AF%E4%BB%A5%E5%8E%BB%E7%9C%8B%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E7%9F%A5%E8%AF%86%E4%BA%86%E8%A7%A3%E4%BA%86%E8%A7%A3%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%89%A9%E7%90%86%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%80%E7%AF%87%E4%B8%8D%E9%94%99%E7%9A%84%E6%96%87%E7%AB%A0httpszybtreegithubio20200810%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text"> 要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章
+https:&#x2F;&#x2F;zybtree.github.io&#x2F;2020&#x2F;08&#x2F;10&#x2F;进程-线程模型&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text"> 进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text"> 1. 进程创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BD%BF%E7%94%A8-fork-%E5%88%9B%E5%BB%BA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 使用 fork 创建子进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E4%BD%BF%E7%94%A8-execve-%E6%89%A7%E8%A1%8C%E6%96%B0%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 使用 execve 执行新程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="toc-number">2.</span> <span class="toc-text"> 2. 进程通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 匿名管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 有名管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3 共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">2.4.</span> <span class="toc-text"> 2.4 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.5.</span> <span class="toc-text"> 2.5 信号</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="凌" class="lazyload">
+  <div class="sidebar-author-name">凌</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">21</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">4</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">19</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf015;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf187;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf06a;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf0c1;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js" integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE&#x2F;jMSCxD+jAPU55x&#x2F;jj3wlf" crossorigin="anonymous"></script>
+
+  <script>
+    function loadScripts(scripts, index) {
+      if (index < scripts.length) {
+        const script = scripts[index];
+        const src = script.getAttribute('src');
+
+        const loadScript = (scriptContent) => {
+          const scriptElement = document.createElement('script');
+          if (script.type) {
+            scriptElement.type = script.type;
+          }
+          scriptElement.text = scriptContent;
+          document.head.appendChild(scriptElement);
+          loadScripts(scripts, index + 1);
+        }
+
+        if (src) {
+          fetch(src)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+              }
+              return response.text();
+            })
+            .then(scriptContent => {
+              loadScript(scriptContent);
+            })
+            .catch(error => {
+              console.error('Failed to load script:', src, error);
+            });
+        } else {
+          loadScript(script.text);
+        }
+      }
+    }
+    window.Pjax && new window.Pjax({
+      selectors: [
+        "#header>img",
+        "#header>picture",
+        "head title",
+        "#header-title",
+        "#subtitle-wrap",
+        "#main",
+        "#content",
+        ".sidebar-widget",
+        ".sidebar-wrapper",
+        '#mobile-nav',
+        '#lazy-script'
+      ],
+      switches: {
+        "#content": function(oldEl, newEl) {
+          // for sidebar change
+          oldEl.className = newEl.className;
+          this.onSwitch();
+        },
+        "#header-title": Pjax.switches.outerHTML,
+        "#subtitle-wrap": Pjax.switches.outerHTML,
+        "#main": function(oldEl, newEl) {
+          const scripts = [...newEl.querySelectorAll('script')];
+          loadScripts(scripts, 0);
+          oldEl.outerHTML = newEl.outerHTML
+          this.onSwitch()
+        },
+        "#mobile-nav": Pjax.switches.outerHTML,
+        '#lazy-script': function(oldEl, newEl) {
+          const scripts = [...newEl.querySelectorAll('script')];
+          loadScripts(scripts, 0);
+          oldEl.innerHTML = newEl.innerHTML
+          this.onSwitch()
+        },
+      },
+      cacheBust: false
+    })
+  </script>
+  
+<script src="/js/pjax.js"></script>
+
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "凌",
+          title: "进程与线程",
+          url: "https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/",
+          excerpt: "",
+          description: "",
+          stripContent: "这里我将学习的进程与线程分为三个大部分 1.进程创建：使用fork创建子进程，execve执行新程序。 2.​进程通信：匿名管道、有名管道、共享内存、消息队列、信号 ​3.线程管理：线程创建、终止、同步（互斥锁、读写锁、条件变量等）  要想进一步了解系统的底层原理可以去看操作系统相关的知识，了解了解进程线程的物理模型，以及进程线程在系统上的工作原理。这里有一篇不错的文章 https://zybtree.github.io/2020/08/10/进程-线程模型/  进程与线程  1. 进程创建  ",
+          date: "Thu Mar 13 2025 21:11:23 GMT+0800",
+          updated: "Thu Mar 13 2025 22:48:10 GMT+0800",
+          cover: "https://pic1.imgdb.cn/item/67b84be2d0e0a243d40160b6.jpg",
+        };
+      </script>
+       
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+        
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+  
+<script src="https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js" integrity="sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn" crossorigin="anonymous" data-pjax></script>
+
+  <script data-pjax>
+    var GUEST_INFO = ['nick', 'mail', 'link'];
+    var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+      return GUEST_INFO.indexOf(item) > -1
+    });
+    var recordIP = JSON.parse('true');
+    var highlight = JSON.parse('true');
+    var visitor = JSON.parse('false');
+
+    new Valine({
+      el: '.vcomment',
+      appId: "Bd17umq4JlEEEj0CkSxnsPC9-gzGzoHsz",
+      appKey: "m0FoW4Y9WglsyoP3J0Y8Kmjh",
+      placeholder: "Just go go",
+      pageSize: '10',
+      avatar: 'mp',
+      lang: 'zh-CN',
+      recordIP: recordIP,
+      highlight: highlight,
+      visitor: visitor,
+      requiredFields: guest_info,
+      path: window.location.pathname
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.3.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL&#x2F;aORyw+5+HZoU6e" crossorigin="anonymous"></script>
+
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js" integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8+0maanw1S&#x2F;IyB+Y4JG+ZDU7GpKE8" crossorigin="anonymous"></script>
+
+  
+
+  </body>
+  </html>
+

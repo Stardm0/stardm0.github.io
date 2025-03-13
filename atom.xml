@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2025-02-21T10:21:15.177Z</updated>
+  <updated>2025-03-13T14:48:10.029Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>进程与线程</title>
+    <link href="https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/"/>
+    <id>https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/</id>
+    <published>2025-03-13T13:11:23.000Z</published>
+    <updated>2025-03-13T14:48:10.029Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;这里我将学习的进程与线程分为三个大部分&lt;/p&gt;
+&lt;p&gt;1.进程创建：使用fork创建子进程，execve执行新程序。&lt;br /&gt;
+2.​进程通信：匿名管道、有名管道、共享内存、消息队列、信号&lt;br</summary>
+        
+      
+    
+    
+    
+    <category term="Linux应用层" scheme="https://stardm.ddns-ip.net/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/"/>
+    
+    
+    <category term="C++" scheme="https://stardm.ddns-ip.net/tags/C/"/>
+    
+    <category term="Linux" scheme="https://stardm.ddns-ip.net/tags/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title>1v1视频聊天网页</title>
@@ -544,32 +573,6 @@
     <category term="数据库" scheme="https://stardm.ddns-ip.net/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     <category term="SQL" scheme="https://stardm.ddns-ip.net/tags/SQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>FFmpeg 基本命令</title>
-    <link href="https://stardm.ddns-ip.net/2024/11/28/FFmpeg%20%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/"/>
-    <id>https://stardm.ddns-ip.net/2024/11/28/FFmpeg%20%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/</id>
-    <published>2024-11-28T10:19:50.000Z</published>
-    <updated>2025-02-21T10:30:54.304Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;ffmpeg-使用命令&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#ffmpeg-使用命令&quot;&gt;&lt;/a&gt; FFmpeg 使用命令&lt;/h1&gt;
-&lt;h2 id=&quot;查询可用设备&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
-    
-    
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
     
   </entry>
   
