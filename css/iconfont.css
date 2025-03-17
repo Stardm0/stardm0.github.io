@@ -67,6 +67,14 @@
   font-family: "iconfont";
   content: "\e617";
 }
+#nav-circle-half-stroke-btn:before {
+  font-family: "iconfont";
+  content: "\e641";
+}
+#nav-language-btn:before {
+  font-family: "iconfont";
+  content: "\e642";
+}
 .icon-copy:before {
   font-family: "iconfont";
   content: "\e60c";
