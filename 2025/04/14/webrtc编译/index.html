@@ -46,7 +46,7 @@
 <meta property="og:description" content="为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累(*￣(oo)￣)。但成功了让我觉得这一切都没有白费(≧▽≦q) Windows 环境下下载 WebRTC 源码   🧰 一、准备工作  安装必要工具  ✅ Visual Studio  安装 Visual Studio 2022 勾选以下组件：  C++开发桌面工作负载（包含 MSVC、">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-14T10:02:04.000Z">
-<meta property="article:modified_time" content="2025-04-14T11:02:47.058Z">
+<meta property="article:modified_time" content="2025-04-14T11:03:58.900Z">
 <meta property="article:author" content="凌">
 <meta property="article:tag" content="WebRtc">
 <meta name="twitter:card" content="summary">
@@ -411,7 +411,7 @@ https_proxy_port = 7890</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gn gen out/Default</span><br></pre></td></tr></table></figure>
 <p>在out/Default/args.gn文件中<br />
 设置如下编译参数：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set build arguments here. See `gn help buildargs`.</span></span><br><span class="line">target_os = <span class="string">&quot;win&quot;</span></span><br><span class="line">target_cpu = <span class="string">&quot;x64&quot;</span></span><br><span class="line">is_debug = <span class="literal">true</span></span><br><span class="line">is_clang = <span class="literal">true</span></span><br><span class="line">use_custom_libcxx = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Set build arguments here. See `gn help buildargs`.</span><br><span class="line">target_os = &quot;win&quot;</span><br><span class="line">target_cpu = &quot;x64&quot;</span><br><span class="line">is_debug = true</span><br><span class="line">is_clang = true</span><br><span class="line">use_custom_libcxx = false</span><br></pre></td></tr></table></figure>
 <p>is_debug = true 控制是否是调试版本的</p>
 <h3 id="编译使用-ninja"><a class="markdownIt-Anchor" href="#编译使用-ninja"></a> 编译（使用 Ninja）</h3>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja <span class="literal">-C</span> out/Default <span class="literal">--ide</span>=vs2022</span><br></pre></td></tr></table></figure>
@@ -869,7 +869,7 @@ _ITERATOR_DEBUG_LEVEL=0</p>
           description: "",
           stripContent: "为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累(*￣(oo)￣)。但成功了让我觉得这一切都没有白费(≧▽≦q) Windows 环境下下载 WebRTC 源码   🧰 一、准备工作  安装必要工具  ✅ Visual Studio  安装 Visual Studio 2022 勾选以下组件：  C++开发桌面工作负载（包含 MSVC、Windows 10 SDK）      安装 Python（推荐 3.8 以上）  安装时勾选 “",
           date: "Mon Apr 14 2025 18:02:04 GMT+0800",
-          updated: "Mon Apr 14 2025 19:02:47 GMT+0800",
+          updated: "Mon Apr 14 2025 19:03:58 GMT+0800",
           cover: "https://pic1.imgdb.cn/item/67b84be1d0e0a243d40160b4.jpg",
         };
       </script>
