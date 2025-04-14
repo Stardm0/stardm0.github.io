@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2025-03-17T11:47:18.338Z</updated>
+  <updated>2025-04-14T10:55:42.708Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>webrtc编译</title>
+    <link href="https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/"/>
+    <id>https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/</id>
+    <published>2025-04-14T10:02:04.000Z</published>
+    <updated>2025-04-14T10:55:42.708Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累&lt;sup&gt;(*￣(oo)￣)&lt;/sup&gt;。但成功了让我觉得这一切都没有白费(≧▽≦q)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Windows 环境下下载 WebRTC</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    
+  </entry>
   
   <entry>
     <title>进程与线程(2)</title>
@@ -545,34 +571,6 @@
     <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
     
     <category term="AAC" scheme="https://stardm.ddns-ip.net/tags/AAC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SQL基础</title>
-    <link href="https://stardm.ddns-ip.net/2024/11/28/SQL%E5%9F%BA%E7%A1%80/"/>
-    <id>https://stardm.ddns-ip.net/2024/11/28/SQL%E5%9F%BA%E7%A1%80/</id>
-    <published>2024-11-28T10:44:50.000Z</published>
-    <updated>2025-02-21T10:30:05.800Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;数据库约束与高级操作总结&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#数据库约束与高级操作总结&quot;&gt;&lt;/a&gt; 数据库约束与高级操作总结&lt;/h1&gt;
-&lt;h2 id=&quot;约束&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="SQL" scheme="https://stardm.ddns-ip.net/categories/SQL/"/>
-    
-    
-    <category term="数据库" scheme="https://stardm.ddns-ip.net/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="SQL" scheme="https://stardm.ddns-ip.net/tags/SQL/"/>
     
   </entry>
   

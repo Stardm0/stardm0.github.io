@@ -17,7 +17,7 @@
   <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://stardm.ddns-ip.net';</script>
   
   <title>
-    用FFmpeg实现一个简单小咖秀 |
+    webrtc编译 |
     
     Stardm 风也温柔
   </title>
@@ -38,17 +38,17 @@
 
   
   
-    <meta name="description" content="核心代码  找其中一个源文件的音频流 1234567891011121314151617for(int i &#x3D; 0; i &lt; ifmt1-&gt;nb_streams; i++)&#123;    AVStream *instream1 &#x3D; ifmt1-&gt;streams[i];    AVStream *outstream &#x3D; NULL;    AVCodecParameters *">
+    <meta name="description" content="为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累(*￣(oo)￣)。但成功了让我觉得这一切都没有白费(≧▽≦q) Windows 环境下下载 WebRTC 源码   🧰 一、准备工作  1. 安装必要工具  ✅ Visual Studio  安装 Visual Studio 2022 勾选以下组件：  C++开发桌面工作负载（包含 MS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="用FFmpeg实现一个简单小咖秀">
-<meta property="og:url" content="https://stardm.ddns-ip.net/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/index.html">
+<meta property="og:title" content="webrtc编译">
+<meta property="og:url" content="https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/index.html">
 <meta property="og:site_name" content="Stardm 风也温柔">
-<meta property="og:description" content="核心代码  找其中一个源文件的音频流 1234567891011121314151617for(int i &#x3D; 0; i &lt; ifmt1-&gt;nb_streams; i++)&#123;    AVStream *instream1 &#x3D; ifmt1-&gt;streams[i];    AVStream *outstream &#x3D; NULL;    AVCodecParameters *">
+<meta property="og:description" content="为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累(*￣(oo)￣)。但成功了让我觉得这一切都没有白费(≧▽≦q) Windows 环境下下载 WebRTC 源码   🧰 一、准备工作  1. 安装必要工具  ✅ Visual Studio  安装 Visual Studio 2022 勾选以下组件：  C++开发桌面工作负载（包含 MS">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-09T11:43:57.000Z">
-<meta property="article:modified_time" content="2025-02-21T10:26:13.970Z">
+<meta property="article:published_time" content="2025-04-14T10:02:04.000Z">
+<meta property="article:modified_time" content="2025-04-14T10:55:42.708Z">
 <meta property="article:author" content="凌">
-<meta property="article:tag" content="FFmpeg">
+<meta property="article:tag" content="WebRtc">
 <meta name="twitter:card" content="summary">
   
   
@@ -178,7 +178,7 @@
 <header id="header">
   
     <picture></picture>
-    <img fetchpriority="high" src="https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160dc.jpg" alt="用FFmpeg实现一个简单小咖秀">
+    <img fetchpriority="high" src="https://pic1.imgdb.cn/item/67b84be1d0e0a243d40160b4.jpg" alt="webrtc编译">
   
   <div id="header-outer">
     <div id="header-title">
@@ -186,7 +186,7 @@
         
         
           <a href="/" id="logo">
-            <h1 data-aos="slide-up">用FFmpeg实现一个简单小咖秀</h1>
+            <h1 data-aos="slide-up">webrtc编译</h1>
           </a>
         
       
@@ -230,7 +230,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text"> 核心代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%BE%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E9%9F%B3%E9%A2%91%E6%B5%81"><span class="toc-number">1.1.</span> <span class="toc-text"> 找其中一个源文件的音频流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%BE%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%A7%86%E9%A2%91%E6%B5%81"><span class="toc-number">1.2.</span> <span class="toc-text"> 找另一个源文件的视频流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%BA%90%E6%96%87%E4%BB%B6%E5%B9%B6%E5%86%99%E5%85%A5%E5%88%B0%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text"> 读取源文件并写入到目标文件</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text"> 🧰 一、准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 安装必要工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#visual-studio"><span class="toc-number">1.1.1.</span> <span class="toc-text"> ✅ Visual Studio</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-python%E6%8E%A8%E8%8D%90-38-%E4%BB%A5%E4%B8%8A"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. 安装 Python（推荐 3.8 以上）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-git"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 安装 Git</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E4%B8%8B%E8%BD%BD-depot_tools%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text"> 📦 二、下载 depot_tools并配置环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.</span> <span class="toc-text"> 配置环境变量：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EF%B8%8F-%E4%B8%89-%E6%8B%89%E5%8F%96-webrtc-%E6%BA%90%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text"> ⬇️ 三、拉取 WebRTC 源码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%93%E5%BC%80-x64-native-tools-command-prompt-for-vs%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E7%BB%88%E7%AB%AF"><span class="toc-number">3.1.</span> <span class="toc-text"> 1. 打开 x64 Native Tools Command Prompt for VS（推荐使用这个终端）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-number">3.2.</span> <span class="toc-text"> 2. 创建工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8B%89%E5%8F%96%E6%BA%90%E7%A0%81%E9%A6%96%E6%AC%A1%E4%BD%BF%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text"> 3. 拉取源码（首次使用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%BF%9B%E5%85%A5%E6%BA%90%E7%A0%81%E7%9B%AE%E5%BD%95%E5%B9%B6%E5%90%8C%E6%AD%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">3.4.</span> <span class="toc-text"> 4. 进入源码目录并同步依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E7%94%9F%E6%88%90%E5%92%8C%E6%9E%84%E5%BB%BA%E5%8F%AF%E9%80%89"><span class="toc-number">4.</span> <span class="toc-text"> 🔧 四、生成和构建（可选）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">4.1.</span> <span class="toc-text"> 1. 创建构建目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E4%BD%BF%E7%94%A8-ninja"><span class="toc-number">4.2.</span> <span class="toc-text"> 2. 编译（使用 Ninja）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%B0%91%E9%87%8F%E8%AF%AD%E6%B3%95%E9%97%AE%E9%A2%98%E5%8F%AF%E9%80%9A%E8%BF%87%E8%AF%A2%E9%97%AEai%E6%89%8B%E5%8A%A8%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text"> 编译过程中可能出现少量语法问题，可通过询问AI手动解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E5%9C%A8vs%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8webrtc%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text"> 🧲 五、在VS项目中使用webrtc库文件</span></a></li></ol>
       
   </div>
 </div>
@@ -314,13 +314,13 @@
   
 </aside>
 
-          <section id="main"><article id="post-用FFmpeg实现一个简单小咖秀" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+          <section id="main"><article id="post-webrtc编译" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
       <div class="article-date">
   <span class="article-date-link" data-aos="zoom-in">
-    <time datetime="2024-12-09T11:43:57.000Z" itemprop="datePublished">2024-12-09</time>
-    <time style="display: none;" id="post-update-time">2025-02-21</time>
+    <time datetime="2025-04-14T10:02:04.000Z" itemprop="datePublished">2025-04-14</time>
+    <time style="display: none;" id="post-update-time">2025-04-14</time>
   </span>
 </div>
 
@@ -337,13 +337,93 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
       
-        <h3 id="核心代码"><a class="markdownIt-Anchor" href="#核心代码"></a> 核心代码</h3>
-<h4 id="找其中一个源文件的音频流"><a class="markdownIt-Anchor" href="#找其中一个源文件的音频流"></a> 找其中一个源文件的音频流</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; ifmt1-&gt;nb_streams; i++)&#123;</span><br><span class="line">    AVStream *instream1 = ifmt1-&gt;streams[i];</span><br><span class="line">    AVStream *outstream = <span class="literal">NULL</span>;</span><br><span class="line">    AVCodecParameters *inCodecPar1 = instream1-&gt;codecpar;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(inCodecPar1-&gt;codec_type == AVMEDIA_TYPE_AUDIO)&#123;</span><br><span class="line">        outstream = avformat_new_stream(ofmt, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span>(!outstream)&#123;</span><br><span class="line">            av_log(<span class="literal">NULL</span>, AV_LOG_ERROR, <span class="string">&quot;创建流失败!&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> __ERROR;</span><br><span class="line">        &#125;</span><br><span class="line">        avcodec_parameters_copy(outstream-&gt;codecpar, instream1-&gt;codecpar);</span><br><span class="line">        outstream-&gt;codecpar-&gt;codec_tag = <span class="number">0</span>;</span><br><span class="line">        aidx = i;</span><br><span class="line">        aidx1 = cnt++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="找另一个源文件的视频流"><a class="markdownIt-Anchor" href="#找另一个源文件的视频流"></a> 找另一个源文件的视频流</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; ifmt2-&gt;nb_streams; i++)&#123;</span><br><span class="line">    AVStream *instream2 = ifmt2-&gt;streams[i];</span><br><span class="line">    AVStream *outstream = <span class="literal">NULL</span>;</span><br><span class="line">    AVCodecParameters *inCodecPar2 = instream2-&gt;codecpar;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(inCodecPar2-&gt;codec_type == AVMEDIA_TYPE_VIDEO)&#123;</span><br><span class="line">        outstream = avformat_new_stream(ofmt, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span>(!outstream)&#123;</span><br><span class="line">            av_log(<span class="literal">NULL</span>, AV_LOG_ERROR, <span class="string">&quot;创建流失败!&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> __ERROR;</span><br><span class="line">        &#125;</span><br><span class="line">        avcodec_parameters_copy(outstream-&gt;codecpar, instream2-&gt;codecpar);</span><br><span class="line">        outstream-&gt;codecpar-&gt;codec_tag = <span class="number">0</span>;</span><br><span class="line">        vidx = i;</span><br><span class="line">        vidx1 = cnt++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="读取源文件并写入到目标文件"><a class="markdownIt-Anchor" href="#读取源文件并写入到目标文件"></a> 读取源文件并写入到目标文件</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(av_read_frame(ifmt1, &amp;pkt1) &gt;= <span class="number">0</span> || av_read_frame(ifmt2, &amp;pkt2) &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(pkt1.stream_index == aidx)&#123;</span><br><span class="line">        pkt1.pts = av_rescale_q_rnd(pkt1.pts, ifmt1-&gt;streams[aidx]-&gt;time_base, ofmt-&gt;streams[aidx1]-&gt;time_base, (AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));</span><br><span class="line">        pkt1.dts = pkt1.pts;</span><br><span class="line">        pkt1.stream_index = aidx1;</span><br><span class="line">        av_interleaved_write_frame(ofmt, &amp;pkt1);</span><br><span class="line">        av_packet_unref(&amp;pkt1);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(pkt2.stream_index == vidx)&#123;</span><br><span class="line">        pkt2.pts = av_rescale_q_rnd(pkt2.pts, ifmt2-&gt;streams[vidx]-&gt;time_base, ofmt-&gt;streams[vidx1]-&gt;time_base, (AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));</span><br><span class="line">        pkt2.dts = av_rescale_q_rnd(pkt2.dts, ifmt2-&gt;streams[vidx]-&gt;time_base, ofmt-&gt;streams[vidx1]-&gt;time_base, (AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));</span><br><span class="line">        pkt2.stream_index = vidx1;</span><br><span class="line">        av_interleaved_write_frame(ofmt, &amp;pkt2);</span><br><span class="line">        av_packet_unref(&amp;pkt2);        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累<sup>(*￣(oo)￣)</sup>。但成功了让我觉得这一切都没有白费(≧▽≦q)</p>
+<p><strong>Windows 环境下下载 WebRTC 源码</strong></p>
+<hr />
+<h2 id="一-准备工作"><a class="markdownIt-Anchor" href="#一-准备工作"></a> 🧰 一、准备工作</h2>
+<h3 id="1-安装必要工具"><a class="markdownIt-Anchor" href="#1-安装必要工具"></a> 1. 安装必要工具</h3>
+<h4 id="visual-studio"><a class="markdownIt-Anchor" href="#visual-studio"></a> ✅ Visual Studio</h4>
+<ul>
+<li>安装 <strong>Visual Studio 2022</strong></li>
+<li>勾选以下组件：
+<ul>
+<li>C++开发桌面工作负载（包含 MSVC、Windows 10 SDK）</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="2-安装-python推荐-38-以上"><a class="markdownIt-Anchor" href="#2-安装-python推荐-38-以上"></a> 2. 安装 Python（推荐 3.8 以上）</h3>
+<blockquote>
+<p>安装时勾选 “Add Python to PATH”。</p>
+</blockquote>
+<hr />
+<h3 id="3-安装-git"><a class="markdownIt-Anchor" href="#3-安装-git"></a> 3. 安装 Git</h3>
+<p>从官网下载并安装：<a target="_blank" rel="noopener" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></p>
+<p>假设你的代理地址是：127.0.0.1:7890</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy http://127.0.0.1:7890</span><br><span class="line">git config --global https.proxy http://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="二-下载-depot_tools并配置环境"><a class="markdownIt-Anchor" href="#二-下载-depot_tools并配置环境"></a> 📦 二、下载 <code>depot_tools</code>并配置环境</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://chromium.googlesource.com/chromium/tools/depot_tools.git</span><br></pre></td></tr></table></figure>
+<h3 id="配置环境变量"><a class="markdownIt-Anchor" href="#配置环境变量"></a> 配置环境变量：</h3>
+<ul>
+<li>
+<p>将 <code>depot_tools</code> 所在目录添加到系统的 <code>PATH</code></p>
+<ul>
+<li>控制面板 → 系统 → 环境变量 → <code>Path</code> → 添加一行：<code>C:\your\path\to\depot_tools</code></li>
+</ul>
+</li>
+<li>
+<p>添加系统变量</p>
+</li>
+<li>
+<p>编译相关<br />
+DEPOT_TOOLS_UPDATE=0<br />
+DEPOT_TOOLS_WIN_TOOLCHAIN=0<br />
+GYP_MSVS_OVERRIDE_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community 这个变量和生成vs工程有关，就是在编译参数添加的–ide=vs2022</p>
+</li>
+<li>
+<p>网络相关<br />
+http_proxy=你的代理地址<br />
+https_proxy=你的代理地址<br />
+NO_AUTH_BOTO_CONFIG=/youpath/.boto</p>
+</li>
+</ul>
+<p>.boto文件的内容如下<br />
+[Boto]<br />
+proxy = 127.0.0.1<br />
+proxy_port = 7890<br />
+https_proxy = 127.0.0.1<br />
+https_proxy_port = 7890</p>
+<hr />
+<h2 id="️-三-拉取-webrtc-源码"><a class="markdownIt-Anchor" href="#️-三-拉取-webrtc-源码"></a> ⬇️ 三、拉取 WebRTC 源码</h2>
+<h3 id="1-打开-x64-native-tools-command-prompt-for-vs推荐使用这个终端"><a class="markdownIt-Anchor" href="#1-打开-x64-native-tools-command-prompt-for-vs推荐使用这个终端"></a> 1. 打开 <strong>x64 Native Tools Command Prompt for VS</strong>（推荐使用这个终端）</h3>
+<h3 id="2-创建工作目录"><a class="markdownIt-Anchor" href="#2-创建工作目录"></a> 2. 创建工作目录</h3>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir webrtc<span class="literal">-checkout</span></span><br><span class="line"><span class="built_in">cd</span> webrtc<span class="literal">-checkout</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-拉取源码首次使用"><a class="markdownIt-Anchor" href="#3-拉取源码首次使用"></a> 3. 拉取源码（首次使用）</h3>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fetch <span class="literal">--nohooks</span> webrtc</span><br></pre></td></tr></table></figure>
+<p>⚠️ 第一次会下载 Chromium 构建环境，时间较长。</p>
+<hr />
+<h3 id="4-进入源码目录并同步依赖"><a class="markdownIt-Anchor" href="#4-进入源码目录并同步依赖"></a> 4. 进入源码目录并同步依赖</h3>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> src</span><br><span class="line">gclient sync</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="四-生成和构建可选"><a class="markdownIt-Anchor" href="#四-生成和构建可选"></a> 🔧 四、生成和构建（可选）</h2>
+<h3 id="1-创建构建目录"><a class="markdownIt-Anchor" href="#1-创建构建目录"></a> 1. 创建构建目录</h3>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gn gen out/Default</span><br></pre></td></tr></table></figure>
+<p>在out/Default/args.gn文件中<br />
+设置如下编译参数：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Set build arguments here. See `gn help buildargs`.</span><br><span class="line">target_os = &quot;win&quot;</span><br><span class="line">target_cpu = &quot;x64&quot;</span><br><span class="line">is_debug = true</span><br><span class="line">is_clang = true</span><br><span class="line">use_custom_libcxx = false</span><br></pre></td></tr></table></figure>
+<p>is_debug = true 控制是否是调试版本的</p>
+<h3 id="2-编译使用-ninja"><a class="markdownIt-Anchor" href="#2-编译使用-ninja"></a> 2. 编译（使用 Ninja）</h3>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja <span class="literal">-C</span> out/Default <span class="literal">--ide</span>=vs2022</span><br></pre></td></tr></table></figure>
+<h2 id="编译过程中可能出现少量语法问题可通过询问ai手动解决"><a class="markdownIt-Anchor" href="#编译过程中可能出现少量语法问题可通过询问ai手动解决"></a> 编译过程中可能出现少量语法问题，可通过询问AI手动解决</h2>
+<h2 id="五-在vs项目中使用webrtc库文件"><a class="markdownIt-Anchor" href="#五-在vs项目中使用webrtc库文件"></a> 🧲 五、在VS项目中使用webrtc库文件</h2>
+<p>需要添加以下预编译宏定义<br />
+WEBRTC_WIN<br />
+NOMINMAX<br />
+RTC_ENABLE_WIN_WGC</p>
+<p>采用调试还要添加以下这行<br />
+_ITERATOR_DEBUG_LEVEL=0</p>
+
       
     </div>
     <footer class="article-footer">
@@ -375,8 +455,8 @@
       
       
       
-        <a data-aos="zoom-in" href="/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/#comments" class="article-comment-link">
-          <span class="post-comments-count valine-comment-count" data-xid="/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/" itemprop="commentCount"></span>
+        <a data-aos="zoom-in" href="/2025/04/14/webrtc%E7%BC%96%E8%AF%91/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2025/04/14/webrtc%E7%BC%96%E8%AF%91/" itemprop="commentCount"></span>
           留言
         </a>
       
@@ -385,7 +465,7 @@
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/FFmpeg/" rel="tag">FFmpeg</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/WebRtc/" rel="tag">WebRtc</a></li></ul>
 
 
     </footer>
@@ -393,31 +473,17 @@
   
   <nav id="article-nav" data-aos="fade-up">
     
-      
-      <div class="article-nav-link-wrap article-nav-link-left">
-        
-          <img data-src="https://pic1.imgdb.cn/item/67b84c57d0e0a243d40160da.jpg" data-sizes="auto" alt="Cloudflare证书的颁发切换为 Google Trust(GTS)" class="lazyload">
-        
-        <a href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/"></a>
-        <div class="article-nav-caption">前一篇</div>
-        <h3 class="article-nav-title">
-          
-            Cloudflare证书的颁发切换为 Google Trust(GTS)
-          
-        </h3>
-      </div>
-    
     
     
     <div class="article-nav-link-wrap article-nav-link-right">
       
-        <img data-src="https://pic1.imgdb.cn/item/67b84c8bd0e0a243d40160ed.jpg" data-sizes="auto" alt="实现FFmpeg的裁剪" class="lazyload">
+        <img data-src="https://pic1.imgdb.cn/item/67b84be1d0e0a243d40160b5.jpg" data-sizes="auto" alt="进程与线程(2)" class="lazyload">
       
-      <a href="/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/"></a>
+      <a href="/2025/03/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(2)/"></a>
       <div class="article-nav-caption">后一篇</div>
       <h3 class="article-nav-title">
         
-          实现FFmpeg的裁剪
+          进程与线程(2)
         
       </h3>
     </div>
@@ -495,7 +561,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text"> 核心代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%BE%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E9%9F%B3%E9%A2%91%E6%B5%81"><span class="toc-number">1.1.</span> <span class="toc-text"> 找其中一个源文件的音频流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%BE%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%A7%86%E9%A2%91%E6%B5%81"><span class="toc-number">1.2.</span> <span class="toc-text"> 找另一个源文件的视频流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%BA%90%E6%96%87%E4%BB%B6%E5%B9%B6%E5%86%99%E5%85%A5%E5%88%B0%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text"> 读取源文件并写入到目标文件</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text"> 🧰 一、准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 安装必要工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#visual-studio"><span class="toc-number">1.1.1.</span> <span class="toc-text"> ✅ Visual Studio</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-python%E6%8E%A8%E8%8D%90-38-%E4%BB%A5%E4%B8%8A"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. 安装 Python（推荐 3.8 以上）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-git"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 安装 Git</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E4%B8%8B%E8%BD%BD-depot_tools%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text"> 📦 二、下载 depot_tools并配置环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.</span> <span class="toc-text"> 配置环境变量：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EF%B8%8F-%E4%B8%89-%E6%8B%89%E5%8F%96-webrtc-%E6%BA%90%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text"> ⬇️ 三、拉取 WebRTC 源码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%93%E5%BC%80-x64-native-tools-command-prompt-for-vs%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E7%BB%88%E7%AB%AF"><span class="toc-number">3.1.</span> <span class="toc-text"> 1. 打开 x64 Native Tools Command Prompt for VS（推荐使用这个终端）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-number">3.2.</span> <span class="toc-text"> 2. 创建工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8B%89%E5%8F%96%E6%BA%90%E7%A0%81%E9%A6%96%E6%AC%A1%E4%BD%BF%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text"> 3. 拉取源码（首次使用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%BF%9B%E5%85%A5%E6%BA%90%E7%A0%81%E7%9B%AE%E5%BD%95%E5%B9%B6%E5%90%8C%E6%AD%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">3.4.</span> <span class="toc-text"> 4. 进入源码目录并同步依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E7%94%9F%E6%88%90%E5%92%8C%E6%9E%84%E5%BB%BA%E5%8F%AF%E9%80%89"><span class="toc-number">4.</span> <span class="toc-text"> 🔧 四、生成和构建（可选）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">4.1.</span> <span class="toc-text"> 1. 创建构建目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E4%BD%BF%E7%94%A8-ninja"><span class="toc-number">4.2.</span> <span class="toc-text"> 2. 编译（使用 Ninja）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%B0%91%E9%87%8F%E8%AF%AD%E6%B3%95%E9%97%AE%E9%A2%98%E5%8F%AF%E9%80%9A%E8%BF%87%E8%AF%A2%E9%97%AEai%E6%89%8B%E5%8A%A8%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text"> 编译过程中可能出现少量语法问题，可通过询问AI手动解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E5%9C%A8vs%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8webrtc%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text"> 🧲 五、在VS项目中使用webrtc库文件</span></a></li></ol>
       
   </div>
 </div>
@@ -796,14 +862,14 @@
       <script data-pjax>
         window.REIMU_POST = {
           author: "凌",
-          title: "用FFmpeg实现一个简单小咖秀",
-          url: "https://stardm.ddns-ip.net/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/",
+          title: "webrtc编译",
+          url: "https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/",
           excerpt: "",
           description: "",
-          stripContent: " 核心代码  找其中一个源文件的音频流 1234567891011121314151617for(int i = 0; i &amp;lt; ifmt1-&amp;gt;nb_streams; i++)&amp;#123;    AVStream *instream1 = ifmt1-&amp;gt;streams[i];    AVStream *outstream = NULL;    AVCodecParameters *inCodecPar1 = instream1-&amp;gt;codecpar;    if(inCode",
-          date: "Mon Dec 09 2024 19:43:57 GMT+0800",
-          updated: "Fri Feb 21 2025 18:26:13 GMT+0800",
-          cover: "https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160dc.jpg",
+          stripContent: "为了使用编译后的webrtc库我花了很多时间，终于在今天解决了各个问题，并正式在自己的项目中使用。说真的很累(*￣(oo)￣)。但成功了让我觉得这一切都没有白费(≧▽≦q) Windows 环境下下载 WebRTC 源码   🧰 一、准备工作  1. 安装必要工具  ✅ Visual Studio  安装 Visual Studio 2022 勾选以下组件：  C++开发桌面工作负载（包含 MSVC、Windows 10 SDK）      2. 安装 Python（推荐 3.8 以上）  安",
+          date: "Mon Apr 14 2025 18:02:04 GMT+0800",
+          updated: "Mon Apr 14 2025 18:55:42 GMT+0800",
+          cover: "https://pic1.imgdb.cn/item/67b84be1d0e0a243d40160b4.jpg",
         };
       </script>
        
