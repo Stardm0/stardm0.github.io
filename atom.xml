@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2025-04-15T04:23:03.757Z</updated>
+  <updated>2025-05-13T13:13:44.156Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>修复webrtc示例中peer_connection_client在windows上运行的问题</title>
+    <link href="https://stardm.ddns-ip.net/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>https://stardm.ddns-ip.net/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <published>2025-05-13T12:45:52.000Z</published>
+    <updated>2025-05-13T13:13:44.156Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;想学习一下webrtc原生API的使用，开始是学习&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    
+    
+    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    
+  </entry>
   
   <entry>
     <title>webrtc编译</title>
@@ -541,36 +566,6 @@
     <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
     
     <category term="H264" scheme="https://stardm.ddns-ip.net/tags/H264/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>③实现电脑音频和视频的录制并封装成mp4</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/</id>
-    <published>2024-12-01T11:23:53.000Z</published>
-    <updated>2025-02-21T10:22:08.458Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h3 id=&quot;音视频录制的多线程实现&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#音视频录制的多线程实现&quot;&gt;&lt;/a&gt; &lt;strong&gt;音视频录制的多线程实现&lt;/strong&gt;&lt;/h3&gt;
-&lt;h4 id=&quot;主要类&quot;&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
-    
-    
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
-    
-    <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
-    
-    <category term="AAC" scheme="https://stardm.ddns-ip.net/tags/AAC/"/>
     
   </entry>
   

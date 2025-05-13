@@ -247,7 +247,7 @@
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">23</div>
+    <div class="sidebar-state-number">24</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
@@ -344,10 +344,54 @@
       <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/" aria-label="Cloudflare证书的颁发切换为 Google Trust(GTS)"></a>
+      <a class="post-link" href="/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/" aria-label="用FFmpeg自带的AAC编码器进行编码"></a>
     
     
     <div class="post-cover-left">
+      
+        <img data-src="https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160db.jpg" data-sizes="auto" alt="用FFmpeg自带的AAC编码器进行编码" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-12-11</span>
+        <span><span class="icon-pencil"></span>946 字</span>
+        <span><span class="icon-clock"></span>4 分钟</span>
+      </div>
+      <h2 class="post-title">用FFmpeg自带的AAC编码器进行编码</h2>
+      <article class="post-article">
+        
+          大体内容和https://stardm.ddns-ip.net/2024/12/01/③实现电脑音频和视频的录制并封装成mp4/ 这一篇的相同，这里主要展示改变有变动的部分
+ 音频采集步骤
+这里的序号与③实现电脑音频和视频的录制并封装成mp4这篇里的对应
+
+
+打开AAC编码器
+1open_encoder(&amp;amp;codec_ctx);
+
+
+配置重采样上下文（主要就是多了这一步）
+1init_resampler(codec_ctx, &amp;amp;swr_ctx, &amp;amp;src_data, &amp;amp;dst_data);
+
+
+配置解码后数据的frame容器及音频帧
+
+
+123456789101
+        
+      </article>
+    </div>
+  </div>
+</div>
+      
+    
+      <div class="post-wrapper">
+  <div class="post-wrap-right" data-aos="fade-up">
+    
+      <a class="post-link" href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/" aria-label="Cloudflare证书的颁发切换为 Google Trust(GTS)"></a>
+    
+    
+    <div class="post-cover-right">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c57d0e0a243d40160da.jpg" data-sizes="auto" alt="Cloudflare证书的颁发切换为 Google Trust(GTS)" class="lazyload">
       
@@ -373,12 +417,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/" aria-label="用FFmpeg实现一个简单小咖秀"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160dc.jpg" data-sizes="auto" alt="用FFmpeg实现一个简单小咖秀" class="lazyload">
       
@@ -403,12 +447,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/" aria-label="实现FFmpeg的裁剪"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c8bd0e0a243d40160ed.jpg" data-sizes="auto" alt="实现FFmpeg的裁剪" class="lazyload">
       
@@ -435,12 +479,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/" aria-label="实现FFmpeg的解复用"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c8ad0e0a243d40160ec.jpg" data-sizes="auto" alt="实现FFmpeg的解复用" class="lazyload">
       
@@ -465,12 +509,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/" aria-label="对ffmpeg中时间基与时间戳的理解"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c8dd0e0a243d40160f0.png" data-sizes="auto" alt="对ffmpeg中时间基与时间戳的理解" class="lazyload">
       
@@ -502,12 +546,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/04/%E8%A7%A3%E5%86%B3git%E6%93%8D%E4%BD%9Cpush%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/" aria-label="解决git操作push失败的问题"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c8cd0e0a243d40160ef.jpg" data-sizes="auto" alt="解决git操作push失败的问题" class="lazyload">
       
@@ -537,12 +581,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/03/%E5%88%A9%E7%94%A8rtmp%E5%AF%B9%E6%9C%AC%E5%9C%B0flv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%8E%A8%E6%B5%81/" aria-label="利用rtmp对本地flv文件进行推流"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84c8cd0e0a243d40160ee.jpg" data-sizes="auto" alt="利用rtmp对本地flv文件进行推流" class="lazyload">
       
@@ -577,12 +621,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/02/%E2%91%A0%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" aria-label="①实现电脑音频和视频的录制并封装成mp4"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84e21d0e0a243d401613f.jpg" data-sizes="auto" alt="①实现电脑音频和视频的录制并封装成mp4" class="lazyload">
       
@@ -607,12 +651,12 @@
       
     
       <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="/2024/12/02/%E2%91%A1%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" aria-label="②实现电脑音频和视频的录制并封装成mp4"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="https://pic1.imgdb.cn/item/67b84e21d0e0a243d401613e.jpg" data-sizes="auto" alt="②实现电脑音频和视频的录制并封装成mp4" class="lazyload">
       
@@ -631,54 +675,6 @@
 123456789// 构造函数VideoRecorder(QObject* parent = nullptr, AVFormatContext **ofmt_ctx = nullptr);// 变量void run() override;bool flage = false;AVFormatContext *fmt_ctx = NULL; // 输入上下文AVFormatContext **ofmt_ctx = NULL; // 输出上下文QObject *parent = NULL;
  源文件部分
 采集视频的具体步骤分为9步，涉及以下变量
-        
-      </article>
-    </div>
-  </div>
-</div>
-      
-    
-      <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
-    
-      <a class="post-link" href="/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/" aria-label="③实现电脑音频和视频的录制并封装成mp4"></a>
-    
-    
-    <div class="post-cover-right">
-      
-        <img data-src="https://pic1.imgdb.cn/item/67b84e14d0e0a243d4016137.jpg" data-sizes="auto" alt="③实现电脑音频和视频的录制并封装成mp4" class="lazyload">
-      
-    </div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-12-01</span>
-        <span><span class="icon-pencil"></span>1.8k 字</span>
-        <span><span class="icon-clock"></span>8 分钟</span>
-      </div>
-      <h2 class="post-title">③实现电脑音频和视频的录制并封装成mp4</h2>
-      <article class="post-article">
-        
-           音视频录制的多线程实现
- 主要类
-
-AudioRecorder：音频采集线程
-VideoRecorder：视频采集线程
-MainWindow：控制音频和视频的采集
-
-
- AudioRecorder 类详解
- 头文件部分
-
-
-构造函数：
-1AudioRecorder(QObject *parent = nullptr, AVFormatContext **ofmt_ctx = nullptr);
-
-
-主要变量：
-
-bool flage = false;  // 用于控制采集的开始与结束
-AVFormatContext *fmt_ctx = NULL;  // 输入上下文
-AVFormatCon
         
       </article>
     </div>
@@ -722,10 +718,10 @@ AVFormatCon
     
       <div>
         <span class="icon-brush"></span>
-        28.4k
+        28.7k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        02:08
+        02:09
       </div>
     
     
@@ -761,7 +757,7 @@ AVFormatCon
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">23</div>
+    <div class="sidebar-state-number">24</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
