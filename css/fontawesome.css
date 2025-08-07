@@ -1,11 +1,11 @@
 :root {
   --font-icon: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome";
 }
-.tag-wrap .archives-tag-list-link:before {
+.archives-tag-list-link:before {
   font-family: var(--font-icon);
   content: "\f02b";
 }
-.category-wrap .archives-category-list-link:before {
+.archives-category-list-link:before {
   font-family: var(--font-icon);
   content: "\f02e";
 }
@@ -105,7 +105,7 @@
   font-family: var(--font-icon);
   content: "\f164";
 }
-.reimu-popup .popup-btn-close:before {
+.popup-btn-close:before {
   font-family: var(--font-icon);
   content: "\f057";
 }

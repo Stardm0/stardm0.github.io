@@ -3,11 +3,11 @@
   src: url("//at.alicdn.com/t/c/font_.woff2") format('woff2');
   font-display: swap;
 }
-.tag-wrap .archives-tag-list-link:before {
+.archives-tag-list-link:before {
   font-family: "iconfont";
   content: "\e622";
 }
-.category-wrap .archives-category-list-link:before {
+.archives-category-list-link:before {
   font-family: "iconfont";
   content: "\e604";
 }
@@ -107,7 +107,7 @@
   font-family: "iconfont";
   content: "\e627";
 }
-.reimu-popup .popup-btn-close:before {
+.popup-btn-close:before {
   font-family: "iconfont";
   content: "\e626";
 }
