@@ -6,7 +6,7 @@
   <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
   
   <link href="https://stardm.ddns-ip.net/"/>
-  <updated>2025-05-20T08:13:22.738Z</updated>
+  <updated>2025-08-09T07:59:55.181Z</updated>
   <id>https://stardm.ddns-ip.net/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>浅聊最近的学习</title>
+    <link href="https://stardm.ddns-ip.net/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://stardm.ddns-ip.net/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/</id>
+    <published>2025-08-09T06:50:54.000Z</published>
+    <updated>2025-08-09T07:59:55.181Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;有段时间没更新了，最近学习webrtc等音视频相关的东西也先放下了。因为我发现学习这些真的一时半会真没有什么成就感，并且是一个漫长的过程，不能很好的给予我正反馈。但不是说我花费的时间和努力就浪费了，相反我认为我在上面花的时间和努力是值得的，一方面是让我在计算机网络、程序的运</summary>
+        
+      
+    
+    
+    
+    <category term="杂项" scheme="https://stardm.ddns-ip.net/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    
+    <category term="学习心得" scheme="https://stardm.ddns-ip.net/tags/%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/"/>
+    
+  </entry>
   
   <entry>
     <title>修复webrtc示例中peer_connection_client在windows上运行的问题</title>
@@ -536,36 +561,6 @@
     <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
     
     <category term="C++" scheme="https://stardm.ddns-ip.net/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>②实现电脑音频和视频的录制并封装成mp4</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/02/%E2%91%A1%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/02/%E2%91%A1%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/</id>
-    <published>2024-12-02T10:42:04.000Z</published>
-    <updated>2025-02-21T10:21:53.667Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;videorecorder-类详解&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#videorecorder-类详解&quot;&gt;&lt;/a&gt; VideoRecorder 类详解&lt;/h2&gt;
-&lt;h3 id=&quot;头文件部分&quot;&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
-    
-    
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
-    
-    <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
-    
-    <category term="H264" scheme="https://stardm.ddns-ip.net/tags/H264/"/>
     
   </entry>
   
