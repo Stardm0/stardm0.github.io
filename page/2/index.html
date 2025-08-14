@@ -474,16 +474,15 @@ https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileh
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-12-10</span>
-        <span><span class="icon-pencil"></span>352 字</span>
-        <span><span class="icon-clock"></span>1 分钟</span>
+        <span><span class="icon-pencil"></span>478 字</span>
+        <span><span class="icon-clock"></span>2 分钟</span>
       </div>
       <h2 class="post-title">Cloudflare证书的颁发切换为 Google Trust(GTS)</h2>
       <article class="post-article">
         
           在使用cloudflare时发现了SSL的证书安全问题，经过一段时间的折腾，证书安全问题倒是解决了。但是我发现cloudflare里SSL显示的有效证书与我网站的真实证书不一致，所以就找到了这个调用官方API的方法。但调用成功后，我发现网站的实际证书还是不一样(很可能是我一开始瞎搞弄成这样的/(ㄒoㄒ)/~~)。总之静观其变吧，看看它续签的时候会不会换回来…(ノへ￣、)
- 通过 API 改变证书(可能需要代理)
- 输入（适用于 Mac/Linux）：
-1curl -sX PATCH &amp;quot;https://api.cloudflare.com/client/v4/zones/[DOMAIN
+错了错了，因为我的博客网站是部署在github上的，而github pages为自定义域名颁发的证书和cloudflare的证书有没有关系，这取决于cloudflare SSL/TLS的加密模式。
+灵活就没有关系，同时证书使用
         
       </article>
     </div>
@@ -761,10 +760,10 @@ https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileh
     
       <div>
         <span class="icon-brush"></span>
-        29.2k
+        29.3k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        02:10
+        02:11
       </div>
     
     
