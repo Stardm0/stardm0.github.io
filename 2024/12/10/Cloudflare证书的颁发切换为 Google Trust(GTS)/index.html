@@ -385,6 +385,7 @@
 <code>灵活</code>就没有关系，同时证书使用的是cloudflare提供的。<br />
 <code>完全</code>就是有关系但如果源服务器没有提供证书访问网站时就会提示不安全。<br />
 <code>完全(严格)</code>的话，源服务器没有提供证书就无法访问。</p>
+<p>但如果不开启小黄云代理的话，那cloudflare只是帮你完成DNS解析, 其效果相当于直接连接源服务器， 并没有开启CDN加速，且根据模式是否检查源服务器的证书。</p>
 <h3 id="通过-api-改变证书可能需要代理"><a class="markdownIt-Anchor" href="#通过-api-改变证书可能需要代理"></a> 通过 API 改变证书(可能需要代理)</h3>
 <h4 id="输入适用于-maclinux"><a class="markdownIt-Anchor" href="#输入适用于-maclinux"></a> 输入（适用于 Mac/Linux）：</h4>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sX PATCH <span class="string">&quot;https://api.cloudflare.com/client/v4/zones/[DOMAIN_ZONE_ID_HERE]/ssl/universal/settings&quot;</span> -H <span class="string">&quot;X-Auth-Email: [CLOUDFLARE_EMAIL_HERE]&quot;</span> -H <span class="string">&quot;X-Auth-Key: [GLOBAL_API_KEY_HERE]&quot;</span> -H <span class="string">&quot;Content-Type: application/json&quot;</span> --data <span class="string">&#x27;&#123;&quot;certificate_authority&quot;:&quot;google&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
@@ -545,7 +546,7 @@
     
       <div>
         <span class="icon-brush"></span>
-        29.3k
+        29.4k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
         02:11
