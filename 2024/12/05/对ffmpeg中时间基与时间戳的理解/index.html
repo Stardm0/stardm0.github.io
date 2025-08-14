@@ -14,7 +14,7 @@
 
   
 
-  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://stardm.ddns-ip.net';</script>
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://stardm.xx.kg';</script>
   
   <title>
     对ffmpeg中时间基与时间戳的理解 |
@@ -49,7 +49,7 @@
     <meta name="description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对ffmpeg中时间基与时间戳的理解">
-<meta property="og:url" content="https://stardm.ddns-ip.net/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:url" content="https://stardm.xx.kg/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Stardm 风也温柔">
 <meta property="og:description" content="时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样">
 <meta property="og:locale" content="zh_CN">
@@ -915,7 +915,7 @@
         window.REIMU_POST = {
           author: "凌",
           title: "对ffmpeg中时间基与时间戳的理解",
-          url: "https://stardm.ddns-ip.net/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/",
+          url: "https://stardm.xx.kg/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/",
           excerpt: "",
           description: "",
           stripContent: " 时间基与时间戳的基本概念 在 FFmpeg 中，时间基(time_base)是时间戳(timestamp)的单位，时间戳值乘以时间基，可以得到实际的时刻值(以秒等为单位)。  pts和dts 这里我将pts和dts简单的理解为pts是播放时间，dts是解码时间 视频帧的解码时间和播放时间可能不同，尤其是当视频帧包含B帧时。 对于I帧，解码时间和播放时间相同。而B帧和P帧的dts和pts就会不一样。 音频帧的解码时间和播放时间绝大多数的情况下是相同的，因为音频帧按顺序解码并播放。  视频流和音频",

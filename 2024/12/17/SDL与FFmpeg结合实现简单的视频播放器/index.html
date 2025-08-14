@@ -14,7 +14,7 @@
 
   
 
-  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://stardm.ddns-ip.net';</script>
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://stardm.xx.kg';</script>
   
   <title>
     SDL与FFmpeg结合实现简单的视频播放器 |
@@ -49,7 +49,7 @@
     <meta name="description" content="用FFmpeg与SDL写了一个简单的音视频播放器，但还有很大的问题。首先并没有使用多线程，音视频的解码渲染操作都在主线程中，导致在同时播放视频的时候，音频的播放会出现断断续续的情况，把视频的播放关闭就不会出现问题。还有就是队列的实现，目前只有音频使用了队列，而视频则是直接播放渲染, 要使用队列的话就不得不实现多线程了。之后还有音视频的同步等等，这些都是需要改进的点。不过我相信在后面的学习中都会解决">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SDL与FFmpeg结合实现简单的视频播放器">
-<meta property="og:url" content="https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/index.html">
+<meta property="og:url" content="https://stardm.xx.kg/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/index.html">
 <meta property="og:site_name" content="Stardm 风也温柔">
 <meta property="og:description" content="用FFmpeg与SDL写了一个简单的音视频播放器，但还有很大的问题。首先并没有使用多线程，音视频的解码渲染操作都在主线程中，导致在同时播放视频的时候，音频的播放会出现断断续续的情况，把视频的播放关闭就不会出现问题。还有就是队列的实现，目前只有音频使用了队列，而视频则是直接播放渲染, 要使用队列的话就不得不实现多线程了。之后还有音视频的同步等等，这些都是需要改进的点。不过我相信在后面的学习中都会解决">
 <meta property="og:locale" content="zh_CN">
@@ -895,7 +895,7 @@
         window.REIMU_POST = {
           author: "凌",
           title: "SDL与FFmpeg结合实现简单的视频播放器",
-          url: "https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/",
+          url: "https://stardm.xx.kg/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/",
           excerpt: "",
           description: "",
           stripContent: "用FFmpeg与SDL写了一个简单的音视频播放器，但还有很大的问题。首先并没有使用多线程，音视频的解码渲染操作都在主线程中，导致在同时播放视频的时候，音频的播放会出现断断续续的情况，把视频的播放关闭就不会出现问题。还有就是队列的实现，目前只有音频使用了队列，而视频则是直接播放渲染, 要使用队列的话就不得不实现多线程了。之后还有音视频的同步等等，这些都是需要改进的点。不过我相信在后面的学习中都会解决的&amp;lt;(￣︶￣)↗[GO!] 这里就直接放源码了(○｀ 3′○) 123456789101112",

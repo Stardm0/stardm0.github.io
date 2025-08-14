@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Stardm 风也温柔</title>
-  <icon>https://stardm.ddns-ip.net/icon.png</icon>
+  <icon>https://stardm.xx.kg/icon.png</icon>
   
-  <link href="https://stardm.ddns-ip.net/atom.xml" rel="self"/>
+  <link href="https://stardm.xx.kg/atom.xml" rel="self"/>
   
-  <link href="https://stardm.ddns-ip.net/"/>
+  <link href="https://stardm.xx.kg/"/>
   <updated>2025-08-09T08:12:12.356Z</updated>
-  <id>https://stardm.ddns-ip.net/</id>
+  <id>https://stardm.xx.kg/</id>
   
   <author>
     <name>凌</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>浅聊最近的学习</title>
-    <link href="https://stardm.ddns-ip.net/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/"/>
-    <id>https://stardm.ddns-ip.net/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/</id>
+    <link href="https://stardm.xx.kg/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://stardm.xx.kg/2025/08/09/%E6%B5%85%E8%81%8A%E6%9C%80%E8%BF%91%E7%9A%84%E5%AD%A6%E4%B9%A0/</id>
     <published>2025-08-09T06:50:54.000Z</published>
     <updated>2025-08-09T08:12:12.356Z</updated>
     
@@ -34,17 +34,17 @@
     
     
     
-    <category term="杂项" scheme="https://stardm.ddns-ip.net/categories/%E6%9D%82%E9%A1%B9/"/>
+    <category term="杂项" scheme="https://stardm.xx.kg/categories/%E6%9D%82%E9%A1%B9/"/>
     
     
-    <category term="学习心得" scheme="https://stardm.ddns-ip.net/tags/%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/"/>
+    <category term="学习心得" scheme="https://stardm.xx.kg/tags/%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/"/>
     
   </entry>
   
   <entry>
     <title>修复webrtc示例中peer_connection_client在windows上运行的问题</title>
-    <link href="https://stardm.ddns-ip.net/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>https://stardm.ddns-ip.net/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <link href="https://stardm.xx.kg/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>https://stardm.xx.kg/2025/05/13/%E4%BF%AE%E5%A4%8Dwebrtc%E7%A4%BA%E4%BE%8B%E4%B8%ADpeer_connection_client%E8%BF%90%E8%A1%8C%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98/</id>
     <published>2025-05-13T12:45:52.000Z</published>
     <updated>2025-05-20T08:13:22.738Z</updated>
     
@@ -59,17 +59,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    <category term="WebRtc" scheme="https://stardm.xx.kg/tags/WebRtc/"/>
     
   </entry>
   
   <entry>
     <title>webrtc编译</title>
-    <link href="https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/"/>
-    <id>https://stardm.ddns-ip.net/2025/04/14/webrtc%E7%BC%96%E8%AF%91/</id>
+    <link href="https://stardm.xx.kg/2025/04/14/webrtc%E7%BC%96%E8%AF%91/"/>
+    <id>https://stardm.xx.kg/2025/04/14/webrtc%E7%BC%96%E8%AF%91/</id>
     <published>2025-04-14T10:02:04.000Z</published>
     <updated>2025-04-15T04:23:03.757Z</updated>
     
@@ -85,17 +85,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    <category term="WebRtc" scheme="https://stardm.xx.kg/tags/WebRtc/"/>
     
   </entry>
   
   <entry>
     <title>进程与线程(2)</title>
-    <link href="https://stardm.ddns-ip.net/2025/03/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(2)/"/>
-    <id>https://stardm.ddns-ip.net/2025/03/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(2)/</id>
+    <link href="https://stardm.xx.kg/2025/03/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(2)/"/>
+    <id>https://stardm.xx.kg/2025/03/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(2)/</id>
     <published>2025-03-17T10:51:47.000Z</published>
     <updated>2025-03-17T11:47:18.338Z</updated>
     
@@ -111,19 +111,19 @@
     
     
     
-    <category term="Linux应用层" scheme="https://stardm.ddns-ip.net/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/"/>
+    <category term="Linux应用层" scheme="https://stardm.xx.kg/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/"/>
     
     
-    <category term="Linux" scheme="https://stardm.ddns-ip.net/tags/Linux/"/>
+    <category term="Linux" scheme="https://stardm.xx.kg/tags/Linux/"/>
     
-    <category term="C" scheme="https://stardm.ddns-ip.net/tags/C/"/>
+    <category term="C" scheme="https://stardm.xx.kg/tags/C/"/>
     
   </entry>
   
   <entry>
     <title>进程与线程(1)</title>
-    <link href="https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/"/>
-    <id>https://stardm.ddns-ip.net/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/</id>
+    <link href="https://stardm.xx.kg/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/"/>
+    <id>https://stardm.xx.kg/2025/03/13/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B(1)/</id>
     <published>2025-03-13T13:11:23.000Z</published>
     <updated>2025-03-28T04:49:58.113Z</updated>
     
@@ -140,19 +140,19 @@
     
     
     
-    <category term="Linux应用层" scheme="https://stardm.ddns-ip.net/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/"/>
+    <category term="Linux应用层" scheme="https://stardm.xx.kg/categories/Linux%E5%BA%94%E7%94%A8%E5%B1%82/"/>
     
     
-    <category term="Linux" scheme="https://stardm.ddns-ip.net/tags/Linux/"/>
+    <category term="Linux" scheme="https://stardm.xx.kg/tags/Linux/"/>
     
-    <category term="C" scheme="https://stardm.ddns-ip.net/tags/C/"/>
+    <category term="C" scheme="https://stardm.xx.kg/tags/C/"/>
     
   </entry>
   
   <entry>
     <title>1v1视频聊天网页</title>
-    <link href="https://stardm.ddns-ip.net/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/"/>
-    <id>https://stardm.ddns-ip.net/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/</id>
+    <link href="https://stardm.xx.kg/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/"/>
+    <id>https://stardm.xx.kg/2025/01/19/1v1%E8%A7%86%E9%A2%91%E8%81%8A%E5%A4%A9%E7%BD%91%E9%A1%B5/</id>
     <published>2025-01-19T10:22:49.000Z</published>
     <updated>2025-02-21T10:21:15.177Z</updated>
     
@@ -168,17 +168,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    <category term="WebRtc" scheme="https://stardm.xx.kg/tags/WebRtc/"/>
     
   </entry>
   
   <entry>
     <title>WebRtc初步认识(webrtc实现1v1视频通话从0到1)</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/</id>
+    <link href="https://stardm.xx.kg/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/"/>
+    <id>https://stardm.xx.kg/2024/12/25/WebRtc%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86(webrtc%E5%AE%9E%E7%8E%B01v1%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D%E4%BB%8E0%E5%88%B01)/</id>
     <published>2024-12-25T12:37:24.000Z</published>
     <updated>2025-02-21T10:29:51.586Z</updated>
     
@@ -194,17 +194,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="WebRtc" scheme="https://stardm.ddns-ip.net/tags/WebRtc/"/>
+    <category term="WebRtc" scheme="https://stardm.xx.kg/tags/WebRtc/"/>
     
   </entry>
   
   <entry>
     <title>FFmpeg与SDL实现真正的音视频播放器</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
+    <link href="https://stardm.xx.kg/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
+    <id>https://stardm.xx.kg/2024/12/18/FFmpeg%E4%B8%8ESDL%E5%AE%9E%E7%8E%B0%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
     <published>2024-12-18T08:27:12.000Z</published>
     <updated>2025-02-21T10:30:42.068Z</updated>
     
@@ -220,25 +220,25 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
-    <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    <category term="SDL" scheme="https://stardm.xx.kg/tags/SDL/"/>
     
-    <category term="多线程" scheme="https://stardm.ddns-ip.net/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    <category term="多线程" scheme="https://stardm.xx.kg/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-    <category term="音视频同步" scheme="https://stardm.ddns-ip.net/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%90%8C%E6%AD%A5/"/>
+    <category term="音视频同步" scheme="https://stardm.xx.kg/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%90%8C%E6%AD%A5/"/>
     
-    <category term="队列" scheme="https://stardm.ddns-ip.net/tags/%E9%98%9F%E5%88%97/"/>
+    <category term="队列" scheme="https://stardm.xx.kg/tags/%E9%98%9F%E5%88%97/"/>
     
   </entry>
   
   <entry>
     <title>SDL与FFmpeg结合实现简单的视频播放器</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
+    <link href="https://stardm.xx.kg/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/"/>
+    <id>https://stardm.xx.kg/2024/12/17/SDL%E4%B8%8EFFmpeg%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8/</id>
     <published>2024-12-17T04:26:08.000Z</published>
     <updated>2025-02-21T10:30:17.457Z</updated>
     
@@ -253,19 +253,19 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
-    <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    <category term="SDL" scheme="https://stardm.xx.kg/tags/SDL/"/>
     
   </entry>
   
   <entry>
     <title>SDL初探</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/14/SDL%E5%88%9D%E6%8E%A2/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/14/SDL%E5%88%9D%E6%8E%A2/</id>
+    <link href="https://stardm.xx.kg/2024/12/14/SDL%E5%88%9D%E6%8E%A2/"/>
+    <id>https://stardm.xx.kg/2024/12/14/SDL%E5%88%9D%E6%8E%A2/</id>
     <published>2024-12-14T14:40:00.000Z</published>
     <updated>2025-02-21T10:30:28.592Z</updated>
     
@@ -282,17 +282,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="SDL" scheme="https://stardm.ddns-ip.net/tags/SDL/"/>
+    <category term="SDL" scheme="https://stardm.xx.kg/tags/SDL/"/>
     
   </entry>
   
   <entry>
     <title>实现FFmpeg的视频转图片(BMP)</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/</id>
+    <link href="https://stardm.xx.kg/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/"/>
+    <id>https://stardm.xx.kg/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/</id>
     <published>2024-12-13T13:10:01.000Z</published>
     <updated>2025-02-21T10:25:42.344Z</updated>
     
@@ -308,19 +308,19 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
-    <category term="BMP" scheme="https://stardm.ddns-ip.net/tags/BMP/"/>
+    <category term="BMP" scheme="https://stardm.xx.kg/tags/BMP/"/>
     
   </entry>
   
   <entry>
     <title>用FFmpeg自带的AAC编码器进行编码</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/</id>
+    <link href="https://stardm.xx.kg/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/"/>
+    <id>https://stardm.xx.kg/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/</id>
     <published>2024-12-11T12:06:32.000Z</published>
     <updated>2025-02-21T10:26:39.038Z</updated>
     
@@ -335,19 +335,19 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
-    <category term="AAC" scheme="https://stardm.ddns-ip.net/tags/AAC/"/>
+    <category term="AAC" scheme="https://stardm.xx.kg/tags/AAC/"/>
     
   </entry>
   
   <entry>
     <title>Cloudflare证书的颁发切换为 Google Trust(GTS)</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/</id>
+    <link href="https://stardm.xx.kg/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/"/>
+    <id>https://stardm.xx.kg/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E7%9A%84%E9%A2%81%E5%8F%91%E5%88%87%E6%8D%A2%E4%B8%BA%20Google%20Trust(GTS)/</id>
     <published>2024-12-10T15:33:09.000Z</published>
     <updated>2025-02-21T10:26:55.553Z</updated>
     
@@ -362,17 +362,17 @@
     
     
     
-    <category term="杂项" scheme="https://stardm.ddns-ip.net/categories/%E6%9D%82%E9%A1%B9/"/>
+    <category term="杂项" scheme="https://stardm.xx.kg/categories/%E6%9D%82%E9%A1%B9/"/>
     
     
-    <category term="解决" scheme="https://stardm.ddns-ip.net/tags/%E8%A7%A3%E5%86%B3/"/>
+    <category term="解决" scheme="https://stardm.xx.kg/tags/%E8%A7%A3%E5%86%B3/"/>
     
   </entry>
   
   <entry>
     <title>用FFmpeg实现一个简单小咖秀</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/</id>
+    <link href="https://stardm.xx.kg/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/"/>
+    <id>https://stardm.xx.kg/2024/12/09/%E7%94%A8FFmpeg%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%B0%8F%E5%92%96%E7%A7%80/</id>
     <published>2024-12-09T11:43:57.000Z</published>
     <updated>2025-02-21T10:26:13.970Z</updated>
     
@@ -388,17 +388,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
   </entry>
   
   <entry>
     <title>实现FFmpeg的裁剪</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/</id>
+    <link href="https://stardm.xx.kg/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/"/>
+    <id>https://stardm.xx.kg/2024/12/08/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A3%81%E5%89%AA/</id>
     <published>2024-12-08T10:23:53.000Z</published>
     <updated>2025-02-21T10:25:07.174Z</updated>
     
@@ -414,17 +414,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
   </entry>
   
   <entry>
     <title>实现FFmpeg的解复用</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/</id>
+    <link href="https://stardm.xx.kg/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/"/>
+    <id>https://stardm.xx.kg/2024/12/06/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%A3%E5%A4%8D%E7%94%A8/</id>
     <published>2024-12-06T13:43:40.000Z</published>
     <updated>2025-02-21T10:25:27.827Z</updated>
     
@@ -440,17 +440,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
   </entry>
   
   <entry>
     <title>对ffmpeg中时间基与时间戳的理解</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/</id>
+    <link href="https://stardm.xx.kg/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+    <id>https://stardm.xx.kg/2024/12/05/%E5%AF%B9ffmpeg%E4%B8%AD%E6%97%B6%E9%97%B4%E5%9F%BA%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E7%90%86%E8%A7%A3/</id>
     <published>2024-12-05T06:05:16.000Z</published>
     <updated>2025-02-21T10:23:55.962Z</updated>
     
@@ -466,17 +466,17 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
   </entry>
   
   <entry>
     <title>解决git操作push失败的问题</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/04/%E8%A7%A3%E5%86%B3git%E6%93%8D%E4%BD%9Cpush%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/04/%E8%A7%A3%E5%86%B3git%E6%93%8D%E4%BD%9Cpush%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <link href="https://stardm.xx.kg/2024/12/04/%E8%A7%A3%E5%86%B3git%E6%93%8D%E4%BD%9Cpush%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>https://stardm.xx.kg/2024/12/04/%E8%A7%A3%E5%86%B3git%E6%93%8D%E4%BD%9Cpush%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%97%AE%E9%A2%98/</id>
     <published>2024-12-04T02:38:17.000Z</published>
     <updated>2025-02-21T10:24:19.315Z</updated>
     
@@ -493,19 +493,19 @@
     
     
     
-    <category term="杂项" scheme="https://stardm.ddns-ip.net/categories/%E6%9D%82%E9%A1%B9/"/>
+    <category term="杂项" scheme="https://stardm.xx.kg/categories/%E6%9D%82%E9%A1%B9/"/>
     
     
-    <category term="解决" scheme="https://stardm.ddns-ip.net/tags/%E8%A7%A3%E5%86%B3/"/>
+    <category term="解决" scheme="https://stardm.xx.kg/tags/%E8%A7%A3%E5%86%B3/"/>
     
-    <category term="git" scheme="https://stardm.ddns-ip.net/tags/git/"/>
+    <category term="git" scheme="https://stardm.xx.kg/tags/git/"/>
     
   </entry>
   
   <entry>
     <title>利用rtmp对本地flv文件进行推流</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/03/%E5%88%A9%E7%94%A8rtmp%E5%AF%B9%E6%9C%AC%E5%9C%B0flv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%8E%A8%E6%B5%81/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/03/%E5%88%A9%E7%94%A8rtmp%E5%AF%B9%E6%9C%AC%E5%9C%B0flv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%8E%A8%E6%B5%81/</id>
+    <link href="https://stardm.xx.kg/2024/12/03/%E5%88%A9%E7%94%A8rtmp%E5%AF%B9%E6%9C%AC%E5%9C%B0flv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%8E%A8%E6%B5%81/"/>
+    <id>https://stardm.xx.kg/2024/12/03/%E5%88%A9%E7%94%A8rtmp%E5%AF%B9%E6%9C%AC%E5%9C%B0flv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%8E%A8%E6%B5%81/</id>
     <published>2024-12-03T05:36:28.000Z</published>
     <updated>2025-02-21T10:24:47.292Z</updated>
     
@@ -520,21 +520,21 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FLV" scheme="https://stardm.ddns-ip.net/tags/FLV/"/>
+    <category term="FLV" scheme="https://stardm.xx.kg/tags/FLV/"/>
     
-    <category term="推流" scheme="https://stardm.ddns-ip.net/tags/%E6%8E%A8%E6%B5%81/"/>
+    <category term="推流" scheme="https://stardm.xx.kg/tags/%E6%8E%A8%E6%B5%81/"/>
     
-    <category term="RTMP" scheme="https://stardm.ddns-ip.net/tags/RTMP/"/>
+    <category term="RTMP" scheme="https://stardm.xx.kg/tags/RTMP/"/>
     
   </entry>
   
   <entry>
     <title>①实现电脑音频和视频的录制并封装成mp4</title>
-    <link href="https://stardm.ddns-ip.net/2024/12/02/%E2%91%A0%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/"/>
-    <id>https://stardm.ddns-ip.net/2024/12/02/%E2%91%A0%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/</id>
+    <link href="https://stardm.xx.kg/2024/12/02/%E2%91%A0%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/"/>
+    <id>https://stardm.xx.kg/2024/12/02/%E2%91%A0%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/</id>
     <published>2024-12-02T13:39:01.000Z</published>
     <updated>2025-02-21T10:21:35.101Z</updated>
     
@@ -551,16 +551,16 @@
     
     
     
-    <category term="音视频" scheme="https://stardm.ddns-ip.net/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+    <category term="音视频" scheme="https://stardm.xx.kg/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="FFmpeg" scheme="https://stardm.ddns-ip.net/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://stardm.xx.kg/tags/FFmpeg/"/>
     
-    <category term="多线程" scheme="https://stardm.ddns-ip.net/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    <category term="多线程" scheme="https://stardm.xx.kg/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-    <category term="QT" scheme="https://stardm.ddns-ip.net/tags/QT/"/>
+    <category term="QT" scheme="https://stardm.xx.kg/tags/QT/"/>
     
-    <category term="C++" scheme="https://stardm.ddns-ip.net/tags/C/"/>
+    <category term="C++" scheme="https://stardm.xx.kg/tags/C/"/>
     
   </entry>
   
