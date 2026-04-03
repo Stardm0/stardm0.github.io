@@ -1,51 +1,33 @@
-
   <!DOCTYPE html>
   <html lang="zh-CN"  
-    
       data-theme-mode="false"
-    
   >
   <head>
-  
   <meta charset="utf-8">
   
-
   
-
   
-
-  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://staro.us.kg';</script>
-  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":{"zh-CN":"复制成功(*^▽^*)"},"fail":{"zh-CN":"复制失败 (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://staro.us.kg';</script>
   <title>
-    用FFmpeg自带的AAC编码器进行编码 |
-    
-    Stardm 风也温柔
+    用FFmpeg自带的AAC编码器进行编码 | Stardm 风也温柔
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
-  
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
-  
-  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic|Noto Serif SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic|Noto Serif SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media='all'">
     
-<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css" integrity="sha384-k5640LgghgAohDLPwSqVWa96yQwWouT6wsAL+J1g0CFJVITNKYkIh1XpPLYKQe7Y" crossorigin="anonymous">
-<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css" integrity="sha384-8yO&#x2F;A&#x2F;BtltnG0hDxdwmmkza8UAleyDoAD1FhXiH6rsOQQsCho1P6WZP9TpBBH3YP" crossorigin="anonymous">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/regular.min.css" integrity="sha384-4qYppzjH8EiA+cGdaubu2vL7Rk8WGiqCSj7oRuP1uwtFWkfKNHD20lPfcrbQc8dU" crossorigin="anonymous">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/solid.min.css" integrity="sha384-wbMWab3UDSPm2kvIgVOn&#x2F;d9KPTecgPU1+Nb3zoQrm&#x2F;oVu0EkPL6IaKinjbwW0rum" crossorigin="anonymous">
 <link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css" crossorigin="anonymous">
 
-    <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" integrity="sha384-&#x2F;BRyRRN0wxxRgh&#x2F;DAXU621go9pdoMHl6LFPiX5Pp8PZYZlKBQCDXj9X9DHx6LOud" crossorigin="anonymous">
-<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" integrity="sha384-&#x2F;mBKnLlGtog8q2qQrgugURRDV+iHWHAPvM5KulYXT1C2ErKOKkBI0vbff8ZPq7rL" crossorigin="anonymous">
-<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" integrity="sha384-d2Yn1&#x2F;9Iw78r3oqwk5B+EcpRcmepXR5LyhmRF2a+WoSe9mpRGvVk0ZviFwDGDOTO" crossorigin="anonymous">
-<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" crossorigin="anonymous">
-<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" crossorigin="anonymous">
-<link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" crossorigin="anonymous">
-  
-  
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/brands.min.css" integrity="sha384-KTGeC2hIMzpeQakhsmzB9bZfhCD5xZZCgI1iZH6f/O457SxzlkzTQg/WXFNoi3ih" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/v5-font-face.min.css" integrity="sha384-nJ1ThfldViXoLpJ6jlKcP2beas8BMbYq26SG9Hi8cH89bZi4RZ644v7helMCqJxd" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/v4-font-face.min.css" integrity="sha384-UlkrhOIvZxJFd4MElSUp7ow6/RUeYKi/orfCZIRRiOENFuQPIAA3T3HjYfmBRhNq" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" integrity="null" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" integrity="null" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" integrity="null" crossorigin="anonymous">
     
 <link rel="stylesheet" href="/css/loader.css">
 
-  
-  
     <meta name="description" content="大体内容和https:&#x2F;&#x2F;stardm.ddns-ip.net&#x2F;2024&#x2F;12&#x2F;01&#x2F;③实现电脑音频和视频的录制并封装成mp4&#x2F; 这一篇的相同，这里主要展示改变有变动的部分  音频采集步骤 这里的序号与③实现电脑音频和视频的录制并封装成mp4这篇里的对应   打开AAC编码器 1open_encoder(&amp;codec_ctx);   配置重采样上下文（主要就是多了这一步） 1init_re">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用FFmpeg自带的AAC编码器进行编码">
@@ -59,71 +41,51 @@
 <meta property="article:tag" content="FFmpeg">
 <meta property="article:tag" content="AAC">
 <meta name="twitter:card" content="summary">
-  
-  
     <link rel="alternate" href="/atom.xml" title="Stardm 风也温柔" type="application/atom+xml">
-  
-  
     <link rel="shortcut icon" href="/images/favicon.ico">
-  
   
 <link rel="stylesheet" href="/css/style.css">
 
-  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" crossorigin="anonymous">
-  
-  
-  
-  
+  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="null" crossorigin="anonymous">
     
 <script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
 
-  
-  
     
 <link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css" crossorigin="anonymous">
 
-  
-  
-    
-<link rel="stylesheet" href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css" integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj+vDDLIL+xBGQU&#x2F;voDBY5XE2lVh" crossorigin="anonymous">
-
-  
-  
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css" integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj+vDDLIL+xBGQU/voDBY5XE2lVh" crossorigin="anonymous">
 <meta name="generator" content="Hexo 7.3.0"></head>
 
   <body>
-    
-    
-  <div id='loader'>
+      <div id='loader'>
     <div class="loading-left-bg loading-bg"></div>
     <div class="loading-right-bg loading-bg"></div>
     <div class="spinner-box">
       <div class="loading-taichi rotate">
-        
           <img src="/images/taichi.png" alt="loading" />
-        
       </div>
-      
-      
       <div class="loading-word">加载中...</div>
     </div>
   </div>
-  </div>
   <script>
     var time = null;
+    var loaderEl = document.getElementById('loader');
     var startLoading = () => {
       time = Date.now();
-      document.getElementById('loader').classList.remove("loading");
+      loaderEl.classList.remove("loading");
     }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
     var endLoading = () => {
       if (!time) {
-        document.body.style.overflow = 'auto';
-        document.getElementById('loader').classList.add("loading");
+        hideLoader();
       } else {
         if (Date.now() - time > 500) {
           time = null;
-          document.body.style.overflow = 'auto';
-          document.getElementById('loader').classList.add("loading");
+          hideLoader();
         } else {
           setTimeout(endLoading, 500 - (Date.now() - time));
           time = null;
@@ -131,136 +93,85 @@
       }
     }
     window.addEventListener('DOMContentLoaded', endLoading);
-    document.getElementById('loader').addEventListener('click', endLoading);
+    loaderEl.addEventListener('click', endLoading);
   </script>
-
-<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
-</div>
+<div id="copy-tooltip"></div>
 <div id="heatmap-tooltip"></div>
 
 
     <div id="container">
       <div id="wrap">
         <div id="header-nav">
-  <nav id="main-nav">
-    
-      
-        <span class="main-nav-link-wrap">
-          <div class="main-nav-icon icon ">
-             
-              
-                &#xf015;
-              
-             
-          </div>
-          <a class="main-nav-link" href="/">首页</a>
-        </span>
-      
-        <span class="main-nav-link-wrap">
-          <div class="main-nav-icon icon ">
-             
-              
-                &#xf187;
-              
-             
-          </div>
-          <a class="main-nav-link" href="/archives">归档</a>
-        </span>
-      
-        <span class="main-nav-link-wrap">
-          <div class="main-nav-icon icon ">
-             
-              
-                &#xf06a;
-              
-             
-          </div>
-          <a class="main-nav-link" href="/about">关于</a>
-        </span>
-      
-        <span class="main-nav-link-wrap">
-          <div class="main-nav-icon icon ">
-             
-              
-                &#xf0c1;
-              
-             
-          </div>
-          <a class="main-nav-link" href="/friend">友链</a>
-        </span>
-      
-    
-    <a id="main-nav-toggle" class="nav-icon"></a>
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+            <div class="main-nav-icon icon ">
+                  &#xf015;
+            </div>
+          <span class="main-nav-link">首页</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/archives">
+            <div class="main-nav-icon icon ">
+                  &#xf187;
+            </div>
+          <span class="main-nav-link">归档</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/about">
+            <div class="main-nav-icon icon ">
+                  &#xf06a;
+            </div>
+          <span class="main-nav-link">关于</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/friend">
+            <div class="main-nav-icon icon ">
+                  &#xf0c1;
+            </div>
+          <span class="main-nav-link">友链</span>
+        </a>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
   </nav>
-  <nav id="sub-nav">
-    
-      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
-    
-    
-    
-      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
-    
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" aria-label="RSS 订阅" target="_blank"></a>
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索" aria-label="搜索"></a>
   </nav>
-  
 </div>
-<header id="header">
-  
+<header id="header" aria-label="Site header">
     <picture></picture>
     <img  fetchpriority="high" src="https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160db.jpg" alt="用FFmpeg自带的AAC编码器进行编码">
-  
   <div id="header-outer">
     <div id="header-title">
-      
-        
-        
-          <a href="/" id="logo">
+          <span id="logo">
             <h1 data-aos="slide-up">用FFmpeg自带的AAC编码器进行编码</h1>
-          </a>
-        
-      
-      
-        
+          </span>
         <h2 id="subtitle-wrap" data-aos="slide-down">
-          
         </h2>
-      
     </div>
   </div>
 </header>
 
-        <div id="content" class="sidebar-left"  >
-          <aside id="sidebar">
-  
-  
-  
-    <meting-js
-      theme="var(--color-link)"
-      id="9838843200"
-      server="netease"
-      type="playlist"
-      
-      
-      
-      
-      
-      
-      
-      
-      list-folded="true"
-      
-    ></meting-js>
-  
-  <div class="sidebar-wrapper wrap-sticky">
-    <div class="sidebar-wrap" data-aos="fade-up">
-      
+        <div id="content" aria-label="Page content" class="sidebar-left"  >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+      <meting-js
+        theme="var(--color-link)"
+        id="9838843200"
+        server="netease"
+        type="playlist"
         
-          <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
-  <h3 class="toc-title">文章目录</h3>
-  <div class="sidebar-toc-wrapper toc-div-class" >
-      
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E8%BF%99%E9%87%8C%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="toc-number">3.</span> <span class="toc-text"> init_resampler() 的具体实现(这里保持不变)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
-      
-  </div>
+        
+        
+        
+        
+        
+        
+        
+        list-folded="true"
+        
+      ></meting-js>
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E8%BF%99%E9%87%8C%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="toc-number">3.</span> <span class="toc-text"> init_resampler() 的具体实现(这里保持不变)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
 </div>
 </div>
           <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
@@ -282,105 +193,65 @@
     <div class="sidebar-state-number">21</div>
   </div>
 </div>
-<div class="sidebar-social">
-  
+<div class="sidebar-social" >
 </div>
 <div class="sidebar-menu">
-  
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf015;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf015;
+          </div>
         <div class="sidebar-menu-link">首页</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf187;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf187;
+          </div>
         <div class="sidebar-menu-link">归档</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf06a;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf06a;
+          </div>
         <div class="sidebar-menu-link">关于</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf0c1;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf0c1;
+          </div>
         <div class="sidebar-menu-link">友链</div>
       </div>
-    
-  
 </div>
 </div>
-        
-      
-      
-        
           <div class="sidebar-btn-wrapper" style="position:static">
             <div class="sidebar-toc-btn current"></div>
             <div class="sidebar-common-btn"></div>
           </div>
-        
-      
     </div>
   </div>
-
   <div class="sidebar-widget">
-  
   </div>
-  
+  </div>
 </aside>
 
-          <section id="main"><article id="post-用FFmpeg自带的AAC编码器进行编码" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+          <section id="main" aria-label="Main content"><article id="post-用FFmpeg自带的AAC编码器进行编码" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
       <div class="article-date">
-  <span class="article-date-link" data-aos="zoom-in">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
     <time datetime="2024-12-11T12:06:32.000Z" itemprop="datePublished">2024-12-11</time>
     <time style="display: none;" id="post-update-time">2025-02-21</time>
   </span>
 </div>
 
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" data-aos="zoom-in">音视频</a>
-  </div>
-
-
     </div>
+    
     <div class="hr-line"></div>
     
-
     <div class="e-content article-entry" itemprop="articleBody">
-      
-      
         <p>大体内容和<a target="_blank" rel="noopener" href="https://stardm.ddns-ip.net/2024/12/01/%E2%91%A2%E5%AE%9E%E7%8E%B0%E7%94%B5%E8%84%91%E9%9F%B3%E9%A2%91%E5%92%8C%E8%A7%86%E9%A2%91%E7%9A%84%E5%BD%95%E5%88%B6%E5%B9%B6%E5%B0%81%E8%A3%85%E6%88%90mp4/">https://stardm.ddns-ip.net/2024/12/01/③实现电脑音频和视频的录制并封装成mp4/</a> 这一篇的相同，这里主要展示改变有变动的部分</p>
 <h3 id="音频采集步骤"><a class="markdownIt-Anchor" href="#音频采集步骤"></a> <strong>音频采集步骤</strong></h3>
 <p>这里的序号与<code>③实现电脑音频和视频的录制并封装成mp4</code>这篇里的对应</p>
@@ -413,162 +284,100 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//开始获取音频帧数据，并进行转换</span></span><br><span class="line">   <span class="keyword">while</span> (flage &amp;&amp; <span class="built_in">av_read_frame</span>(fmt_ctx, &amp;pkt) == <span class="number">0</span>) &#123;</span><br><span class="line">       <span class="type">int</span> ret = <span class="built_in">avcodec_send_packet</span>(dec_ctx, &amp;pkt);</span><br><span class="line">       <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">           <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;向解码器发送数据包失败!&quot;</span>;</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">while</span>(ret &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">           ret = <span class="built_in">avcodec_receive_frame</span>(dec_ctx, frame);</span><br><span class="line">           <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">               <span class="keyword">if</span>(ret == <span class="built_in">AVERROR</span>(EAGAIN) || ret == AVERROR_EOF)&#123;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Error, decoding video frame&quot;</span>;</span><br><span class="line">               <span class="keyword">return</span>;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="built_in">swr_convert</span>(swr_ctx, dst_data, nb_samples, frame-&gt;data, nb_samples);<span class="comment">//添加这一步</span></span><br><span class="line"></span><br><span class="line">           <span class="comment">//将样本数据写入 FIFO</span></span><br><span class="line">           <span class="built_in">write_to_fifo</span>(fifo, (<span class="type">const</span> <span class="type">uint8_t</span>**)dst_data, nb_samples); <span class="comment">//这里的frame改成dst_data</span></span><br><span class="line">           <span class="keyword">while</span> (<span class="built_in">av_audio_fifo_size</span>(fifo) &gt;= frame_size) &#123;</span><br><span class="line">               <span class="built_in">read_from_fifo</span>(fifo, nframe-&gt;data, frame_size);</span><br><span class="line">               nframe-&gt;nb_samples = codec_ctx-&gt;frame_size;</span><br><span class="line">               nframe-&gt;pts = pts;</span><br><span class="line">               ret = <span class="built_in">avcodec_send_frame</span>(codec_ctx, nframe); <span class="comment">//还有这个发送的数据包改成nframe</span></span><br><span class="line">               <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                   <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;向编码器发送数据包失败!&quot;</span>;</span><br><span class="line">                   <span class="keyword">return</span>;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">while</span>(ret &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">                   ret = <span class="built_in">avcodec_receive_packet</span>(codec_ctx, newpkt);</span><br><span class="line">                   <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                       <span class="keyword">if</span>(ret == <span class="built_in">AVERROR</span>(EAGAIN) || ret == AVERROR_EOF)&#123;</span><br><span class="line">                           <span class="keyword">break</span>;</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Error, encoding video frame&quot;</span>;</span><br><span class="line">                       <span class="keyword">return</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">                   newpkt-&gt;pts = newpkt-&gt;dts = pts;</span><br><span class="line">                   newpkt-&gt;stream_index = audio_stream_index;</span><br><span class="line">                   CallbackFun write = std::<span class="built_in">bind</span>(&amp;MainWindow::Main_av_interleaved_write_frame, <span class="built_in">static_cast</span>&lt;MainWindow *&gt;(parent), *ofmt_ctx, newpkt);</span><br><span class="line">                   <span class="built_in">write</span>();</span><br><span class="line">                   <span class="built_in">av_packet_unref</span>(newpkt);</span><br><span class="line">               &#125;</span><br><span class="line">               pts += frame_size;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="built_in">av_frame_unref</span>(frame);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="built_in">av_packet_unref</span>(&amp;pkt);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p>之前我这里read_from_fifo(fifo, frame-&gt;data, frame_size); 之前偷懒，直接用frame。因为没有重采样，所以frame的data数据又是一致的，也就是没有发生改写操作，这样就不会受引用计数的影响，从而不会报错。但就是这么点细节结果让我在用官方AAC编码器上一直写不对(然后就用libfdk_aac了<sup>(*￣(oo)￣)</sup>)</p>
 
-      
     </div>
     <footer class="article-footer">
-      
-      
         <div class="sponsor-wrapper">
-  <div class="sponsor-button-wrapper">
-    <div class="sponsor-icon rotate"></div>
+  <div class="sponsor-button">
+      <div class="sponsor-icon rotate"></div>
     <div class="sponsor-title">赞助</div>
-    <div class="sponsor-icon rotate"></div>
+      <div class="sponsor-icon rotate"></div>
   </div>
-  
-  
   <div class="sponsor-tip">请作者喝杯咖啡吧！</div>
-  
     <div class="sponsor-qr">
-      
         <div class="sponsor-qr-image-wrapper">
           <img src="/sponsor/alipay.jpg" alt=支付宝 width="200" />
           <p class="sponsor-qr-name">支付宝</p>
         </div>
-      
         <div class="sponsor-qr-image-wrapper">
           <img src="/sponsor/wechat.jpg" alt=微信 width="200" />
           <p class="sponsor-qr-name">微信</p>
         </div>
-      
     </div>
-  
 </div>
-      
-      
-      
         <a data-aos="zoom-in" href="/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/#comments" class="article-comment-link">
           <span class="post-comments-count valine-comment-count" data-xid="/2024/12/11/%E7%94%A8FFmpeg%E8%87%AA%E5%B8%A6%E7%9A%84AAC%E7%BC%96%E7%A0%81%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81/" itemprop="commentCount"></span>
           留言
         </a>
-      
-      
-      
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/AAC/" rel="tag">AAC</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/FFmpeg/" rel="tag">FFmpeg</a></li></ul>
+        <a class="article-category-link" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" title="音视频" data-aos="zoom-in">音视频</a>
 
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/AAC/" rel="tag" title="AAC">AAC</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/FFmpeg/" rel="tag" title="FFmpeg">FFmpeg</a></li></ul>
 
     </footer>
   </div>
-  
-  <nav id="article-nav" data-aos="fade-up">
-    
-      
-      <div class="article-nav-link-wrap article-nav-link-left">
-        
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+      <div class="article-nav-link-wrap left">
           <img data-src="https://pic1.imgdb.cn/item/67b84c59d0e0a243d40160de.jpg" data-sizes="auto" alt="实现FFmpeg的视频转图片(BMP)" class="lazyload">
-        
-        <a href="/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/"></a>
+        <a href="/2024/12/13/%E5%AE%9E%E7%8E%B0FFmpeg%E7%9A%84%E8%A7%86%E9%A2%91%E8%BD%AC%E5%9B%BE%E7%89%87(BMP)/" aria-label="前一篇: 实现FFmpeg的视频转图片(BMP)" title="前一篇: 实现FFmpeg的视频转图片(BMP)"></a>
         <div class="article-nav-caption">前一篇</div>
         <h3 class="article-nav-title">
-          
             实现FFmpeg的视频转图片(BMP)
-          
         </h3>
       </div>
-    
-    
-    
-    <div class="article-nav-link-wrap article-nav-link-right">
-      
+    <div class="article-nav-link-wrap right">
         <img data-src="https://pic1.imgdb.cn/item/67b84c57d0e0a243d40160da.jpg" data-sizes="auto" alt="Cloudflare证书到底是怎样" class="lazyload">
-      
-      <a href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7/"></a>
+      <a href="/2024/12/10/Cloudflare%E8%AF%81%E4%B9%A6%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7/" aria-label="后一篇: Cloudflare证书到底是怎样"  title="后一篇: Cloudflare证书到底是怎样"></a>
       <div class="article-nav-caption">后一篇</div>
       <h3 class="article-nav-title">
-        
           Cloudflare证书到底是怎样
-        
       </h3>
     </div>
-    
   </nav>
-
 
 </article>
 
-
-
-
-
-
-
-
-
   <section id="comments" data-aos="fade-up">
     <div class="comment-header">
-      
-      
         
-      
       <h2 class="comment-title">说些什么吧！</h2>
       <div class="comment-selector">
         <div class="comment-selector-wrap">
-            
             <div class="selector-item" data-selector="valine">
               <span>valine</span>
             </div>
-            
         </div>
       </div>
     </div>
     <div class="comment-content">
-      
-        <div class="comment valine-comment" data-aos="fade-up"
-          id="valine-comment">
-        </div>
-      
+          <div class="comment valine-comment" data-aos="fade-up"
+            id="valine-comment">
+          </div>
     </div>
   </section>
 
-
 </section>
         </div>
-        <footer id="footer">
+        <footer id="footer" aria-label="Site footer">
   <div style="width: 100%; overflow: hidden">
     <div class="footer-line"></div>
   </div>
   <div id="footer-info">
-    
     <div>
       <span class="icon-copyright"></span>
-      
-      
-      
-        2020-2025
-      
-      <span class="footer-info-sep rotate"></span>
+        2020-2026
+        <span class="footer-info-sep rotate"></span>
       凌
     </div>
-    
       <div>
-        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
-        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
       </div>
-    
-    
       <div>
         <span class="icon-brush"></span>
         29.4k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        02:11
+        02:35
       </div>
-    
-    
-    
-    
       <div>
         <span class="icon-eye"></span>
         <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
@@ -576,29 +385,20 @@
         <span class="icon-user"></span>
         <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
       </div>
-    
   </div>
 </footer>
 
-        
           <div class="sidebar-top">
             <div class="sidebar-top-taichi rotate"></div>
             <div class="arrow-up"></div>
           </div>
-        
         <div id="mask" class="hide"></div>
       </div>
-      <nav id="mobile-nav">
+      <nav id="mobile-nav" aria-label="Mobile navigation">
   <div class="sidebar-wrap">
-    
-      
-        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
-  <h3 class="toc-title">文章目录</h3>
-  <div class="sidebar-toc-wrapper toc-div-class" >
-      
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E8%BF%99%E9%87%8C%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="toc-number">3.</span> <span class="toc-text"> init_resampler() 的具体实现(这里保持不变)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
-      
-  </div>
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E9%87%87%E9%9B%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text"> 音频采集步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open_encoder-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text"> open_encoder() 的具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init_resampler-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E8%BF%99%E9%87%8C%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="toc-number">3.</span> <span class="toc-text"> init_resampler() 的具体实现(这里保持不变)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text"> 音频数据读取与写入文件过程</span></a></li></ol>
 </div>
 </div>
         <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
@@ -620,83 +420,52 @@
     <div class="sidebar-state-number">21</div>
   </div>
 </div>
-<div class="sidebar-social">
-  
+<div class="sidebar-social" >
 </div>
 <div class="sidebar-menu">
-  
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf015;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf015;
+          </div>
         <div class="sidebar-menu-link">首页</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf187;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf187;
+          </div>
         <div class="sidebar-menu-link">归档</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf06a;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf06a;
+          </div>
         <div class="sidebar-menu-link">关于</div>
       </div>
-    
       <div class="sidebar-menu-link-wrap">
         <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
-        <div class="sidebar-menu-icon icon ">
-          
-            
-              &#xf0c1;
-            
-          
-        </div>
+          <div class="sidebar-menu-icon icon ">
+                &#xf0c1;
+          </div>
         <div class="sidebar-menu-link">友链</div>
       </div>
-    
-  
 </div>
 </div>
-      
-    
   </div>
-  
-    
       <div class="sidebar-btn-wrapper">
         <div class="sidebar-toc-btn current"></div>
         <div class="sidebar-common-btn"></div>
       </div>
-    
-  
 </nav>
 
     </div>
-    
       <div class="site-search">
         <div class="reimu-popup popup">
           <div class="reimu-search">
             <div class="reimu-search-input-icon"></div>
-            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div id="reimu-search-input"></div>
             <div class="popup-btn-close"></div>
           </div>
           <div class="reimu-results">
@@ -704,12 +473,9 @@
             <div id="reimu-hits"></div>
             <div id="reimu-pagination" class="reimu-pagination"></div>
           </div>
-          <img class="reimu-bg" src="/images/reimu.png"/>
+          <img class="reimu-bg" src="/images/reimu.png" loading="lazy" decoding="async" fetchpriority="low"/>
         </div>
       </div>
-    
-    
-    
     
 <script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
 
@@ -719,9 +485,7 @@
 
 
 
-
 <script src="/js/script.js"></script>
-
 
 
   
@@ -744,9 +508,7 @@
   </script>
 
 
-
 <script src="/js/pjax_script.js" data-pjax></script>
-
 
 
   
@@ -754,156 +516,20 @@
 
 
 
-
-
-
-  
-<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
-
   <script>
-    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)","#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)","#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+    var setupFirework = () => {
+      if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+        window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)","#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)","#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+      }
+    }
   </script>
-
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous" onload="setupFirework()" defer></script>
 
 
   
 <script src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js" integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE&#x2F;jMSCxD+jAPU55x&#x2F;jj3wlf" crossorigin="anonymous"></script>
 
-  <script>
-    function loadScripts(scripts, index) {
-      if (index < scripts.length) {
-        const script = scripts[index];
-        const src = script.getAttribute('src');
-
-        const loadScript = (scriptContent) => {
-          return new Promise((resolve, reject) => {
-            const scriptElement = document.createElement('script');
-            if (script.type) {
-              scriptElement.type = script.type;
-            }
-            if (script.src) {
-              scriptElement.src = script.src;
-              if (script.integrity) {
-                scriptElement.integrity = script.integrity;
-              }
-              if (script.crossOrigin) {
-                scriptElement.crossOrigin = script.crossOrigin;
-              }
-              scriptElement.onload = resolve;
-              scriptElement.onerror = reject;
-            }
-            if (scriptContent) {
-              scriptElement.text = scriptContent;
-            }
-            document.head.appendChild(scriptElement);
-            if (!script.src) {
-              resolve();
-            }
-          })
-          
-        }
-
-        ;(src ? loadScript() : loadScript(script.text))
-          .then(() => loadScripts(scripts, index + 1))
-          .catch(error => {
-            console.error(`Failed to load script: ${src || 'inline script'}`, error);
-            loadScripts(scripts, index + 1);
-          });
-      }
-    }
-    if (window.Pjax) {
-      Pjax.prototype.getElements = function() {
-        const i18nLanguages = window.REIMU_CONFIG.i18n_languages;
-        const baseUrl = window.REIMU_CONFIG.base;
-        let basePathname = new URL(baseUrl).pathname;
-        if (!basePathname.endsWith('/')) {
-          basePathname += '/';  
-        }
-        const currentUrl = window.location.href;
-        const currentPathname = new URL(currentUrl).pathname.replace(basePathname, '');
-        const aLinks = document.querySelectorAll('a[href]');
-        const pjaxLinks = [];
-        for(let i = 0; i < aLinks.length; i++) {
-          const aLink = aLinks[i];
-          const aLinkHref = aLink.getAttribute('href');
-          const isExternal = aLink.getAttribute('target') === '_blank' || aLink.getAttribute('rel')?.includes('noopener');
-          if (isExternal || aLinkHref.startsWith('mailto:') || aLinkHref.startsWith('tel:') || aLinkHref.startsWith('javascript:') || aLinkHref.startsWith("data:") || aLinkHref.startsWith("vbscript:")) {
-            continue;
-          }
-          if (!i18nLanguages) {
-            // 多语言功能未打开
-            pjaxLinks.push(aLink);
-            continue;
-          }
-
-          const absoluteUrl = new URL(aLinkHref, currentUrl).href;
-          const absolutePathname = new URL(absoluteUrl).pathname.replace(basePathname, '');
-
-          if (!absolutePathname || !currentPathname) {
-            pjaxLinks.push(aLink);
-            continue;
-          }
-
-          const currentLangIndex = i18nLanguages.findIndex(lang => currentPathname.startsWith(lang));
-          if (currentLangIndex > -1) {
-            // 当前属于多语言站点
-            const absoluteLangIndex = i18nLanguages.findIndex(lang => absolutePathname.startsWith(lang));
-            if (absoluteLangIndex === currentLangIndex) {
-              // 同一语言站点，可以使用 pjax
-              pjaxLinks.push(aLink);
-            }
-          } else {
-            // 当前属于默认语言站点
-            const absoluteLangIndex = i18nLanguages.findIndex(lang => absolutePathname.startsWith(lang));
-            if (absoluteLangIndex === -1) {
-              // 同一语言站点，可以使用 pjax
-              pjaxLinks.push(aLink);
-            }
-          }
-        }
-        return pjaxLinks;
-      }
-    }
-    window.Pjax && new window.Pjax({
-      selectors: [
-        "#header>img",
-        "#header>picture",
-        "head title",
-        "#header-title",
-        "#subtitle-wrap",
-        "#main",
-        "#content",
-        ".sidebar-widget",
-        ".sidebar-wrapper",
-        '#mobile-nav',
-        '#lazy-script',
-        '#i18n-nav'
-      ],
-      switches: {
-        "#content": function(oldEl, newEl) {
-          // for sidebar change
-          oldEl.className = newEl.className;
-          this.onSwitch();
-        },
-        "#header-title": Pjax.switches.outerHTML,
-        "#subtitle-wrap": Pjax.switches.outerHTML,
-        "#main": function(oldEl, newEl) {
-          const scripts = [...newEl.querySelectorAll('script')];
-          loadScripts(scripts, 0);
-          oldEl.outerHTML = newEl.outerHTML
-          this.onSwitch()
-        },
-        "#mobile-nav": Pjax.switches.outerHTML,
-        '#lazy-script': function(oldEl, newEl) {
-          const scripts = [...newEl.querySelectorAll('script')];
-          loadScripts(scripts, 0);
-          oldEl.innerHTML = newEl.innerHTML
-          this.onSwitch()
-        },
-      },
-      cacheBust: false
-    })
-  </script>
   
 <script src="/js/pjax.js"></script>
 
@@ -911,13 +537,8 @@
 
 
 
-
-
-
-
 <div id="lazy-script">
   <div>
-    
       
       
       <script data-pjax>
@@ -933,53 +554,32 @@
           cover: "https://pic1.imgdb.cn/item/67b84c58d0e0a243d40160db.jpg",
         };
       </script>
-       
-    
-    
-      
         
 <script src="/js/insert_highlight.js" data-pjax></script>
 
-        
       
-    
-    
+<script src="/js/tabs.js" data-pjax defer></script>
+
       <script type="module" data-pjax>
-        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
-        
-        const pswp = () => {
-          if (_$$('.article-entry a.article-gallery-item').length > 0) {
-            new PhotoSwipeLightbox({
-              gallery: '.article-entry',
-              children: 'a.article-gallery-item',
-              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
-            }).init();
+        (async () => {
+          const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+          const initPswp = (gallery, children) => {
+            if (_$$(`${gallery} ${children}`).length > 0) {
+              new PhotoSwipeLightbox({
+                gallery,
+                children,
+                pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+              }).init();
+            }
           }
-          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
-            new PhotoSwipeLightbox({
-              gallery: '.article-gallery',
-              children: 'a.article-gallery-item',
-              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
-            }).init();
+          const pswp = () => {
+            initPswp('.article-entry', 'a.article-gallery-item');
+            initPswp('.article-gallery', 'a.article-gallery-item');
           }
-          window.lightboxStatus = 'done';
-          window.removeEventListener('lightbox:ready', pswp);
-        }
-        if(window.lightboxStatus === 'ready') {
-          pswp()
-        } else {
-          window.addEventListener('lightbox:ready', pswp);
-        }
+          pswp();
+        })();
       </script>
-      
         
-
-
-
-
-
-
-
 
 <script data-pjax>
   var loadScript = (src, integrity) => {
@@ -990,13 +590,14 @@
     return script;
   };
 
-  var commentConfigKeys = ['valine', 'waline', 'twikoo', 'gitalk', 'giscus'];
+  var commentConfigKeys = ["valine"];
   var commentConfig = {
     valine: {
       enable: true,
-      load: () => {
+      load: async () => {
         const container = document.querySelector('.valine-comment');
         if (!container) return;
+        if (container.style.display === 'block') return; // already loaded
         container.style.display = 'block';
 
         const script = loadScript(
@@ -1034,166 +635,6 @@
         document.head.appendChild(script);
       }
     },
-    waline: {
-      enable: false,
-      load: async () => {
-        const container = document.querySelector('.waline-comment');
-        if (!container) return;
-        container.style.display = 'block';
-
-        let walineInit;
-        const walineCdn = 'https://npm.webcache.cn/@waline/client@2.15.8/dist/waline.mjs';
-        const walineIntegrity = 'sha384-9sbqJjrfGjbkI6/PI4nU/MvBfEmkkPC4YK9I4zBeMIf1CVCZdCMH/KinBEAZII/5';
-
-        const module = await safeImport(walineCdn, walineIntegrity);
-        walineInit = module.init;
-
-        window.walineInstance = walineInit({
-          el: '.waline-comment',
-          serverURL: '',
-          lang: document.documentElement.lang || 'en',
-          locale: {},
-          emoji: ["https://unpkg.com/@waline/emojis@1.2.0/weibo","https://unpkg.com/@waline/emojis@1.2.0/alus","https://unpkg.com/@waline/emojis@1.2.0/bilibili","https://unpkg.com/@waline/emojis@1.2.0/qq","https://unpkg.com/@waline/emojis@1.2.0/tieba","https://unpkg.com/@waline/emojis@1.2.0/tw-emoji"],
-          meta: ["nick","mail","link"],
-          requiredMeta: ["nick","mail"],
-          wordLimit: JSON.parse('0'),
-          comment: true,
-          pageSize: JSON.parse('10'),
-          dark: 'html[data-theme="dark"]',
-          pageview: JSON.parse('true'),
-        });
-      }
-    },
-    twikoo: {
-      enable: false,
-      load: () => {
-        const container = document.querySelector('.twikoo-comment');
-        if (!container) return;
-        container.style.display = 'block';
-
-        const script = loadScript(
-          'https://npm.webcache.cn/twikoo@1.6.16/dist/twikoo.all.min.js',
-          'sha384-lDHsr5aZmkMS0eKnsUu6e9RWP+dRmn7sgjRAKGOAoXfMyzbUK6Qi86zZK7R+KvRV'
-        );
-
-        script.onload = () => {
-          if (window.twikoo) {
-            twikoo.init({
-              envId: 'https://twikoo-api-rho-three.vercel.app/',
-              el: '.twikoo-comment',
-              region: '',
-              lang: document.documentElement.lang || 'en',
-            });
-
-            twikoo.getCommentsCount({
-              envId: 'https://twikoo-api-rho-three.vercel.app/',
-              region: '',
-              urls: [
-                '/about/index.html'
-              ],
-              includeReply: false
-            }).then((res) => {
-              _$('.twikoo-comment-count').innerText = res[0].count;
-            }).catch((err) => {
-              console.error(err);
-            });
-          }
-        } 
-        document.head.appendChild(script);
-      }
-    },
-    gitalk: {
-      enable: false,
-      load: () => {
-        const container = document.querySelector('.gitalk-comment');
-        if (!container) return;
-        container.style.display = 'block';
-
-        const script = loadScript(
-          'https://npm.webcache.cn/gitalk@1.8.0/dist/gitalk.min.js',
-          'sha384-kspnZUWBoSWwoJHa0hBCXYbHGbhvU/lcEH5O8eVbSDhbPwsiVUTp/aGX/z/5EuMA'
-        );
-
-        script.onload = () => {
-          if (false) {
-            const md5Script = loadScript(
-              'https://npm.webcache.cn/blueimp-md5@2.19.0/js/md5.min.js',
-              'sha384-JmVtRz6RWiXnA14QbIOJzPuU3MidULOpBP66deeLLyyoF4Tr/gZlbkHkL6vTthxH'
-            );
-            md5Script.onload = initGitalk;
-            document.head.appendChild(md5Script);
-          } else {
-            initGitalk();
-          }
-        }
-        document.head.appendChild(script);
-
-        function initGitalk() {
-          var gitalkId = location.pathname;
-          var gitalk = new Gitalk({
-            clientID: '',
-            clientSecret: '',
-            repo: '',
-            owner: '',
-            admin: null,
-            id: gitalkId,
-            distractionFreeMode: false,
-            language: document.documentElement.lang || 'en',
-          })
-          gitalk.render('gitalk-comment');
-        }
-      }
-    },
-    giscus: {
-      enable: false,
-      load: () => {
-        const container = document.querySelector('.giscus-comment');
-        if (!container) return;
-        container.style.display = 'block';
-
-        // 删除可能已存在的 giscus 脚本和 iframe
-        const existingScript = container.querySelector('script[src*="giscus.app/client.js"]');
-        if (existingScript) existingScript.remove();
-        const existingFrame = document.querySelector('iframe.giscus-frame');
-        if (existingFrame) existingFrame.remove();
-
-        const giscusScript = document.createElement('script');
-        const domMode = document.documentElement.getAttribute("data-theme");
-
-        const docLang = document.documentElement.lang || 'en';
-        const langBase = docLang.split('-')[0];
-        const supportedLangs = ['ar', 'be', 'bg', 'ca', 'cs', 'da', 'de', 'en', 
-        'eo', 'es', 'eu', 'fa', 'fr', 'gr', 'hbs', 'he', 'hu', 'id', 'it', 'ja', 
-        'kh', 'ko', 'nl', 'pl', 'pt', 'ro', 'ru', 'th', 'tr', 'uk', 'uz', 'vi', 'zh-CN', 'zh-HK', 'zh-TW'];
-        const giscusLang = supportedLangs.includes(docLang) ? docLang : supportedLangs.includes(langBase) ? langBase : 'en';
-
-        giscusScript.src = 'https://giscus.app/client.js';
-        giscusScript.setAttribute('data-repo', '');
-        giscusScript.setAttribute('data-repo-id', '');
-        giscusScript.setAttribute('data-category', ''); 
-        giscusScript.setAttribute('data-category-id', '');
-        giscusScript.setAttribute('data-mapping', '0');
-        giscusScript.setAttribute('data-strict', '0');
-        giscusScript.setAttribute('data-reactions-enabled', '1');
-        giscusScript.setAttribute('data-emit-metadata', '0');
-        giscusScript.setAttribute('data-input-position', 'bottom');
-        giscusScript.setAttribute('data-theme', domMode === 'dark' ? 'dark' : 'light');
-        giscusScript.setAttribute('data-lang', giscusLang);
-        giscusScript.setAttribute('crossorigin', 'anonymous');
-        giscusScript.async = true;
-        container.appendChild(giscusScript);
-        document.body.addEventListener('light-theme-set', () => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: 'light' } } }, 'https://giscus.app');
-        });
-        document.body.addEventListener('dark-theme-set', () => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: 'dark' } } }, 'https://giscus.app');
-        });
-      }
-    }
   }
   commentConfig.enable = commentConfigKeys.some(key => commentConfig[key].enable);
 
@@ -1224,7 +665,6 @@
   }
   function loadComments() {
     if (!commentConfig.enable) return;
-    // 评论组件加载状态跟踪
     const loadedComments = {
       valine: false,
       waline: false,
@@ -1304,8 +744,6 @@
   loadComments();
 </script>
 
-      
-    
   </div>
 </div>
 
@@ -1319,16 +757,13 @@
   \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
                                                   
 `,'color: #ff5252;')
-    console.log('%c Theme.Reimu v' + '1.9.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.12.3' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
   </script>
   
 
 
-
   
 <script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
-
-
 
 
 <script>
@@ -1342,38 +777,30 @@
 </script>
 
 
-
-
-
-  
-<script src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL&#x2F;aORyw+5+HZoU6e" crossorigin="anonymous"></script>
-
-  
-
-
-
-  
-  <script>
-    var isMobile = window.matchMedia('(max-width: 959px)').matches;
-    if (isMobile) {
-      const meting = _$('meting-js');
-      if (meting) {
-        meting.setAttribute('fixed', 'true');
-        const aside = meting.parentNode;
-        if (aside?.tagName === 'ASIDE') {
-          aside.removeChild(meting);
-          document.body.appendChild(meting);
+    <script>
+      var setupAPlayer = () => {
+        if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+          if (window.matchMedia('(max-width: 959px)').matches) {
+            const meting = _$('meting-js');
+            if (meting) {
+              meting.setAttribute('fixed', 'true');
+              const aside = meting.parentNode?.parentNode;
+              if (aside?.tagName === 'ASIDE') {
+                meting.parentNode.removeChild(meting);
+                document.body.appendChild(meting);
+              }
+            }
+          }
         }
-      }
-    }
-  </script>
+      };
+    </script>
   
-<script src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js" integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8+0maanw1S&#x2F;IyB+Y4JG+ZDU7GpKE8" crossorigin="anonymous"></script>
-
-
-
+<script src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL&#x2F;aORyw+5+HZoU6e" crossorigin="anonymous" defer onload="setupAPlayer()"></script>
 
     
+<script src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js" integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8+0maanw1S&#x2F;IyB+Y4JG+ZDU7GpKE8" crossorigin="anonymous" defer></script>
+
+
+
   </body>
   </html>
-
